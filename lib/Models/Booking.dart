@@ -4,6 +4,7 @@ class Booking {
   final String placeId, userId, status, type, info, id;
   final double price;
   final String from, to, date;
+  // ignore: non_constant_identifier_names
   final Timestamp timestamp_date;
 
   Booking(
@@ -14,6 +15,7 @@ class Booking {
       this.to,
       this.date, 
       this.status,
+      // ignore: non_constant_identifier_names
       this.timestamp_date, 
       this.type,
       this.info, 

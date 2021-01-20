@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Services/auth_service.dart';
@@ -32,13 +31,17 @@ class FootyScreen extends StatefulWidget {
 //   }
 // }
 
+bool isOnEvent = false;
+
 class _FootyScreenState extends State<FootyScreen> {
+  @override
   void initState() {
     Timer(Duration(seconds: 2), () async {
       await Firebase.initializeApp();
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (context) => AuthService().handleAuth()));
     });
+    super.initState();
   }
 
   @override

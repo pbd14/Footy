@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -27,9 +28,15 @@ class AuthService{
   signIn(PhoneAuthCredential authCredential){
     try{
       dynamic res = FirebaseAuth.instance.signInWithCredential(authCredential);
+      FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).set({
+        'status' : 'default'
+      });
       return res;
     }
     catch(e){
+      FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser.uid).set({
+        'status' : 'not logged in'
+      });
       return null;
     }
   }

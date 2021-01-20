@@ -3,6 +3,7 @@ import 'package:flutter_complete_guide/Screens/PlaceScreen/components/1.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
 import 'components/2.dart';
 
+// ignore: must_be_immutable
 class PlaceScreen extends StatefulWidget {
   Map data;
   PlaceScreen({Key key, this.data}) : super(key: key);
@@ -11,7 +12,6 @@ class PlaceScreen extends StatefulWidget {
 }
 
 class _PlaceScreenState extends State<PlaceScreen> {
-  final _formKey = GlobalKey<FormState>();
 
   bool loading = false;
 
@@ -21,7 +21,6 @@ class _PlaceScreenState extends State<PlaceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return loading
         ? LoadingScreen()
         : PageView(

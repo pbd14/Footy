@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:math';
 import 'package:flutter_complete_guide/Models/Place.dart';
+import 'package:flutter_complete_guide/Screens/OnEventScreen/on_event_screen.dart';
 import 'package:flutter_complete_guide/Screens/PlaceScreen/place_screen.dart';
 import 'package:flutter_complete_guide/Services/db/place_db.dart';
 import 'package:flutter_complete_guide/widgets/ciw.dart';
@@ -25,6 +26,7 @@ import 'package:location/location.dart';
 
 bool loading = false;
 
+// ignore: must_be_immutable
 class HomeScreen extends StatefulWidget {
   String selected;
   Map data;
@@ -36,6 +38,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String _itemSelected = 'map';
   bool _enableAnimation = true;
+  bool onEvent = false;
 
   @override
   void initState() {
@@ -101,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 BottomPersonalizedDotBarItem('map',
                     icon: Icons.map,
                     name: 'Map',
-                    onTap: (itemSelected) => _changePage(itemSelected)),
+                    onTap: (itemSelected) => _changePage(itemSelected),),
                 BottomPersonalizedDotBarItem('search',
                     icon: Icons.search,
                     name: 'Search',
@@ -170,6 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  // ignore: missing_return
   Widget _buildPage(String itemSelected) {
     switch (itemSelected) {
       case 'map':
@@ -196,10 +200,13 @@ class _HomeScreenState extends State<HomeScreen> {
         return PlaceScreen(
           data: widget.data,
         );
+      case 'on_event':
+        return OnEventScreen();
     }
   }
 }
 
+// ignore: must_be_immutable
 class MapPage extends StatefulWidget {
   bool isLoading;
   Map data;
@@ -214,6 +221,7 @@ class _MapPageState extends State<MapPage> {
   bool loading = true;
   Set<Marker> _markers = HashSet<Marker>();
   GoogleMapController _mapController;
+  // ignore: avoid_init_to_null
   static LatLng _initialPosition = null;
 
   @override
@@ -319,7 +327,7 @@ class _MapPageState extends State<MapPage> {
                   width: 0.6,
                   height: 0.07,
                   text: 'Book',
-                  press: () async {
+                  press: () {
                     setState(() {
                       loading = true;
                     });
@@ -329,16 +337,16 @@ class _MapPageState extends State<MapPage> {
                           page: HomeScreen(
                             selected: 'place',
                             data: {
-                              'name' : place.name, //0
-                              'description' : place.description, //1
-                              'by' : place.by, //2
-                              'lat' : place.lat, //3
-                              'lon' : place.lon, //4
-                              'images' : place.images, //5
-                              'days' : place.days,
-                              'spm' : place.spm, //6
-                              'type' : place.type,
-                              'id' : place.id, //7
+                              'name': place.name, //0
+                              'description': place.description, //1
+                              'by': place.by, //2
+                              'lat': place.lat, //3
+                              'lon': place.lon, //4
+                              'images': place.images, //5
+                              'days': place.days,
+                              'spm': place.spm, //6
+                              'type': place.type,
+                              'id': place.id, //7
                             },
                           ),
                         ));
@@ -362,7 +370,7 @@ class _MapPageState extends State<MapPage> {
       body: _initialPosition == null
           ? LoadingScreen()
           : Stack(
-            clipBehavior: Clip.hardEdge,
+              clipBehavior: Clip.hardEdge,
               children: <Widget>[
                 GoogleMap(
                   mapType: MapType.normal,

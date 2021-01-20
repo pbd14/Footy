@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/constants.dart';
 
+// ignore: must_be_immutable
 class CardW extends StatefulWidget {
   double height, width;
   Widget child;

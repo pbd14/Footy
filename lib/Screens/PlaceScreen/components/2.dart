@@ -28,6 +28,7 @@ class _PlaceScreen2State extends State<PlaceScreen2> {
   bool verifying = false;
   bool loading = false;
 
+  // ignore: unused_field
   String _setTime, _setTime2, _setDate, error;
   String _hour, _minute, _time, _dow;
   String _hour2, _minute2, _time2;
@@ -46,9 +47,31 @@ class _PlaceScreen2State extends State<PlaceScreen2> {
   Future<void> _verify(time1, time2) async {
     double dtime1 = selectedTime.minute + selectedTime.hour * 60.0;
     double dtime2 = selectedTime2.minute + selectedTime2.hour * 60.0;
-    if (dtime1 >= dtime2 || selectedDate.isBefore(DateTime.now())) {
+    double dNow = DateTime.now().minute + DateTime.now().hour * 60.0;
+    if (selectedDate.isBefore(DateTime.now())) {
+      if (selectedDate.day != DateTime.now().day) {
+        print('LOOK WE HAVE DATE HERE');
+        print(selectedDate.toString());
+        print(DateTime.now().toString());
+        setState(() {
+          error = 'Incorrect date selected';
+          loading1 = false;
+          verified = false;
+        });
+        return;
+      }
+    }
+    if (dtime1 < dNow) {
       setState(() {
-        error = 'Incorrect date/time selected';
+        error = 'Incorrect date selected';
+        loading1 = false;
+        verified = false;
+      });
+      return;
+    }
+    if (dtime1 >= dtime2) {
+      setState(() {
+        error = 'Incorrect time selected';
         loading1 = false;
         verified = false;
       });
@@ -60,13 +83,13 @@ class _PlaceScreen2State extends State<PlaceScreen2> {
           verified = false;
         });
       } else {
-        TimeOfDay place_to = TimeOfDay.fromDateTime(
+        TimeOfDay placeTo = TimeOfDay.fromDateTime(
             DateFormat.Hm().parse(widget.data['days'][_dow]['to']));
-        TimeOfDay place_from = TimeOfDay.fromDateTime(
+        TimeOfDay placeFrom = TimeOfDay.fromDateTime(
             DateFormat.Hm().parse(widget.data['days'][_dow]['from']));
-        double dplace_to = place_to.minute + place_to.hour * 60.0;
-        double dplace_from = place_from.minute + place_from.hour * 60.0;
-        if (dtime1 < dplace_from || dtime2 < dplace_from) {
+        double dplaceTo = placeTo.minute + placeTo.hour * 60.0;
+        double dplaceFrom = placeFrom.minute + placeFrom.hour * 60.0;
+        if (dtime1 < dplaceFrom || dtime2 < dplaceFrom) {
           setState(() {
             error = 'Too early';
             loading1 = false;
@@ -74,7 +97,7 @@ class _PlaceScreen2State extends State<PlaceScreen2> {
           });
           return;
         }
-        if (dtime1 > dplace_to || dtime2 > dplace_to) {
+        if (dtime1 > dplaceTo || dtime2 > dplaceTo) {
           setState(() {
             error = 'Too late';
             loading1 = false;
@@ -82,7 +105,7 @@ class _PlaceScreen2State extends State<PlaceScreen2> {
           });
           return;
         }
-        if (dtime1 >= dplace_from && dtime2 <= dplace_to) {
+        if (dtime1 >= dplaceFrom && dtime2 <= dplaceTo) {
           var data = await FirebaseFirestore.instance
               .collection('bookings')
               .where(
@@ -92,14 +115,13 @@ class _PlaceScreen2State extends State<PlaceScreen2> {
               .get();
           List _bookings = data.docs;
           for (DocumentSnapshot booking in _bookings) {
-            TimeOfDay booking_to = TimeOfDay.fromDateTime(
+            TimeOfDay bookingTo = TimeOfDay.fromDateTime(
                 DateFormat.Hm().parse(Booking.fromSnapshot(booking).to));
-            TimeOfDay booking_from = TimeOfDay.fromDateTime(
+            TimeOfDay bookingFrom = TimeOfDay.fromDateTime(
                 DateFormat.Hm().parse(Booking.fromSnapshot(booking).from));
-            double dbooking_to = booking_to.minute + booking_to.hour * 60.0;
-            double dbooking_from =
-                booking_from.minute + booking_from.hour * 60.0;
-            if (dtime1 >= dbooking_from && dtime1 < dbooking_to) {
+            double dbookingTo = bookingTo.minute + bookingTo.hour * 60.0;
+            double dbookingFrom = bookingFrom.minute + bookingFrom.hour * 60.0;
+            if (dtime1 >= dbookingFrom && dtime1 < dbookingTo) {
               setState(() {
                 error = 'This time is already booked';
                 loading1 = false;
@@ -107,7 +129,7 @@ class _PlaceScreen2State extends State<PlaceScreen2> {
               });
               return;
             }
-            if (dtime2 <= dbooking_to && dtime2 > dbooking_from) {
+            if (dtime2 <= dbookingTo && dtime2 > dbookingFrom) {
               setState(() {
                 error = 'This time is already booked';
                 loading1 = false;
@@ -117,6 +139,8 @@ class _PlaceScreen2State extends State<PlaceScreen2> {
             }
           }
           setState(() {
+            print('LOOK WE HAVE A TYPE HERE');
+            print(widget.data['type']);
             duration = dtime2 - dtime1;
             price = duration * widget.data['spm'].toDouble();
             loading1 = false;
@@ -173,8 +197,8 @@ class _PlaceScreen2State extends State<PlaceScreen2> {
         selectedTime = picked;
         _hour = selectedTime.hour.toString();
         _minute = selectedTime.minute.toString();
-        if (_minute == '0') {
-          _minute = '00';
+        if (int.parse(_minute) < 10) {
+          _minute = '0' + _minute;
         }
         _time = _hour + ':' + _minute;
         _timeController.text = _time;
@@ -217,6 +241,9 @@ class _PlaceScreen2State extends State<PlaceScreen2> {
         _minute2 = selectedTime2.minute.toString();
         if (_minute2 == '0') {
           _minute2 = '00';
+        }
+        if(int.parse(_minute2) < 10){
+          _minute2 = '0' + _minute2;
         }
         _time2 = _hour2 + ':' + _minute2;
         _timeController2.text = _time2;
@@ -540,9 +567,13 @@ class _PlaceScreen2State extends State<PlaceScreen2> {
                                                     'to': _time2,
                                                     'date':
                                                         selectedDate.toString(),
-                                                    'timestamp_date' : selectedDate,
-                                                    'status' : 
-                                                    widget.data['type'] == 'nonver' ? 'unfinished' : 'verification_needed',
+                                                    'timestamp_date':
+                                                        selectedDate,
+                                                    'status': widget
+                                                                .data['type'] ==
+                                                            'nonver'
+                                                        ? 'unfinished'
+                                                        : 'verification_needed',
                                                   });
                                                   setState(() {
                                                     selectedDate =

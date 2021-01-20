@@ -33,6 +33,7 @@ class PlaceDB {
         images: doc.data()['images'],
         days: doc.data()['days'],
         spm: doc.data()['spm'],
+        type: doc.data()['type'],
         id: doc.id,
       );
     }).toList();

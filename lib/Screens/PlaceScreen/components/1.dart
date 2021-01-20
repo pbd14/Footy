@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_complete_guide/Screens/PlaceScreen/components/background.dart';
 import '../../../constants.dart';
 
+// ignore: must_be_immutable
 class PlaceScreen1 extends StatefulWidget {
   Map data;
   PlaceScreen1({Key key, this.data}) : super(key: key);
@@ -11,7 +12,6 @@ class PlaceScreen1 extends StatefulWidget {
 }
 
 class _PlaceScreen1State extends State<PlaceScreen1> {
-  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {

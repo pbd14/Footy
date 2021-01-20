@@ -1,4 +1,3 @@
-import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Screens/HistoryScreen/components/1.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
@@ -12,7 +11,6 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
-  final _formKey = GlobalKey<FormState>();
 
   String stext;
   bool loading = false;

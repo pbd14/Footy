@@ -7,9 +7,15 @@ import GoogleMaps
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+    
+    
   ) -> Bool {
+    if #available(iOS 10.0, *) {
+      UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
+    }
     GMSServices.provideAPIKey("AIzaSyAP76RF198pKogJjyPyEtcB3L_bLfSWgGY")
     GeneratedPluginRegistrant.register(with: self)
+    UIApplication.shared.setMinimumBackgroundFetchInterval(TimeInterval(60*5))
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }

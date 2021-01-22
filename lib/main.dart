@@ -4,11 +4,11 @@
 // import 'package:flutter_complete_guide/Services/local_notification.dart';
 // import 'package:intl/intl.dart';
 // import 'package:path_provider/path_provider.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_complete_guide/Screens/footy_screen.dart';
-import 'package:flutter_complete_guide/Services/push_notification_service.dart';
+import 'package:flutter_complete_guide/Services/auth_service.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:splashscreen/splashscreen.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:workmanager/workmanager.dart';
 // import 'Models/Booking.dart';
@@ -35,61 +35,61 @@ import 'constants.dart';
 //         LocalNotification.Initializer();
 //         LocalNotification.ShowOneTimeNotification(
 //             tz.TZDateTime.now(tz.getLocation('Uzbekistan/Tashkent')));
-        // var data = await FirebaseFirestore.instance
-        //     .collection('bookings')
-        //     .orderBy(
-        //       'timestamp_date',
-        //       descending: true,
-        //     )
-        //     .where(
-        //       'status',
-        //       whereIn: ['unfinished', 'verification_needed'],
-        //     )
-        //     .where(
-        //       'userId',
-        //       isEqualTo: FirebaseAuth.instance.currentUser.uid,
-        //     )
-        //     .get();
-        // _bookings = data.docs;
-        // for (dynamic book in _bookings) {
-        //   TimeOfDay booking_to = TimeOfDay.fromDateTime(
-        //       DateFormat.Hm().parse(Booking.fromSnapshot(book).to));
-        //   TimeOfDay booking_from = TimeOfDay.fromDateTime(
-        //       DateFormat.Hm().parse(Booking.fromSnapshot(book).from));
-        //   double dbooking_to = booking_to.minute + booking_to.hour * 60.0;
-        //   double dbooking_from = booking_from.minute + booking_from.hour * 60.0;
-        //   double dnow = DateTime.now().minute + DateTime.now().hour * 60.0;
-        //   if (dnow == dbooking_from) {
-        //     FirebaseFirestore.instance
-        //         .collection('users')
-        //         .doc(FirebaseAuth.instance.currentUser.uid)
-        //         .set({'status': 'on booking'});
-        //     FirebaseFirestore.instance
-        //         .collection('bookings')
-        //         .doc(book.id)
-        //         .set({'status': 'in process'});
-        //   }
-        //   if (dnow > dbooking_from && dnow < dbooking_to) {
-        //     FirebaseFirestore.instance
-        //         .collection('users')
-        //         .doc(FirebaseAuth.instance.currentUser.uid)
-        //         .set({'status': 'on booking'});
-        //     FirebaseFirestore.instance
-        //         .collection('bookings')
-        //         .doc(book.id)
-        //         .set({'status': 'in process'});
-        //   }
-        //   if (dnow >= dbooking_to) {
-        //     FirebaseFirestore.instance
-        //         .collection('users')
-        //         .doc(FirebaseAuth.instance.currentUser.uid)
-        //         .set({'status': 'default'});
-        //     FirebaseFirestore.instance
-        //         .collection('bookings')
-        //         .doc(book.id)
-        //         .set({'status': 'finished'});
-        //   }
-        // }
+// var data = await FirebaseFirestore.instance
+//     .collection('bookings')
+//     .orderBy(
+//       'timestamp_date',
+//       descending: true,
+//     )
+//     .where(
+//       'status',
+//       whereIn: ['unfinished', 'verification_needed'],
+//     )
+//     .where(
+//       'userId',
+//       isEqualTo: FirebaseAuth.instance.currentUser.uid,
+//     )
+//     .get();
+// _bookings = data.docs;
+// for (dynamic book in _bookings) {
+//   TimeOfDay booking_to = TimeOfDay.fromDateTime(
+//       DateFormat.Hm().parse(Booking.fromSnapshot(book).to));
+//   TimeOfDay booking_from = TimeOfDay.fromDateTime(
+//       DateFormat.Hm().parse(Booking.fromSnapshot(book).from));
+//   double dbooking_to = booking_to.minute + booking_to.hour * 60.0;
+//   double dbooking_from = booking_from.minute + booking_from.hour * 60.0;
+//   double dnow = DateTime.now().minute + DateTime.now().hour * 60.0;
+//   if (dnow == dbooking_from) {
+//     FirebaseFirestore.instance
+//         .collection('users')
+//         .doc(FirebaseAuth.instance.currentUser.uid)
+//         .set({'status': 'on booking'});
+//     FirebaseFirestore.instance
+//         .collection('bookings')
+//         .doc(book.id)
+//         .set({'status': 'in process'});
+//   }
+//   if (dnow > dbooking_from && dnow < dbooking_to) {
+//     FirebaseFirestore.instance
+//         .collection('users')
+//         .doc(FirebaseAuth.instance.currentUser.uid)
+//         .set({'status': 'on booking'});
+//     FirebaseFirestore.instance
+//         .collection('bookings')
+//         .doc(book.id)
+//         .set({'status': 'in process'});
+//   }
+//   if (dnow >= dbooking_to) {
+//     FirebaseFirestore.instance
+//         .collection('users')
+//         .doc(FirebaseAuth.instance.currentUser.uid)
+//         .set({'status': 'default'});
+//     FirebaseFirestore.instance
+//         .collection('bookings')
+//         .doc(book.id)
+//         .set({'status': 'finished'});
+//   }
+// }
 //         break;
 //       case Workmanager.iOSBackgroundTask:
 //         print("The iOS background fetch was triggered");
@@ -126,19 +126,28 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  static final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  Future<Widget> prepare() async {
+    await Firebase.initializeApp();
+    return Future.value(new AuthService().handleAuth());
+  }
 
   @override
   Widget build(BuildContext context) {
-    final pushNotificationService = PushNotificationService(_firebaseMessaging);
-    pushNotificationService.init();
     return OverlaySupport(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Footy',
         theme: ThemeData(
             primaryColor: primaryColor, scaffoldBackgroundColor: whiteColor),
-        home: FootyScreen(),
+        home: new SplashScreen(
+          navigateAfterFuture: prepare(),
+          image: new Image.asset(
+            'assets/images/Footy.png',
+          ),
+          backgroundColor: Colors.white,
+          photoSize: 150.0,
+          loaderColor: primaryColor,
+        ),
       ),
     );
 

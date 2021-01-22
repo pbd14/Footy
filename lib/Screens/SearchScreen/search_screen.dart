@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Models/Place.dart';
-import 'package:flutter_complete_guide/Screens/HomeScreen/home_screen.dart';
+import 'package:flutter_complete_guide/Screens/MapScreen/map_screen.dart';
+import 'package:flutter_complete_guide/Screens/PlaceScreen/place_screen.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
 import 'package:flutter_complete_guide/constants.dart';
 import 'package:flutter_complete_guide/Screens/SearchScreen/components/background.dart';
@@ -212,8 +213,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                         Navigator.push(
                                                           context,
                                                           SlideRightRoute(
-                                                            page: HomeScreen(
-                                                              selected: 'map',
+                                                            page: MapScreen(
                                                               data: {
                                                                 'lat': Place.fromSnapshot(
                                                                         _results[
@@ -227,6 +227,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                                             ),
                                                           ),
                                                         );
+                                                        setState(() {
+                                                          loading = false;
+                                                        });
                                                       },
                                                       color: darkPrimaryColor,
                                                       textColor: whiteColor,
@@ -245,8 +248,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                         Navigator.push(
                                                           context,
                                                           SlideRightRoute(
-                                                            page: HomeScreen(
-                                                              selected: 'place',
+                                                            page: PlaceScreen(
                                                               data: {
                                                                 'name': Place.fromSnapshot(
                                                                         _results[
@@ -276,11 +278,11 @@ class _SearchScreenState extends State<SearchScreen> {
                                                                         _results[
                                                                             index])
                                                                     .days, //6
-                                                                'spm' : Place.fromSnapshot(
+                                                                'spm': Place.fromSnapshot(
                                                                         _results[
                                                                             index])
                                                                     .spm,
-                                                                'type' : Place.fromSnapshot(
+                                                                'type': Place.fromSnapshot(
                                                                         _results[
                                                                             index])
                                                                     .type,
@@ -292,6 +294,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                                             ),
                                                           ),
                                                         );
+                                                        setState(() {
+                                                          loading = false;
+                                                        });
                                                       },
                                                       color: darkPrimaryColor,
                                                       textColor: whiteColor,

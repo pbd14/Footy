@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:math';
 import 'package:flutter_complete_guide/Models/Place.dart';
-import 'package:flutter_complete_guide/Screens/OnEventScreen/on_event_screen.dart';
 import 'package:flutter_complete_guide/Screens/PlaceScreen/place_screen.dart';
 import 'package:flutter_complete_guide/Services/db/place_db.dart';
 import 'package:flutter_complete_guide/widgets/ciw.dart';
@@ -12,197 +11,78 @@ import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart'
 import 'package:geolocator/geolocator.dart' as geolocator;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:bottom_personalized_dot_bar/bottom_personalized_dot_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_complete_guide/Screens/FavouritesScreen/favourites_screen.dart';
 import 'package:flutter_complete_guide/Screens/HistoryScreen/history_screen.dart';
 import 'package:flutter_complete_guide/Screens/ProfileScreen/profile_screen.dart';
 import 'package:flutter_complete_guide/Screens/SearchScreen/search_screen.dart';
-import 'package:flutter_complete_guide/Screens/SettingsScreen/settings_screen.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
 import 'package:flutter_complete_guide/constants.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
-bool loading = false;
-
 // ignore: must_be_immutable
 class HomeScreen extends StatefulWidget {
-  String selected;
-  Map data;
-  HomeScreen({Key key, this.selected, this.data}) : super(key: key);
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String _itemSelected = 'map';
-  bool _enableAnimation = true;
-  bool onEvent = false;
+  int _selectedIndex = 0;
+  static List<Widget> _widgetOptions = <Widget>[
+    StreamProvider<List<Place>>.value(
+      value: PlaceDB().places,
+      child: MapPage(
+        data: null,
+        isLoading: true,
+      ),
+    ),
+    SearchScreen(),
+    HistoryScreen(),
+    ProfileScreen(),
+  ];
 
-  @override
-  void initState() {
-    super.initState();
-    if (widget.selected != null) {
-      setState(() {
-        _itemSelected = widget.selected;
-      });
-    }
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: <Widget>[
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 700),
-              switchOutCurve: Interval(0.0, 0.0),
-              transitionBuilder: (Widget child, Animation<double> animation) {
-                final revealAnimation = Tween(begin: 0.0, end: 1.0).animate(
-                    CurvedAnimation(parent: animation, curve: Curves.ease));
-                return AnimatedBuilder(
-                  builder: (BuildContext context, Widget _) {
-                    return _buildAnimation(
-                        context, _itemSelected, child, revealAnimation.value);
-                  },
-                  animation: animation,
-                );
-              },
-              child: _buildPage(_itemSelected),
-            ),
-            BottomPersonalizedDotBar(
-              dotColor: darkPrimaryColor,
-              selectedColorIcon: darkPrimaryColor,
-              unSelectedColorIcon: primaryColor,
-              height: size.height * 0.12,
-              width: (MediaQuery.of(context).size.width > 600) ? 500.0 : null,
-              keyItemSelected: _itemSelected,
-              doneText: 'Done',
-              settingTitleText: 'Your Menu',
-              settingSubTitleText: 'Drag and drop',
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black12, blurRadius: 10.0, spreadRadius: 1.0)
-              ],
-              iconSettingColor: primaryColor,
-              buttonDoneColor: primaryColor,
-              settingSubTitleColor: primaryColor,
-              hiddenItems: <BottomPersonalizedDotBarItem>[
-                BottomPersonalizedDotBarItem('favourites',
-                    icon: Icons.favorite_border,
-                    name: 'Favourites',
-                    onTap: (itemSelected) => _changePage(itemSelected)),
-                BottomPersonalizedDotBarItem('settings',
-                    icon: Icons.settings,
-                    name: 'Settings',
-                    onTap: (itemSelected) => _changePage(itemSelected)),
-              ],
-              items: <BottomPersonalizedDotBarItem>[
-                BottomPersonalizedDotBarItem('map',
-                    icon: Icons.map,
-                    name: 'Map',
-                    onTap: (itemSelected) => _changePage(itemSelected),),
-                BottomPersonalizedDotBarItem('search',
-                    icon: Icons.search,
-                    name: 'Search',
-                    onTap: (itemSelected) => _changePage(itemSelected)),
-                BottomPersonalizedDotBarItem('history',
-                    icon: Icons.access_alarm,
-                    name: 'History',
-                    onTap: (itemSelected) => _changePage(itemSelected)),
-                BottomPersonalizedDotBarItem('profile',
-                    icon: Icons.face,
-                    name: 'Profile',
-                    onTap: (itemSelected) => _changePage(itemSelected)),
-              ],
-            ),
-          ],
-        ),
+      body: Center(
+        child: _widgetOptions.elementAt(_selectedIndex),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.map),
+            label: 'Map',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Search',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.access_alarm),
+            label: 'History',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.face),
+            label: 'Profile',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: darkPrimaryColor,
+        unselectedItemColor: primaryColor,
+        onTap: _onItemTapped,
+        backgroundColor: whiteColor,
+        elevation: 50,
+        iconSize: 33.0,
+        selectedFontSize: 17.0,
+        type: BottomNavigationBarType.fixed,
       ),
     );
-  }
-
-  void _changePage(String itemSelected) {
-    if (_itemSelected != itemSelected && _enableAnimation) {
-      _enableAnimation = false;
-      setState(() {
-        _itemSelected = itemSelected;
-        widget.data = null;
-      });
-      Future.delayed(
-          const Duration(milliseconds: 700), () => _enableAnimation = true);
-    }
-  }
-
-  Widget _buildAnimation(BuildContext context, String itemSelected,
-      Widget child, double valueAnimation) {
-    switch (itemSelected) {
-      case 'map':
-        return Transform.translate(
-            offset: Offset(
-                .0,
-                -(valueAnimation - 1).abs() *
-                    MediaQuery.of(context).size.width),
-            child: child);
-      // case 'item-2':
-      //   return PageReveal(revealPercent: valueAnimation, child: child);
-      // case 'item-3':
-      //   return Opacity(opacity: valueAnimation, child: child);
-      // case 'item-4':
-      //   return Transform.translate(
-      //       offset: Offset(
-      //           -(valueAnimation - 1).abs() * MediaQuery.of(context).size.width,
-      //           .0),
-      //       child: child);
-      // case 'item-5':
-      //   return Transform.translate(
-      //       offset: Offset(
-      //           (valueAnimation - 1).abs() * MediaQuery.of(context).size.width,
-      //           .0),
-      //       child: child);
-      // case 'item-6':
-      //   return Transform.translate(
-      //       offset: Offset(.0,
-      //           (valueAnimation - 1).abs() * MediaQuery.of(context).size.width),
-      //       child: child);
-      default:
-        return PageReveal(revealPercent: valueAnimation, child: child);
-    }
-  }
-
-  // ignore: missing_return
-  Widget _buildPage(String itemSelected) {
-    switch (itemSelected) {
-      case 'map':
-        Map permanentData = widget.data;
-        widget.data = null;
-        return StreamProvider<List<Place>>.value(
-          value: PlaceDB().places,
-          child: MapPage(
-            data: permanentData != null ? permanentData : null,
-            isLoading: true,
-          ),
-        );
-      case 'search':
-        return SearchScreen();
-      case 'favourites':
-        return FavouritesScreen();
-      case 'profile':
-        return ProfileScreen();
-      case 'history':
-        return HistoryScreen();
-      case 'settings':
-        return SettingsScreen();
-      case 'place':
-        return PlaceScreen(
-          data: widget.data,
-        );
-      case 'on_event':
-        return OnEventScreen();
-    }
   }
 }
 
@@ -334,8 +214,7 @@ class _MapPageState extends State<MapPage> {
                     Navigator.push(
                         context,
                         SlideRightRoute(
-                          page: HomeScreen(
-                            selected: 'place',
+                          page: PlaceScreen(
                             data: {
                               'name': place.name, //0
                               'description': place.description, //1
@@ -350,6 +229,9 @@ class _MapPageState extends State<MapPage> {
                             },
                           ),
                         ));
+                    setState(() {
+                      loading = false;
+                    });
                   },
                   color: darkPrimaryColor,
                   textColor: whiteColor,

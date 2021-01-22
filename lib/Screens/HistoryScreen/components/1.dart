@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Models/Booking.dart';
 import 'package:flutter_complete_guide/Models/Place.dart';
-import 'package:flutter_complete_guide/Screens/HomeScreen/home_screen.dart';
+import 'package:flutter_complete_guide/Screens/MapScreen/map_screen.dart';
 import 'package:flutter_complete_guide/Screens/OnEventScreen/on_event_screen.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
 import 'package:flutter_complete_guide/constants.dart';
@@ -261,8 +261,7 @@ class _History1State extends State<History1> {
                                               Navigator.push(
                                                 context,
                                                 SlideRightRoute(
-                                                  page: HomeScreen(
-                                                    selected: 'map',
+                                                  page: MapScreen(
                                                     data: {
                                                       'lat': _places != null
                                                           ? _places[Booking
@@ -282,6 +281,9 @@ class _History1State extends State<History1> {
                                                   ),
                                                 ),
                                               );
+                                              setState(() {
+                                                loading = false;
+                                              });
                                             },
                                             color: darkPrimaryColor,
                                             textColor: whiteColor,
@@ -422,8 +424,7 @@ class _History1State extends State<History1> {
                                               Navigator.push(
                                                 context,
                                                 SlideRightRoute(
-                                                  page: HomeScreen(
-                                                    selected: 'map',
+                                                  page: MapScreen(
                                                     data: {
                                                       'lat': _places != null
                                                           ? _places[Booking
@@ -443,6 +444,9 @@ class _History1State extends State<History1> {
                                                   ),
                                                 ),
                                               );
+                                              setState(() {
+                                                loading = false;
+                                              });
                                             },
                                             color: darkPrimaryColor,
                                             textColor: whiteColor,

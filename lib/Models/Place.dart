@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Place {
-  final String name, description, by, id, type;
-  final double lat, lon, spm;
-  final List images;
-  final Map days;
+  final String name, description, by, id;
+  final double lat, lon;
+  final List images, services;
 
   Place(
       {this.name,
@@ -13,10 +12,8 @@ class Place {
       this.lon,
       this.by,
       this.images,
-      this.days,
-      this.spm,
-      this.id,
-      this.type});
+      this.services,
+      this.id});
 
   Place.fromSnapshot(DocumentSnapshot snapshot)
       : name = snapshot.data()['name'],
@@ -25,8 +22,6 @@ class Place {
         lat = snapshot.data()['lat'],
         lon = snapshot.data()['lon'],
         images = snapshot.data()['images'],
-        days = snapshot.data()['days'],
-        spm = snapshot.data()['spm'],
-        type = snapshot.data()['type'],
+        services = snapshot.data()['services'],
         id = snapshot.id;
 }

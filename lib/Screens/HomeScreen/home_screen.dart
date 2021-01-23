@@ -222,9 +222,7 @@ class _MapPageState extends State<MapPage> {
                               'lat': place.lat, //3
                               'lon': place.lon, //4
                               'images': place.images, //5
-                              'days': place.days,
-                              'spm': place.spm, //6
-                              'type': place.type,
+                              'services': place.services, //6
                               'id': place.id, //7
                             },
                           ),

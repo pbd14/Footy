@@ -274,18 +274,10 @@ class _SearchScreenState extends State<SearchScreen> {
                                                                         _results[
                                                                             index])
                                                                     .images, //5
-                                                                'days': Place.fromSnapshot(
+                                                                'services': Place.fromSnapshot(
                                                                         _results[
                                                                             index])
-                                                                    .days, //6
-                                                                'spm': Place.fromSnapshot(
-                                                                        _results[
-                                                                            index])
-                                                                    .spm,
-                                                                'type': Place.fromSnapshot(
-                                                                        _results[
-                                                                            index])
-                                                                    .type,
+                                                                    .services,
                                                                 'id': Place.fromSnapshot(
                                                                         _results[
                                                                             index])

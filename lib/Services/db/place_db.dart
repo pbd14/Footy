@@ -31,9 +31,7 @@ class PlaceDB {
         lon: doc.data()['lon'] ?? 0,
         by: doc.data()['by'] ?? '',
         images: doc.data()['images'],
-        days: doc.data()['days'],
-        spm: doc.data()['spm'],
-        type: doc.data()['type'],
+        services: doc.data()['services'],
         id: doc.id,
       );
     }).toList();

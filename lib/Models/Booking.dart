@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Booking {
-  final String placeId, userId, status, type, info, id;
+  final String placeId, serviceId, userId, status, type, info, id;
   final double price;
   final String from, to, date;
   // ignore: non_constant_identifier_names
@@ -9,6 +9,7 @@ class Booking {
 
   Booking(
       {this.placeId,
+      this.serviceId,
       this.userId,
       this.price,
       this.from,
@@ -23,6 +24,7 @@ class Booking {
 
   Booking.fromSnapshot(DocumentSnapshot snapshot)
       : placeId = snapshot.data()['placeId'],
+        serviceId = snapshot.data()['serviceId'],
         userId = snapshot.data()['userId'],
         price = snapshot.data()['price'],
         from = snapshot.data()['from'],

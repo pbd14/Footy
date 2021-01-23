@@ -21,9 +21,6 @@ class _OnEventScreenState extends State<OnEventScreen> {
   var place;
 
   Future<void> prepare() async {
-    print('LOOK we have Book here');
-    print(Booking.fromSnapshot(widget.booking));
-    print(Booking.fromSnapshot(widget.booking).placeId);
     place = await FirebaseFirestore.instance
         .collection('locations')
         .doc(Booking.fromSnapshot(widget.booking).placeId)

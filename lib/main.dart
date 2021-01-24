@@ -8,7 +8,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Services/auth_service.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'package:splashscreen/splashscreen.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:workmanager/workmanager.dart';
 // import 'Models/Booking.dart';
@@ -104,7 +103,7 @@ import 'constants.dart';
 //   });
 // }
 
-void main() {
+void main() async{
   // WidgetsFlutterBinding.ensureInitialized();
   // Workmanager.initialize(
   //     callbackDispatcher, // The top level function, aka callbackDispatcher
@@ -117,6 +116,8 @@ void main() {
   //     constraints: Constraints(
   //       networkType: NetworkType.connected,
   //     ));
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -126,10 +127,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Future<Widget> prepare() async {
-    await Firebase.initializeApp();
-    return Future.value(new AuthService().handleAuth());
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -139,15 +136,16 @@ class _MyAppState extends State<MyApp> {
         title: 'Footy',
         theme: ThemeData(
             primaryColor: primaryColor, scaffoldBackgroundColor: whiteColor),
-        home: new SplashScreen(
-          navigateAfterFuture: prepare(),
-          image: new Image.asset(
-            'assets/images/Footy.png',
-          ),
-          backgroundColor: Colors.white,
-          photoSize: 150.0,
-          loaderColor: primaryColor,
-        ),
+        home: AuthService().handleAuth(),
+        // new SplashScreen(
+        //   navigateAfterFuture: prepare(),
+        //   image: new Image.asset(
+        //     'assets/images/Footy.png',
+        //   ),
+        //   backgroundColor: Colors.white,
+        //   photoSize: 150.0,
+        //   loaderColor: primaryColor,
+        // ),
       ),
     );
 

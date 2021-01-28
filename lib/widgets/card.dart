@@ -3,9 +3,10 @@ import 'package:flutter_complete_guide/constants.dart';
 
 // ignore: must_be_immutable
 class CardW extends StatefulWidget {
-  double height, width;
+  double height, width, pw, ph;
   Widget child;
-  CardW({Key key, this.height, this.width, this.child}) : super(key: key);
+  CardW({Key key, this.height, this.width, this.child, this.pw, this.ph})
+      : super(key: key);
   @override
   _CardWState createState() => _CardWState();
 }
@@ -15,8 +16,8 @@ class _CardWState extends State<CardW> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      height: size.height * widget.height,
-      width: size.width * widget.width,
+      height: widget.ph == null ? size.height * widget.height : widget.ph,
+      width: widget.pw == null ? size.width * widget.width : widget.pw,
       child: Card(
         color: whiteColor,
         shadowColor: darkPrimaryColor,

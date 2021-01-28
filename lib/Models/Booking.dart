@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Booking {
-  final String placeId, serviceId, userId, status, type, info, id;
+  final String placeId, userId, status, type, info, id;
   final double price;
+  final int serviceId;
   final String from, to, date;
   // ignore: non_constant_identifier_names
   final Timestamp timestamp_date;

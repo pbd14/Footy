@@ -65,15 +65,16 @@ class _PlaceScreenState extends State<ServiceScreen> {
           verified = false;
         });
         return;
+      } else {
+        if (dtime1 < dNow) {
+          setState(() {
+            error = 'Incorrect date selected';
+            loading1 = false;
+            verified = false;
+          });
+          return;
+        }
       }
-    }
-    if (dtime1 < dNow) {
-      setState(() {
-        error = 'Incorrect date selected';
-        loading1 = false;
-        verified = false;
-      });
-      return;
     }
     if (dtime1 >= dtime2) {
       setState(() {
@@ -249,8 +250,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
         _minute2 = selectedTime2.minute.toString();
         if (_minute2 == '0') {
           _minute2 = '00';
-        }
-        else if (int.parse(_minute2) < 10) {
+        } else if (int.parse(_minute2) < 10) {
           _minute2 = '0' + _minute2;
         }
         _time2 = _hour2 + ':' + _minute2;

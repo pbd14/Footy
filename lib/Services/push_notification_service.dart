@@ -16,7 +16,7 @@ class PushNotificationService {
 
   PushNotificationService(this._fcm);
 
-  Future init(context) async {
+  Future init() async {
     if (Platform.isIOS) {
       _fcm.requestNotificationPermissions(IosNotificationSettings());
     }
@@ -30,8 +30,7 @@ class PushNotificationService {
     print("FirebaseMessaging token: $token");
     _fcm.configure(
       onMessage: (Map<String, dynamic> message) async {
-        if (message['screen'] == 'OnEventScreen')
-          Navigator.of(context).push(SlideRightRoute(page: HistoryScreen()));
+        // Navigator.of(context).push(SlideRightRoute(page: HistoryScreen()));
         // if (Platform.isAndroid) {
         PushNotificationMessage notification = PushNotificationMessage(
           title: message['notification']['title'],
@@ -45,8 +44,6 @@ class PushNotificationService {
         // }
       },
       onLaunch: (Map<String, dynamic> message) async {
-        if (message['screen'] == 'OnEventScreen')
-          Navigator.of(context).push(SlideRightRoute(page: HistoryScreen()));
         if (Platform.isAndroid || Platform.isIOS) {
           PushNotificationMessage notification = PushNotificationMessage(
             title: message['notification']['title'],
@@ -71,8 +68,6 @@ class PushNotificationService {
         }
       },
       onResume: (Map<String, dynamic> message) async {
-        if (message['screen'] == 'OnEventScreen')
-          Navigator.of(context).push(SlideRightRoute(page: HistoryScreen()));
         if (Platform.isAndroid || Platform.isIOS) {
           PushNotificationMessage notification = PushNotificationMessage(
             title: message['notification']['title'],

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Models/Place.dart';
 import 'package:flutter_complete_guide/Screens/MapScreen/map_screen.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_complete_guide/Screens/loading_screen.dart';
 import 'package:flutter_complete_guide/constants.dart';
 import 'package:flutter_complete_guide/Screens/SearchScreen/components/background.dart';
 import 'package:flutter_complete_guide/widgets/card.dart';
+import 'package:flutter_complete_guide/widgets/label_button.dart';
 import 'package:flutter_complete_guide/widgets/rounded_button.dart';
 import 'package:flutter_complete_guide/widgets/rounded_text_input.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
@@ -125,8 +127,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                       itemBuilder:
                                           (BuildContext context, int index) =>
                                               CardW(
-                                        width: 0.7,
-                                        height: 0.35,
+                                        width: 0.8,
+                                        ph: 250,
                                         child: Center(
                                           child: Padding(
                                             padding: EdgeInsets.fromLTRB(
@@ -136,20 +138,59 @@ class _SearchScreenState extends State<SearchScreen> {
                                                 SizedBox(
                                                   height: size.height * 0.04,
                                                 ),
-                                                Text(
-                                                  Place.fromSnapshot(
-                                                          _results[index])
-                                                      .name,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: GoogleFonts.montserrat(
-                                                    textStyle: TextStyle(
-                                                      color: darkPrimaryColor,
-                                                      fontSize: 25,
-                                                      fontWeight:
-                                                          FontWeight.bold,
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    SizedBox(
+                                                      width: size.width * 0.03,
                                                     ),
-                                                  ),
+                                                    Expanded(
+                                                      child: Text(
+                                                        Place.fromSnapshot(
+                                                                _results[index])
+                                                            .name,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: GoogleFonts
+                                                            .montserrat(
+                                                          textStyle: TextStyle(
+                                                            color:
+                                                                darkPrimaryColor,
+                                                            fontSize: 25,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    LabelButton(
+                                                      color1: Colors.red,
+                                                      color2: lightPrimaryColor,
+                                                      ph: 45,
+                                                      pw: 45,
+                                                      size: 40,
+                                                      onTap: () async {
+                                                        setState(() {
+                                                          FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'users')
+                                                              .doc(FirebaseAuth
+                                                                  .instance
+                                                                  .currentUser
+                                                                  .uid)
+                                                              .update({
+                                                            'favourites': Place
+                                                                    .fromSnapshot(
+                                                                        _results[
+                                                                            index])
+                                                                .id
+                                                          });
+                                                        });
+                                                      },
+                                                    ),
+                                                  ],
                                                 ),
                                                 SizedBox(
                                                   height: size.height * 0.03,
@@ -274,9 +315,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                                                         _results[
                                                                             index])
                                                                     .images, //5
-                                                                'services': Place.fromSnapshot(
-                                                                        _results[
-                                                                            index])
+                                                                'services': Place
+                                                                        .fromSnapshot(
+                                                                            _results[index])
                                                                     .services,
                                                                 'id': Place.fromSnapshot(
                                                                         _results[

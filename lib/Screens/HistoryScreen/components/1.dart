@@ -7,6 +7,7 @@ import 'package:flutter_complete_guide/Screens/OnEventScreen/on_event_screen.dar
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
 import 'package:flutter_complete_guide/constants.dart';
 import 'package:flutter_complete_guide/widgets/card.dart';
+import 'package:flutter_complete_guide/widgets/label_button.dart';
 import 'package:flutter_complete_guide/widgets/rounded_button.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -299,6 +300,13 @@ class _History1State extends State<History1> {
                                           press: () {},
                                           color: darkPrimaryColor,
                                           textColor: whiteColor,
+                                        ),
+                                        LabelButton(
+                                          color1: Colors.red,
+                                          color2: lightPrimaryColor,
+                                          ph: 45,
+                                          pw: 45,
+                                          size: 40,
                                         ),
                                       ],
                                     ),
@@ -615,6 +623,13 @@ class _History1State extends State<History1> {
                                           press: () {},
                                           color: darkPrimaryColor,
                                           textColor: whiteColor,
+                                        ),
+                                        LabelButton(
+                                          color1: Colors.red,
+                                          color2: lightPrimaryColor,
+                                          ph: 45,
+                                          pw: 45,
+                                          size: 40,
                                         ),
                                       ],
                                     ),

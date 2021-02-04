@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_complete_guide/Models/Place.dart';
 import 'package:flutter_complete_guide/Screens/PlaceScreen/place_screen.dart';
 import 'package:flutter_complete_guide/Services/db/place_db.dart';
 import 'package:flutter_complete_guide/widgets/ciw.dart';
+import 'package:flutter_complete_guide/widgets/label_button.dart';
 import 'package:flutter_complete_guide/widgets/point_object.dart';
 import 'package:flutter_complete_guide/widgets/rounded_button.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
@@ -203,36 +206,74 @@ class _MapPageState extends State<MapPage> {
                 SizedBox(
                   height: size.height * 0.04,
                 ),
-                RoundedButton(
-                  width: 0.6,
-                  height: 0.07,
-                  text: 'Book',
-                  press: () {
-                    setState(() {
-                      loading = true;
-                    });
-                    Navigator.push(
-                        context,
-                        SlideRightRoute(
-                          page: PlaceScreen(
-                            data: {
-                              'name': place.name, //0
-                              'description': place.description, //1
-                              'by': place.by, //2
-                              'lat': place.lat, //3
-                              'lon': place.lon, //4
-                              'images': place.images, //5
-                              'services': place.services, //6
-                              'id': place.id, //7
-                            },
-                          ),
-                        ));
-                    setState(() {
-                      loading = false;
-                    });
-                  },
-                  color: darkPrimaryColor,
-                  textColor: whiteColor,
+                Row(
+                  children: [
+                    Expanded(
+                      child: RoundedButton(
+                        width: 100,
+                        height: 15,
+                        text: 'Book',
+                        press: () {
+                          setState(() {
+                            loading = true;
+                          });
+                          Navigator.push(
+                              context,
+                              SlideRightRoute(
+                                page: PlaceScreen(
+                                  data: {
+                                    'name': place.name, //0
+                                    'description': place.description, //1
+                                    'by': place.by, //2
+                                    'lat': place.lat, //3
+                                    'lon': place.lon, //4
+                                    'images': place.images, //5
+                                    'services': place.services, //6
+                                    'id': place.id, //7
+                                  },
+                                ),
+                              ));
+                          setState(() {
+                            loading = false;
+                          });
+                        },
+                        color: darkPrimaryColor,
+                        textColor: whiteColor,
+                      ),
+                    ),
+                    LabelButton(
+                      isC: false,
+                      reverse: FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(FirebaseAuth.instance.currentUser.uid),
+                      containsValue: place.id,
+                      color1: Colors.red,
+                      color2: lightPrimaryColor,
+                      ph: 45,
+                      pw: 45,
+                      size: 40,
+                      onTap: () {
+                        setState(() {
+                          FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(FirebaseAuth.instance.currentUser.uid)
+                              .update({
+                            'favourites': FieldValue.arrayUnion([place.id])
+                          });
+                        });
+                      },
+                      onTap2: () {
+                        setState(() {
+                          FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(FirebaseAuth.instance.currentUser.uid)
+                              .update({
+                            'favourites': FieldValue.arrayRemove([place.id])
+                          });
+                        });
+                      },
+                    )
+                  ],
                 )
               ],
             ),

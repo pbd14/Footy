@@ -56,9 +56,6 @@ class _PlaceScreenState extends State<ServiceScreen> {
     double dNow = DateTime.now().minute + DateTime.now().hour * 60.0;
     if (selectedDate.isBefore(DateTime.now())) {
       if (selectedDate.day != DateTime.now().day) {
-        print('LOOK WE HAVE DATE HERE');
-        print(selectedDate.toString());
-        print(DateTime.now().toString());
         setState(() {
           error = 'Incorrect date selected';
           loading1 = false;
@@ -68,7 +65,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
       } else {
         if (dtime1 < dNow) {
           setState(() {
-            error = 'Incorrect date selected';
+            error = 'Incorrect time selected';
             loading1 = false;
             verified = false;
           });
@@ -76,6 +73,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
         }
       }
     }
+
     if (dtime1 >= dtime2) {
       setState(() {
         error = 'Incorrect time selected';
@@ -121,10 +119,11 @@ class _PlaceScreenState extends State<ServiceScreen> {
               )
               .where(
                 'serviceId',
-                isEqualTo: widget.serviceId.toString(),
+                isEqualTo: widget.serviceId,
               )
               .get();
           List _bookings = data.docs;
+          print(_bookings);
           for (DocumentSnapshot booking in _bookings) {
             TimeOfDay bookingTo = TimeOfDay.fromDateTime(
                 DateFormat.Hm().parse(Booking.fromSnapshot(booking).to));
@@ -141,6 +140,14 @@ class _PlaceScreenState extends State<ServiceScreen> {
               return;
             }
             if (dtime2 <= dbookingTo && dtime2 > dbookingFrom) {
+              setState(() {
+                error = 'This time is already booked';
+                loading1 = false;
+                verified = false;
+              });
+              return;
+            }
+            if (dtime1 <= dbookingFrom && dtime2 >= dbookingTo) {
               setState(() {
                 error = 'This time is already booked';
                 loading1 = false;

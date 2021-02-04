@@ -24,6 +24,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   List _allResults = [];
   List _results = [];
+  List _favs = [];
 
   Future resultsLoaded;
 
@@ -88,9 +89,20 @@ class _SearchScreenState extends State<SearchScreen> {
     resultsLoaded = getPlaces();
   }
 
+  void prepareLabel() async {
+    var dataL = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .get();
+    setState(() {
+      _favs = dataL.data()['favourites'];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    prepareLabel();
     return loading
         ? LoadingScreen()
         : Scaffold(
@@ -165,6 +177,13 @@ class _SearchScreenState extends State<SearchScreen> {
                                                       ),
                                                     ),
                                                     LabelButton(
+                                                      isC: _favs.contains(
+                                                        Place.fromSnapshot(
+                                                                _results[index])
+                                                            .id,
+                                                      )
+                                                          ? true
+                                                          : false,
                                                       reverse: FirebaseFirestore
                                                           .instance
                                                           .collection('users')

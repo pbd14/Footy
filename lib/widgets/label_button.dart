@@ -17,6 +17,7 @@ class LabelButton extends StatefulWidget {
     this.onTap2,
     this.reverse,
     this.containsValue,
+    this.isC,
   }) : super(key: key);
 
   final Color color1;
@@ -27,6 +28,7 @@ class LabelButton extends StatefulWidget {
   final Function onTap, onTap2;
   final DocumentReference reverse;
   final String containsValue;
+  final bool isC;
 
   @override
   _LabelButtonState createState() => _LabelButtonState();
@@ -46,15 +48,23 @@ class _LabelButtonState extends State<LabelButton> {
       if (docsnap.data()['favourites'].contains(widget.containsValue)) {
         setState(() {
           isColored = true;
+          isOne = false;
         });
-        print('DATA IS ALREADY HERE \n');
       } else if (!docsnap.data()['favourites'].contains(widget.containsValue)) {
         setState(() {
-          print('NO DATA');
-          print(docsnap.data()['favourites']);
+          setState(() {
+            isColored = false;
+            isOne = true;
+          });
         });
       }
     });
+    if (widget.isC) {
+      setState(() {
+        isOne = false;
+        isColored = true;
+      });
+    }
   }
 
   @override
@@ -64,6 +74,9 @@ class _LabelButtonState extends State<LabelButton> {
     }
     if (isColored) {
       labelColor = widget.color1;
+    }
+    else{
+      labelColor = widget.color2;
     }
     return FlatButton(
       highlightColor: darkPrimaryColor,

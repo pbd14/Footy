@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Models/Booking.dart';
+import 'package:flutter_complete_guide/Models/Place.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
 import 'package:flutter_complete_guide/constants.dart';
 import 'package:flutter_complete_guide/widgets/card.dart';
+import 'package:flutter_complete_guide/widgets/label_button.dart';
 import 'package:flutter_complete_guide/widgets/rounded_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +19,7 @@ class History2 extends StatefulWidget {
 class _History2State extends State<History2> {
   bool loading = false;
   List _bookings;
+  Map _places = {};
 
   Future<void> loadData() async {
     setState(() {
@@ -38,6 +41,16 @@ class _History2State extends State<History2> {
         )
         .get();
     _bookings = data.docs;
+    for (dynamic book in _bookings) {
+      var data1 = await FirebaseFirestore.instance
+          .collection('locations')
+          .doc(Booking.fromSnapshot(book).placeId)
+          .get();
+      var data2 = Place.fromSnapshot(data1);
+      _places.addAll({
+        Booking.fromSnapshot(book).id: data2,
+      });
+    }
     setState(() {
       loading = false;
     });
@@ -131,51 +144,57 @@ class _History2State extends State<History2> {
                                         SizedBox(
                                           width: size.width * 0.2,
                                         ),
-                                        Container(
-                                          alignment: Alignment.centerLeft,
-                                          child: Column(
-                                            children: [
-                                              Text(
-                                                // _places != null
-                                                //     ? _places[Booking.fromSnapshot(book)
-                                                //                     .id]
-                                                //                 .name !=
-                                                //             null
-                                                //         ? _places[Booking.fromSnapshot(
-                                                //                     book)
-                                                //                 .id]
-                                                //             .name
-                                                //         : 'Place'
-                                                //     : 'Place',
-                                                'Place',
-                                                overflow: TextOverflow.ellipsis,
-                                                style: GoogleFonts.montserrat(
-                                                  textStyle: TextStyle(
-                                                    color: darkPrimaryColor,
-                                                    fontSize: 20,
+                                        Flexible(
+                                          child: Container(
+                                            alignment: Alignment.centerLeft,
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  _places != null
+                                                      ? _places[Booking.fromSnapshot(
+                                                                          _bookings[
+                                                                              index])
+                                                                      .id]
+                                                                  .name !=
+                                                              null
+                                                          ? _places[Booking.fromSnapshot(
+                                                                      _bookings[
+                                                                          index])
+                                                                  .id]
+                                                              .name
+                                                          : 'Place'
+                                                      : 'Place',
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: GoogleFonts.montserrat(
+                                                    textStyle: TextStyle(
+                                                      color: darkPrimaryColor,
+                                                      fontSize: 20,
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              Text(
-                                                Booking.fromSnapshot(
-                                                            _bookings[index])
-                                                        .from +
-                                                    ' - ' +
-                                                    Booking.fromSnapshot(
-                                                            _bookings[index])
-                                                        .to,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: GoogleFonts.montserrat(
-                                                  textStyle: TextStyle(
-                                                    color: darkPrimaryColor,
-                                                    fontSize: 15,
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text(
+                                                  Booking.fromSnapshot(
+                                                              _bookings[index])
+                                                          .from +
+                                                      ' - ' +
+                                                      Booking.fromSnapshot(
+                                                              _bookings[index])
+                                                          .to,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: GoogleFonts.montserrat(
+                                                    textStyle: TextStyle(
+                                                      color: darkPrimaryColor,
+                                                      fontSize: 15,
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -204,6 +223,66 @@ class _History2State extends State<History2> {
                                       color: darkPrimaryColor,
                                       textColor: whiteColor,
                                     ),
+                                    SizedBox(
+                                      width: size.width * 0.04,
+                                    ),
+                                    _places != null
+                                        ? LabelButton(
+                                            isC: false,
+                                            reverse: FirebaseFirestore.instance
+                                                .collection('users')
+                                                .doc(FirebaseAuth
+                                                    .instance.currentUser.uid),
+                                            containsValue: _places[
+                                                    Booking.fromSnapshot(
+                                                            _bookings[index])
+                                                        .id]
+                                                .id,
+                                            color1: Colors.red,
+                                            color2: lightPrimaryColor,
+                                            ph: 45,
+                                            pw: 45,
+                                            size: 40,
+                                            onTap: () {
+                                              setState(() {
+                                                FirebaseFirestore.instance
+                                                    .collection('users')
+                                                    .doc(FirebaseAuth.instance
+                                                        .currentUser.uid)
+                                                    .update({
+                                                  'favourites':
+                                                      FieldValue.arrayUnion([
+                                                    _places[Booking
+                                                                .fromSnapshot(
+                                                                    _bookings[
+                                                                        index])
+                                                            .id]
+                                                        .id
+                                                  ])
+                                                });
+                                              });
+                                            },
+                                            onTap2: () {
+                                              setState(() {
+                                                FirebaseFirestore.instance
+                                                    .collection('users')
+                                                    .doc(FirebaseAuth.instance
+                                                        .currentUser.uid)
+                                                    .update({
+                                                  'favourites':
+                                                      FieldValue.arrayRemove([
+                                                    _places[Booking
+                                                                .fromSnapshot(
+                                                                    _bookings[
+                                                                        index])
+                                                            .id]
+                                                        .id
+                                                  ])
+                                                });
+                                              });
+                                            },
+                                          )
+                                        : Container(),
                                   ],
                                 ),
                                 SizedBox(

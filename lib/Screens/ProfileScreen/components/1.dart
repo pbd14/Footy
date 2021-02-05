@@ -28,8 +28,10 @@ class _ProfileScreen1State extends State<ProfileScreen1> {
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser.uid)
         .get();
-    name = snaps.data()['name'] != null ? snaps.data()['name'] : 'No name';
-    loading = false;
+    setState(() {
+      name = snaps.data()['name'] != null ? snaps.data()['name'] : 'No name';
+      loading = false;
+    });
   }
 
   _onNameChanged() async {

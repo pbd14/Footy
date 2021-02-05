@@ -3,7 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Models/Booking.dart';
 import 'package:flutter_complete_guide/Models/Place.dart';
+import 'package:flutter_complete_guide/Screens/MapScreen/map_screen.dart';
 import 'package:flutter_complete_guide/Screens/OnEventScreen/on_event_screen.dart';
+import 'package:flutter_complete_guide/Screens/PlaceScreen/place_screen.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
 import 'package:flutter_complete_guide/constants.dart';
 import 'package:flutter_complete_guide/widgets/card.dart';
@@ -291,7 +293,33 @@ class _History1State extends State<History1> {
                                           width: 0.3,
                                           height: 0.07,
                                           text: 'On Map',
-                                          press: () {},
+                                          press: () {
+                                            setState(() {
+                                              loading = true;
+                                            });
+                                            Navigator.push(
+                                              context,
+                                              SlideRightRoute(
+                                                page: MapScreen(
+                                                  data: {
+                                                    'lat': _places[Booking
+                                                                .fromSnapshot(
+                                                                    book)
+                                                            .id]
+                                                        .lat,
+                                                    'lon': _places[Booking
+                                                                .fromSnapshot(
+                                                                    book)
+                                                            .id]
+                                                        .lon
+                                                  },
+                                                ),
+                                              ),
+                                            );
+                                            setState(() {
+                                              loading = false;
+                                            });
+                                          },
                                           color: darkPrimaryColor,
                                           textColor: whiteColor,
                                         ),
@@ -302,7 +330,63 @@ class _History1State extends State<History1> {
                                           width: 0.3,
                                           height: 0.07,
                                           text: 'Book',
-                                          press: () {},
+                                          press: () {
+                                            setState(() {
+                                              loading = true;
+                                            });
+                                            Navigator.push(
+                                              context,
+                                              SlideRightRoute(
+                                                page: PlaceScreen(
+                                                  data: {
+                                                    'name': _places[Booking
+                                                                .fromSnapshot(
+                                                                    book)
+                                                            .id]
+                                                        .name, //0
+                                                    'description': _places[
+                                                            Booking.fromSnapshot(
+                                                                    book)
+                                                                .id]
+                                                        .description, //1
+                                                    'by': _places[Booking
+                                                                .fromSnapshot(
+                                                                    book)
+                                                            .id]
+                                                        .by, //2
+                                                    'lat': _places[Booking
+                                                                .fromSnapshot(
+                                                                    book)
+                                                            .id]
+                                                        .lat, //3
+                                                    'lon': _places[Booking
+                                                                .fromSnapshot(
+                                                                    book)
+                                                            .id]
+                                                        .lon, //4
+                                                    'images': _places[Booking
+                                                                .fromSnapshot(
+                                                                    book)
+                                                            .id]
+                                                        .images, //5
+                                                    'services': _places[Booking
+                                                                .fromSnapshot(
+                                                                    book)
+                                                            .id]
+                                                        .services,
+                                                    'id': _places[Booking
+                                                                .fromSnapshot(
+                                                                    book)
+                                                            .id]
+                                                        .id, //7
+                                                  },
+                                                ),
+                                              ),
+                                            );
+                                            setState(() {
+                                              loading = false;
+                                            });
+                                          },
                                           color: darkPrimaryColor,
                                           textColor: whiteColor,
                                         ),
@@ -674,7 +758,33 @@ class _History1State extends State<History1> {
                                           width: 0.3,
                                           height: 0.07,
                                           text: 'On Map',
-                                          press: () {},
+                                          press: () {
+                                            setState(() {
+                                              loading = true;
+                                            });
+                                            Navigator.push(
+                                              context,
+                                              SlideRightRoute(
+                                                page: MapScreen(
+                                                  data: {
+                                                    'lat': _places[Booking
+                                                                .fromSnapshot(
+                                                                    book)
+                                                            .id]
+                                                        .lat,
+                                                    'lon': _places[Booking
+                                                                .fromSnapshot(
+                                                                    book)
+                                                            .id]
+                                                        .lon
+                                                  },
+                                                ),
+                                              ),
+                                            );
+                                            setState(() {
+                                              loading = false;
+                                            });
+                                          },
                                           color: darkPrimaryColor,
                                           textColor: whiteColor,
                                         ),
@@ -685,7 +795,63 @@ class _History1State extends State<History1> {
                                           width: 0.3,
                                           height: 0.07,
                                           text: 'Book',
-                                          press: () {},
+                                          press: () {
+                                            setState(() {
+                                              loading = true;
+                                            });
+                                            Navigator.push(
+                                              context,
+                                              SlideRightRoute(
+                                                page: PlaceScreen(
+                                                  data: {
+                                                    'name': _places[Booking
+                                                                .fromSnapshot(
+                                                                    book)
+                                                            .id]
+                                                        .name, //0
+                                                    'description': _places[
+                                                            Booking.fromSnapshot(
+                                                                    book)
+                                                                .id]
+                                                        .description, //1
+                                                    'by': _places[Booking
+                                                                .fromSnapshot(
+                                                                    book)
+                                                            .id]
+                                                        .by, //2
+                                                    'lat': _places[Booking
+                                                                .fromSnapshot(
+                                                                    book)
+                                                            .id]
+                                                        .lat, //3
+                                                    'lon': _places[Booking
+                                                                .fromSnapshot(
+                                                                    book)
+                                                            .id]
+                                                        .lon, //4
+                                                    'images': _places[Booking
+                                                                .fromSnapshot(
+                                                                    book)
+                                                            .id]
+                                                        .images, //5
+                                                    'services': _places[Booking
+                                                                .fromSnapshot(
+                                                                    book)
+                                                            .id]
+                                                        .services,
+                                                    'id': _places[Booking
+                                                                .fromSnapshot(
+                                                                    book)
+                                                            .id]
+                                                        .id, //7
+                                                  },
+                                                ),
+                                              ),
+                                            );
+                                            setState(() {
+                                              loading = false;
+                                            });
+                                          },
                                           color: darkPrimaryColor,
                                           textColor: whiteColor,
                                         ),

@@ -8,9 +8,6 @@ import 'package:flutter_complete_guide/widgets/rounded_button.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'components/1.dart';
-import 'components/2.dart';
-
 class ProfileScreen extends StatefulWidget {
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -66,8 +63,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               body: TabBarView(
                 children: [
-                  ProfileScreen1(),
-                  ProfileScreen2(),
+                  ProfileScreen1();
+                  ProfileScreen2();
                 ],
               ),
             ),

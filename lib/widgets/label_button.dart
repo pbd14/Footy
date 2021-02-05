@@ -52,10 +52,8 @@ class _LabelButtonState extends State<LabelButton> {
         });
       } else if (!docsnap.data()['favourites'].contains(widget.containsValue)) {
         setState(() {
-          setState(() {
-            isColored = false;
-            isOne = true;
-          });
+          isColored = false;
+          isOne = true;
         });
       }
     });
@@ -74,8 +72,7 @@ class _LabelButtonState extends State<LabelButton> {
     }
     if (isColored) {
       labelColor = widget.color1;
-    }
-    else{
+    } else {
       labelColor = widget.color2;
     }
     return FlatButton(

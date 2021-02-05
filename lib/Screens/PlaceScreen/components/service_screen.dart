@@ -123,7 +123,6 @@ class _PlaceScreenState extends State<ServiceScreen> {
               )
               .get();
           List _bookings = data.docs;
-          print(_bookings);
           for (DocumentSnapshot booking in _bookings) {
             TimeOfDay bookingTo = TimeOfDay.fromDateTime(
                 DateFormat.Hm().parse(Booking.fromSnapshot(booking).to));

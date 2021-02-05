@@ -206,74 +206,77 @@ class _MapPageState extends State<MapPage> {
                 SizedBox(
                   height: size.height * 0.04,
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: RoundedButton(
-                        width: 100,
-                        height: 15,
-                        text: 'Book',
-                        press: () {
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: RoundedButton(
+                          pw: 60,
+                          ph: 40,
+                          text: 'Book',
+                          press: () {
+                            setState(() {
+                              loading = true;
+                            });
+                            Navigator.push(
+                                context,
+                                SlideRightRoute(
+                                  page: PlaceScreen(
+                                    data: {
+                                      'name': place.name, //0
+                                      'description': place.description, //1
+                                      'by': place.by, //2
+                                      'lat': place.lat, //3
+                                      'lon': place.lon, //4
+                                      'images': place.images, //5
+                                      'services': place.services, //6
+                                      'id': place.id, //7
+                                    },
+                                  ),
+                                ));
+                            setState(() {
+                              loading = false;
+                            });
+                          },
+                          color: darkPrimaryColor,
+                          textColor: whiteColor,
+                        ),
+                      ),
+                      LabelButton(
+                        isC: false,
+                        reverse: FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(FirebaseAuth.instance.currentUser.uid),
+                        containsValue: place.id,
+                        color1: Colors.red,
+                        color2: lightPrimaryColor,
+                        ph: 45,
+                        pw: 45,
+                        size: 40,
+                        onTap: () {
                           setState(() {
-                            loading = true;
-                          });
-                          Navigator.push(
-                              context,
-                              SlideRightRoute(
-                                page: PlaceScreen(
-                                  data: {
-                                    'name': place.name, //0
-                                    'description': place.description, //1
-                                    'by': place.by, //2
-                                    'lat': place.lat, //3
-                                    'lon': place.lon, //4
-                                    'images': place.images, //5
-                                    'services': place.services, //6
-                                    'id': place.id, //7
-                                  },
-                                ),
-                              ));
-                          setState(() {
-                            loading = false;
+                            FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(FirebaseAuth.instance.currentUser.uid)
+                                .update({
+                              'favourites': FieldValue.arrayUnion([place.id])
+                            });
                           });
                         },
-                        color: darkPrimaryColor,
-                        textColor: whiteColor,
-                      ),
-                    ),
-                    LabelButton(
-                      isC: false,
-                      reverse: FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(FirebaseAuth.instance.currentUser.uid),
-                      containsValue: place.id,
-                      color1: Colors.red,
-                      color2: lightPrimaryColor,
-                      ph: 45,
-                      pw: 45,
-                      size: 40,
-                      onTap: () {
-                        setState(() {
-                          FirebaseFirestore.instance
-                              .collection('users')
-                              .doc(FirebaseAuth.instance.currentUser.uid)
-                              .update({
-                            'favourites': FieldValue.arrayUnion([place.id])
+                        onTap2: () {
+                          setState(() {
+                            FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(FirebaseAuth.instance.currentUser.uid)
+                                .update({
+                              'favourites': FieldValue.arrayRemove([place.id])
+                            });
                           });
-                        });
-                      },
-                      onTap2: () {
-                        setState(() {
-                          FirebaseFirestore.instance
-                              .collection('users')
-                              .doc(FirebaseAuth.instance.currentUser.uid)
-                              .update({
-                            'favourites': FieldValue.arrayRemove([place.id])
-                          });
-                        });
-                      },
-                    )
-                  ],
+                        },
+                      )
+                    ],
+                  ),
                 )
               ],
             ),

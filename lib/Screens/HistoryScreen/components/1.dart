@@ -38,7 +38,7 @@ class _History1State extends State<History1> {
         )
         .where(
           'status',
-          whereIn: ['unfinished', 'verification_needed', 'in process'],
+          whereIn: ['unfinished', 'verification_needed'],
         )
         .where(
           'userId',
@@ -56,6 +56,8 @@ class _History1State extends State<History1> {
         Booking.fromSnapshot(book).id: data2,
       });
     }
+
+
 
     var dataNow = await FirebaseFirestore.instance
         .collection('bookings')
@@ -95,7 +97,38 @@ class _History1State extends State<History1> {
     setState(() {
       loading = false;
     });
+    for (dynamic book in _bookings1) {
+      if (Booking.fromSnapshot(book).seen_status == 'unseen') {
+        FirebaseFirestore.instance
+            .collection('bookings')
+            .doc(Booking.fromSnapshot(book).id)
+            .update({'seen_status': 'seen1'});
+      } 
+      // else if (Booking.fromSnapshot(book).seen_status == 'seen1') {
+      //   FirebaseFirestore.instance
+      //       .collection('bookings')
+      //       .doc(Booking.fromSnapshot(book).id)
+      //       .update({'seen_status': 'seen2'});
+      // }
+    }
+
+    for (dynamic book in _bookings) {
+      if (Booking.fromSnapshot(book).seen_status == 'seen1') {
+        FirebaseFirestore.instance
+            .collection('bookings')
+            .doc(Booking.fromSnapshot(book).id)
+            .update({'seen_status': 'seen2'});
+      } 
+      // else if (Booking.fromSnapshot(book).seen_status == 'seen1') {
+      //   FirebaseFirestore.instance
+      //       .collection('bookings')
+      //       .doc(Booking.fromSnapshot(book).id)
+      //       .update({'seen_status': 'seen2'});
+      // }
+    }
   }
+
+  
 
   @override
   void initState() {

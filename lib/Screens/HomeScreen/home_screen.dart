@@ -30,7 +30,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool isNotif = false;
   int _selectedIndex = 0;
+  int notifCounter = 0;
+  StreamSubscription<QuerySnapshot> subscription;
   static List<Widget> _widgetOptions = <Widget>[
     StreamProvider<List<Place>>.value(
       value: PlaceDB().places,
@@ -51,13 +54,61 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void initState() {
+    subscription = FirebaseFirestore.instance
+        .collection('bookings')
+        .where(
+          'status',
+          isEqualTo: 'in process',
+        )
+        .where(
+          'userId',
+          isEqualTo: FirebaseAuth.instance.currentUser.uid.toString(),
+        )
+        .where('seen_status', whereIn: ['unseen'])
+        .snapshots()
+        .listen((docsnap) {
+          if (docsnap != null) {
+            if (docsnap.docs.length != 0) {
+              setState(() {
+                isNotif = true;
+                notifCounter = docsnap.docs.length;
+              });
+            } else {
+              setState(() {
+                isNotif = false;
+                notifCounter = 0;
+              });
+            }
+          } else {
+            setState(() {
+              isNotif = false;
+              notifCounter = 0;
+            });
+          }
+          // if (docsnap.data()['favourites'].contains(widget.containsValue)) {
+          //   setState(() {
+          //     isColored = true;
+          //     isOne = false;
+          //   });
+          // } else if (!docsnap.data()['favourites'].contains(widget.containsValue)) {
+          //   setState(() {
+          //     isColored = false;
+          //     isOne = true;
+          //   });
+          // }
+        });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.map),
             label: 'Map',
@@ -67,7 +118,35 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Search',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.access_alarm),
+            icon: isNotif
+                ? new Stack(
+                    children: <Widget>[
+                      new Icon(Icons.access_alarm),
+                      new Positioned(
+                        right: 0,
+                        child: new Container(
+                          padding: EdgeInsets.all(1),
+                          decoration: new BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          constraints: BoxConstraints(
+                            minWidth: 15,
+                            minHeight: 15,
+                          ),
+                          child: new Text(
+                            notifCounter.toString(),
+                            style: new TextStyle(
+                              color: Colors.white,
+                              fontSize: 8,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                : Icon(Icons.access_alarm),
             label: 'History',
           ),
           BottomNavigationBarItem(

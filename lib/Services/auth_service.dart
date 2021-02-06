@@ -9,7 +9,7 @@ import 'package:flutter_complete_guide/Services/push_notification_service.dart';
 
 class AuthService {
   static final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-  
+
   handleAuth() {
     return StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
@@ -37,6 +37,9 @@ class AuthService {
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser.uid)
           .set({'status': 'default'});
+      final pushNotificationService =
+          PushNotificationService(_firebaseMessaging);
+      pushNotificationService.init();
       return res;
     } catch (e) {
       FirebaseFirestore.instance

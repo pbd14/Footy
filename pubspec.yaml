@@ -39,7 +39,7 @@ dependencies:
   provider: ^4.3.2+3
   geolocator: ^5.3.0
   carousel_slider: ^2.3.1
-  # syncfusion_flutter_calendar: ^18.4.32
+  syncfusion_flutter_calendar: ^18.4.32
   date_format: ^1.0.9
   overlay_support: ^1.0.5
   # workmanager: ^0.2.3

@@ -179,7 +179,6 @@ class _History1State extends State<History1> {
                               });
                             },
                             child: CardW(
-                              width: 0.8,
                               ph: 140,
                               bgColor: darkPrimaryColor,
                               child: Column(
@@ -317,7 +316,6 @@ class _History1State extends State<History1> {
                         ),
                           for (var book in _bookings)
                             CardW(
-                              width: 0.8,
                               ph: 170,
                               child: Column(
                                 children: [
@@ -606,161 +604,6 @@ class _History1State extends State<History1> {
                                 ],
                               ),
                             ),
-
-                          // CardW(
-                          //   width: 0.8,
-                          //   height: 0.45,
-                          //   child: Center(
-                          //     child: Padding(
-                          //       padding: EdgeInsets.fromLTRB(20, 0, 15, 0),
-                          //       child: Column(
-                          //         children: <Widget>[
-                          //           SizedBox(
-                          //             height: size.height * 0.04,
-                          //           ),
-                          //           Text(
-                          //             DateFormat.yMMMd()
-                          //                 .format(Booking.fromSnapshot(book)
-                          //                     .timestamp_date
-                          //                     .toDate())
-                          //                 .toString(),
-                          //             overflow: TextOverflow.ellipsis,
-                          //             style: GoogleFonts.montserrat(
-                          //               textStyle: TextStyle(
-                          //                 color: darkPrimaryColor,
-                          //                 fontSize: 25,
-                          //                 fontWeight: FontWeight.bold,
-                          //               ),
-                          //             ),
-                          //           ),
-                          //           Text(
-                          //             Booking.fromSnapshot(book).from +
-                          //                 ' - ' +
-                          //                 Booking.fromSnapshot(book).to,
-                          //             overflow: TextOverflow.ellipsis,
-                          //             style: GoogleFonts.montserrat(
-                          //               textStyle: TextStyle(
-                          //                 color: darkPrimaryColor,
-                          //                 fontSize: 20,
-                          //               ),
-                          //             ),
-                          //           ),
-                          //           Text(
-                          //             // _places != null
-                          //             //     ? _places[Booking.fromSnapshot(book)
-                          //             //                     .id]
-                          //             //                 .name !=
-                          //             //             null
-                          //             //         ? _places[Booking.fromSnapshot(
-                          //             //                     book)
-                          //             //                 .id]
-                          //             //             .name
-                          //             //         : 'Place'
-                          //             //     : 'Place',
-                          //             'Place',
-                          //             overflow: TextOverflow.ellipsis,
-                          //             style: GoogleFonts.montserrat(
-                          //               textStyle: TextStyle(
-                          //                 color: darkPrimaryColor,
-                          //                 fontSize: 20,
-                          //               ),
-                          //             ),
-                          //           ),
-                          //           Expanded(
-                          //             child: Text(
-                          //               Booking.fromSnapshot(book).info !=
-                          //                       null
-                          //                   ? Booking.fromSnapshot(book).info
-                          //                   : 'No info',
-                          //               overflow: TextOverflow.ellipsis,
-                          //               style: GoogleFonts.montserrat(
-                          //                 textStyle: TextStyle(
-                          //                   color: darkPrimaryColor,
-                          //                   fontSize: 20,
-                          //                 ),
-                          //               ),
-                          //             ),
-                          //           ),
-                          //           Text(
-                          //             Booking.fromSnapshot(book).status,
-                          //             overflow: TextOverflow.ellipsis,
-                          //             style: GoogleFonts.montserrat(
-                          //               textStyle: TextStyle(
-                          //                 color: Booking.fromSnapshot(book)
-                          //                             .status ==
-                          //                         'unfinished'
-                          //                     ? darkPrimaryColor
-                          //                     : Colors.red,
-                          //                 fontSize: 20,
-                          //               ),
-                          //             ),
-                          //           ),
-                          //           SizedBox(
-                          //             height: size.height * 0.02,
-                          //           ),
-                          //           Row(
-                          //             mainAxisAlignment:
-                          //                 MainAxisAlignment.center,
-                          //             children: <Widget>[
-                          //               RoundedButton(
-                          //                 width: 0.3,
-                          //                 height: 0.07,
-                          //                 text: 'On Map',
-                          //                 press: () {
-                          //                   setState(() {
-                          //                     loading = true;
-                          //                   });
-                          //                   Navigator.push(
-                          //                     context,
-                          //                     SlideRightRoute(
-                          //                       page: MapScreen(
-                          //                         data: {
-                          //                           'lat': _places != null
-                          //                               ? _places[Booking
-                          //                                           .fromSnapshot(
-                          //                                               book)
-                          //                                       .id]
-                          //                                   .lat
-                          //                               : null,
-                          //                           'lon': _places != null
-                          //                               ? _places[Booking
-                          //                                           .fromSnapshot(
-                          //                                               book)
-                          //                                       .id]
-                          //                                   .lon
-                          //                               : null
-                          //                         },
-                          //                       ),
-                          //                     ),
-                          //                   );
-                          //                   setState(() {
-                          //                     loading = false;
-                          //                   });
-                          //                 },
-                          //                 color: darkPrimaryColor,
-                          //                 textColor: whiteColor,
-                          //               ),
-                          //               SizedBox(
-                          //                 width: size.width * 0.04,
-                          //               ),
-                          //               RoundedButton(
-                          //                 width: 0.3,
-                          //                 height: 0.07,
-                          //                 text: 'Book',
-                          //                 press: () async {},
-                          //                 color: darkPrimaryColor,
-                          //                 textColor: whiteColor,
-                          //               ),
-                          //             ],
-                          //           ),
-                          //           SizedBox(
-                          //             height: size.height * 0.05,
-                          //           ),
-                          //         ],
-                          //       ),
-                          //     ),
-                          //   ),
-                          // )
                         ],
                       ),
                     ),
@@ -769,9 +612,26 @@ class _History1State extends State<History1> {
                     SliverList(
                       delegate: SliverChildListDelegate(
                         [
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Center(
+                          child: Text(
+                            'Upcoming',
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.montserrat(
+                              textStyle: TextStyle(
+                                color: darkPrimaryColor,
+                                fontSize: 25,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
                           for (var book in _bookings)
                             CardW(
-                              width: 0.8,
                               ph: 170,
                               child: Column(
                                 children: [

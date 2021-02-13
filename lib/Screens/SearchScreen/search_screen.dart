@@ -74,6 +74,7 @@ class _SearchScreenState extends State<SearchScreen> {
   void initState() {
     super.initState();
     _searchController.addListener(_onSearchChanged);
+    prepareLabel();
   }
 
   @override
@@ -101,481 +102,466 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('BUILD');
     Size size = MediaQuery.of(context).size;
-    prepareLabel();
+    // prepareLabel();
     return loading
         ? LoadingScreen()
         : Scaffold(
             backgroundColor: whiteColor,
             body: SafeArea(
-              child: SingleChildScrollView(
-                child: Background(
-                  child: Form(
-                    key: _formKey,
-                    child: Container(
-                      width: size.width * 0.85,
-                      margin: EdgeInsets.fromLTRB(
-                          size.width * 0.065,
-                          size.height * 0.01,
-                          size.width * 0.065,
-                          size.height * 0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          RoundedTextInput(
-                            controller: _searchController,
-                            icon: Icons.search,
-                            hintText: 'Place name',
-                            type: TextInputType.text,
-                          ),
-                          Expanded(
-                            child: loading1
-                                ? LoadingScreen()
-                                : Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                    child: ListView.builder(
-                                      itemCount: _results.length,
-                                      itemBuilder:
-                                          (BuildContext context, int index) =>
-                                              CardW(
-                                        width: 0.8,
-                                        ph: 250,
-                                        child: Center(
-                                          child: Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                20, 0, 15, 0),
-                                            child: Column(
-                                              children: <Widget>[
+              child: Background(
+                child: Form(
+                  key: _formKey,
+                  child: Container(
+                    // width: size.width * 0.85,
+                    // margin: EdgeInsets.fromLTRB(
+                    //     size.width * 0.065,
+                    //     size.height * 0.01,
+                    //     size.width * 0.065,
+                    //     size.height * 0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        RoundedTextInput(
+                          controller: _searchController,
+                          icon: Icons.search,
+                          hintText: 'Place name',
+                          type: TextInputType.text,
+                        ),
+                        Expanded(
+                          child: loading1
+                              ? LoadingScreen()
+                              : ListView.builder(
+                                  padding: EdgeInsets.only(bottom: 10),
+                                  itemCount: _results.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) =>
+                                          CardW(
+                                    ph: 250,
+                                    child: Center(
+                                      child: Padding(
+                                        padding:
+                                            EdgeInsets.fromLTRB(20, 0, 15, 0),
+                                        child: Column(
+                                          children: <Widget>[
+                                            SizedBox(
+                                              height: size.height * 0.04,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
                                                 SizedBox(
-                                                  height: size.height * 0.04,
+                                                  width: size.width * 0.03,
                                                 ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    SizedBox(
-                                                      width: size.width * 0.03,
-                                                    ),
-                                                    Expanded(
-                                                      child: Text(
-                                                        Place.fromSnapshot(
-                                                                _results[index])
-                                                            .name,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: GoogleFonts
-                                                            .montserrat(
-                                                          textStyle: TextStyle(
-                                                            color:
-                                                                darkPrimaryColor,
-                                                            fontSize: 25,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                        ),
+                                                Expanded(
+                                                  child: Text(
+                                                    Place.fromSnapshot(
+                                                            _results[index])
+                                                        .name,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style:
+                                                        GoogleFonts.montserrat(
+                                                      textStyle: TextStyle(
+                                                        color: darkPrimaryColor,
+                                                        fontSize: 25,
+                                                        fontWeight:
+                                                            FontWeight.bold,
                                                       ),
                                                     ),
-                                                    LabelButton(
-                                                      isC: _favs.contains(
-                                                        Place.fromSnapshot(
-                                                                _results[index])
-                                                            .id,
-                                                      )
-                                                          ? true
-                                                          : false,
-                                                      reverse: FirebaseFirestore
-                                                          .instance
+                                                  ),
+                                                ),
+                                                LabelButton(
+                                                  isC: _favs.contains(
+                                                    Place.fromSnapshot(
+                                                            _results[index])
+                                                        .id,
+                                                  )
+                                                      ? true
+                                                      : false,
+                                                  reverse: FirebaseFirestore
+                                                      .instance
+                                                      .collection('users')
+                                                      .doc(FirebaseAuth.instance
+                                                          .currentUser.uid),
+                                                  containsValue:
+                                                      Place.fromSnapshot(
+                                                              _results[index])
+                                                          .id,
+                                                  color1: Colors.red,
+                                                  color2: lightPrimaryColor,
+                                                  ph: 45,
+                                                  pw: 45,
+                                                  size: 40,
+                                                  onTap: () {
+                                                    setState(() {
+                                                      FirebaseFirestore.instance
                                                           .collection('users')
                                                           .doc(FirebaseAuth
                                                               .instance
                                                               .currentUser
-                                                              .uid),
-                                                      containsValue:
+                                                              .uid)
+                                                          .update({
+                                                        'favourites': FieldValue
+                                                            .arrayUnion([
                                                           Place.fromSnapshot(
                                                                   _results[
                                                                       index])
-                                                              .id,
-                                                      color1: Colors.red,
-                                                      color2: lightPrimaryColor,
-                                                      ph: 45,
-                                                      pw: 45,
-                                                      size: 40,
-                                                      onTap: () {
-                                                        setState(() {
-                                                          FirebaseFirestore
+                                                              .id
+                                                        ])
+                                                      });
+                                                    });
+                                                  },
+                                                  onTap2: () {
+                                                    setState(() {
+                                                      FirebaseFirestore.instance
+                                                          .collection('users')
+                                                          .doc(FirebaseAuth
                                                               .instance
-                                                              .collection(
-                                                                  'users')
-                                                              .doc(FirebaseAuth
-                                                                  .instance
-                                                                  .currentUser
-                                                                  .uid)
-                                                              .update({
-                                                            'favourites':
-                                                                FieldValue
-                                                                    .arrayUnion([
-                                                              Place.fromSnapshot(
-                                                                      _results[
-                                                                          index])
-                                                                  .id
-                                                            ])
-                                                          });
-                                                        });
-                                                      },
-                                                      onTap2: () {
-                                                        setState(() {
-                                                          FirebaseFirestore
-                                                              .instance
-                                                              .collection(
-                                                                  'users')
-                                                              .doc(FirebaseAuth
-                                                                  .instance
-                                                                  .currentUser
-                                                                  .uid)
-                                                              .update({
-                                                            'favourites':
-                                                                FieldValue
-                                                                    .arrayRemove([
-                                                              Place.fromSnapshot(
-                                                                      _results[
-                                                                          index])
-                                                                  .id
-                                                            ])
-                                                          });
-                                                        });
-                                                      },
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: size.height * 0.03,
-                                                ),
-                                                Text(
-                                                  Place.fromSnapshot(_results[
-                                                                  index])
-                                                              .description !=
-                                                          null
-                                                      ? Place.fromSnapshot(
-                                                              _results[index])
-                                                          .description
-                                                      : 'No description',
-                                                  maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: GoogleFonts.montserrat(
-                                                    textStyle: TextStyle(
-                                                      color: darkPrimaryColor,
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: size.height * 0.01,
-                                                ),
-                                                Text(
-                                                  Place.fromSnapshot(_results[
-                                                                  index])
-                                                              .by !=
-                                                          null
-                                                      ? Place.fromSnapshot(
-                                                              _results[index])
-                                                          .by
-                                                      : 'No company',
-                                                  maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: GoogleFonts.montserrat(
-                                                    textStyle: TextStyle(
-                                                      color: darkPrimaryColor,
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: size.height * 0.04,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: <Widget>[
-                                                    RoundedButton(
-                                                      width: 0.3,
-                                                      height: 0.07,
-                                                      text: 'On Map',
-                                                      press: () async {
-                                                        setState(() {
-                                                          loading = true;
-                                                        });
-                                                        Navigator.push(
-                                                          context,
-                                                          SlideRightRoute(
-                                                            page: MapScreen(
-                                                              data: {
-                                                                'lat': Place.fromSnapshot(
-                                                                        _results[
-                                                                            index])
-                                                                    .lat,
-                                                                'lon': Place.fromSnapshot(
-                                                                        _results[
-                                                                            index])
-                                                                    .lon
-                                                              },
-                                                            ),
-                                                          ),
-                                                        );
-                                                        setState(() {
-                                                          loading = false;
-                                                        });
-                                                      },
-                                                      color: darkPrimaryColor,
-                                                      textColor: whiteColor,
-                                                    ),
-                                                    SizedBox(
-                                                      width: size.width * 0.04,
-                                                    ),
-                                                    RoundedButton(
-                                                      width: 0.3,
-                                                      height: 0.07,
-                                                      text: 'Book',
-                                                      press: () async {
-                                                        setState(() {
-                                                          loading = true;
-                                                        });
-                                                        Navigator.push(
-                                                          context,
-                                                          SlideRightRoute(
-                                                            page: PlaceScreen(
-                                                              data: {
-                                                                'name': Place.fromSnapshot(
-                                                                        _results[
-                                                                            index])
-                                                                    .name, //0
-                                                                'description': Place
-                                                                        .fromSnapshot(
-                                                                            _results[index])
-                                                                    .description, //1
-                                                                'by': Place.fromSnapshot(
-                                                                        _results[
-                                                                            index])
-                                                                    .by, //2
-                                                                'lat': Place.fromSnapshot(
-                                                                        _results[
-                                                                            index])
-                                                                    .lat, //3
-                                                                'lon': Place.fromSnapshot(
-                                                                        _results[
-                                                                            index])
-                                                                    .lon, //4
-                                                                'images': Place.fromSnapshot(
-                                                                        _results[
-                                                                            index])
-                                                                    .images, //5
-                                                                'services': Place
-                                                                        .fromSnapshot(
-                                                                            _results[index])
-                                                                    .services,
-                                                                'id': Place.fromSnapshot(
-                                                                        _results[
-                                                                            index])
-                                                                    .id, //7
-                                                              },
-                                                            ),
-                                                          ),
-                                                        );
-                                                        setState(() {
-                                                          loading = false;
-                                                        });
-                                                      },
-                                                      color: darkPrimaryColor,
-                                                      textColor: whiteColor,
-                                                    ),
-                                                  ],
+                                                              .currentUser
+                                                              .uid)
+                                                          .update({
+                                                        'favourites': FieldValue
+                                                            .arrayRemove([
+                                                          Place.fromSnapshot(
+                                                                  _results[
+                                                                      index])
+                                                              .id
+                                                        ])
+                                                      });
+                                                    });
+                                                  },
                                                 ),
                                               ],
                                             ),
-                                          ),
+                                            SizedBox(
+                                              height: size.height * 0.03,
+                                            ),
+                                            Text(
+                                              Place.fromSnapshot(
+                                                              _results[index])
+                                                          .description !=
+                                                      null
+                                                  ? Place.fromSnapshot(
+                                                          _results[index])
+                                                      .description
+                                                  : 'No description',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              textScaleFactor: 1,
+                                              style: GoogleFonts.montserrat(
+                                                textStyle: TextStyle(
+                                                  color: darkPrimaryColor,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: size.height * 0.01,
+                                            ),
+                                            Text(
+                                              Place.fromSnapshot(
+                                                              _results[index])
+                                                          .by !=
+                                                      null
+                                                  ? Place.fromSnapshot(
+                                                          _results[index])
+                                                      .by
+                                                  : 'No company',
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: GoogleFonts.montserrat(
+                                                textStyle: TextStyle(
+                                                  color: darkPrimaryColor,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: size.height * 0.04,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: <Widget>[
+                                                RoundedButton(
+                                                  width: 0.3,
+                                                  height: 0.07,
+                                                  text: 'On Map',
+                                                  press: () async {
+                                                    setState(() {
+                                                      loading = true;
+                                                    });
+                                                    Navigator.push(
+                                                      context,
+                                                      SlideRightRoute(
+                                                        page: MapScreen(
+                                                          data: {
+                                                            'lat': Place.fromSnapshot(
+                                                                    _results[
+                                                                        index])
+                                                                .lat,
+                                                            'lon': Place.fromSnapshot(
+                                                                    _results[
+                                                                        index])
+                                                                .lon
+                                                          },
+                                                        ),
+                                                      ),
+                                                    );
+                                                    setState(() {
+                                                      loading = false;
+                                                    });
+                                                  },
+                                                  color: darkPrimaryColor,
+                                                  textColor: whiteColor,
+                                                ),
+                                                SizedBox(
+                                                  width: size.width * 0.04,
+                                                ),
+                                                RoundedButton(
+                                                  width: 0.3,
+                                                  height: 0.07,
+                                                  text: 'Book',
+                                                  press: () async {
+                                                    setState(() {
+                                                      loading = true;
+                                                    });
+                                                    Navigator.push(
+                                                      context,
+                                                      SlideRightRoute(
+                                                        page: PlaceScreen(
+                                                          data: {
+                                                            'name': Place
+                                                                    .fromSnapshot(
+                                                                        _results[
+                                                                            index])
+                                                                .name, //0
+                                                            'description': Place
+                                                                    .fromSnapshot(
+                                                                        _results[
+                                                                            index])
+                                                                .description, //1
+                                                            'by': Place.fromSnapshot(
+                                                                    _results[
+                                                                        index])
+                                                                .by, //2
+                                                            'lat': Place.fromSnapshot(
+                                                                    _results[
+                                                                        index])
+                                                                .lat, //3
+                                                            'lon': Place.fromSnapshot(
+                                                                    _results[
+                                                                        index])
+                                                                .lon, //4
+                                                            'images': Place
+                                                                    .fromSnapshot(
+                                                                        _results[
+                                                                            index])
+                                                                .images, //5
+                                                            'services': Place
+                                                                    .fromSnapshot(
+                                                                        _results[
+                                                                            index])
+                                                                .services,
+                                                            'id': Place.fromSnapshot(
+                                                                    _results[
+                                                                        index])
+                                                                .id, //7
+                                                          },
+                                                        ),
+                                                      ),
+                                                    );
+                                                    setState(() {
+                                                      loading = false;
+                                                    });
+                                                  },
+                                                  color: darkPrimaryColor,
+                                                  textColor: whiteColor,
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),
                                   ),
-                            // StreamBuilder(
-                            //   stream: FirebaseFirestore.instance
-                            //       .collection('locations')
-                            //       .orderBy('name')
-                            //       .limit(100)
-                            //       .snapshots(),
-                            //   builder: (context, snapshot) {
-                            //     return !snapshot.hasData
-                            //         ? LoadingScreen()
-                            //         : Padding(
-                            //             padding: const EdgeInsets.fromLTRB(
-                            //                 0, 5, 0, 5),
-                            //             child: ListView.builder(
-                            //               itemCount:
-                            //                   snapshot.data.documents.length,
-                            //               itemBuilder: (context, index) {
-                            //                 DocumentSnapshot places =
-                            //                     snapshot.data.documents[index];
-                            //                 return CardW(
-                            //                   width: 0.7,
-                            //                   height: 0.35,
-                            //                   child: Center(
-                            //                     child: Padding(
-                            //                       padding: EdgeInsets.fromLTRB(
-                            //                           20, 0, 15, 0),
-                            //                       child: Column(
-                            //                         children: <Widget>[
-                            //                           SizedBox(
-                            //                             height:
-                            //                                 size.height * 0.04,
-                            //                           ),
-                            //                           Text(
-                            //                             places.data()['name'],
-                            //                             overflow: TextOverflow
-                            //                                 .ellipsis,
-                            //                             style: GoogleFonts
-                            //                                 .montserrat(
-                            //                               textStyle: TextStyle(
-                            //                                 color:
-                            //                                     darkPrimaryColor,
-                            //                                 fontSize: 25,
-                            //                                 fontWeight:
-                            //                                     FontWeight.bold,
-                            //                               ),
-                            //                             ),
-                            //                           ),
-                            //                           SizedBox(
-                            //                             height:
-                            //                                 size.height * 0.03,
-                            //                           ),
-                            //                           Text(
-                            //                             places.data()[
-                            //                                         'description'] !=
-                            //                                     null
-                            //                                 ? places.data()[
-                            //                                     'description']
-                            //                                 : 'No description',
-                            //                             maxLines: 2,
-                            //                             overflow: TextOverflow
-                            //                                 .ellipsis,
-                            //                             style: GoogleFonts
-                            //                                 .montserrat(
-                            //                               textStyle: TextStyle(
-                            //                                 color:
-                            //                                     darkPrimaryColor,
-                            //                                 fontSize: 15,
-                            //                               ),
-                            //                             ),
-                            //                           ),
-                            //                           SizedBox(
-                            //                             height:
-                            //                                 size.height * 0.01,
-                            //                           ),
-                            //                           Text(
-                            //                             places.data()['by'] !=
-                            //                                     null
-                            //                                 ? places
-                            //                                     .data()['by']
-                            //                                 : 'No company',
-                            //                             maxLines: 2,
-                            //                             overflow: TextOverflow
-                            //                                 .ellipsis,
-                            //                             style: GoogleFonts
-                            //                                 .montserrat(
-                            //                               textStyle: TextStyle(
-                            //                                 color:
-                            //                                     darkPrimaryColor,
-                            //                                 fontSize: 15,
-                            //                               ),
-                            //                             ),
-                            //                           ),
-                            //                           SizedBox(
-                            //                             height:
-                            //                                 size.height * 0.04,
-                            //                           ),
-                            //                           Row(
-                            //                             mainAxisAlignment:
-                            //                                 MainAxisAlignment
-                            //                                     .center,
-                            //                             children: <Widget>[
-                            //                               RoundedButton(
-                            //                                 width: 0.3,
-                            //                                 height: 0.07,
-                            //                                 text: 'On Map',
-                            //                                 press: () async {
-                            //                                   setState(() {
-                            //                                     loading = true;
-                            //                                   });
-                            //                                   Navigator.push(
-                            //                                     context,
-                            //                                     SlideRightRoute(
-                            //                                       page:
-                            //                                           HomeScreen(
-                            //                                         selected:
-                            //                                             'map',
-                            //                                         data: [
-                            //                                           places.data()[
-                            //                                               'lat'],
-                            //                                           places.data()[
-                            //                                               'lon']
-                            //                                         ],
-                            //                                       ),
-                            //                                     ),
-                            //                                   );
-                            //                                 },
-                            //                                 color:
-                            //                                     darkPrimaryColor,
-                            //                                 textColor:
-                            //                                     whiteColor,
-                            //                               ),
-                            //                               SizedBox(
-                            //                                 width: size.width *
-                            //                                     0.04,
-                            //                               ),
-                            //                               RoundedButton(
-                            //                                 width: 0.3,
-                            //                                 height: 0.07,
-                            //                                 text: 'Order',
-                            //                                 press: () async {
-                            //                                   setState(() {
-                            //                                     loading = true;
-                            //                                   });
-                            //                                   Navigator.push(
-                            //                                     context,
-                            //                                     SlideRightRoute(
-                            //                                       page:
-                            //                                           HomeScreen(
-                            //                                         selected:
-                            //                                             'favourites',
-                            //                                         data: null,
-                            //                                       ),
-                            //                                     ),
-                            //                                   );
-                            //                                 },
-                            //                                 color:
-                            //                                     darkPrimaryColor,
-                            //                                 textColor:
-                            //                                     whiteColor,
-                            //                               ),
-                            //                             ],
-                            //                           ),
-                            //                         ],
-                            //                       ),
-                            //                     ),
-                            //                   ),
-                            //                 );
-                            //               },
-                            //             ),
-                            //           );
-                            //   },
-                            // ),
-                          ),
-                          SizedBox(
-                            height: size.height * 0.105,
-                          ),
-                        ],
-                      ),
+                                ),
+                          // StreamBuilder(
+                          //   stream: FirebaseFirestore.instance
+                          //       .collection('locations')
+                          //       .orderBy('name')
+                          //       .limit(100)
+                          //       .snapshots(),
+                          //   builder: (context, snapshot) {
+                          //     return !snapshot.hasData
+                          //         ? LoadingScreen()
+                          //         : Padding(
+                          //             padding: const EdgeInsets.fromLTRB(
+                          //                 0, 5, 0, 5),
+                          //             child: ListView.builder(
+                          //               itemCount:
+                          //                   snapshot.data.documents.length,
+                          //               itemBuilder: (context, index) {
+                          //                 DocumentSnapshot places =
+                          //                     snapshot.data.documents[index];
+                          //                 return CardW(
+                          //                   width: 0.7,
+                          //                   height: 0.35,
+                          //                   child: Center(
+                          //                     child: Padding(
+                          //                       padding: EdgeInsets.fromLTRB(
+                          //                           20, 0, 15, 0),
+                          //                       child: Column(
+                          //                         children: <Widget>[
+                          //                           SizedBox(
+                          //                             height:
+                          //                                 size.height * 0.04,
+                          //                           ),
+                          //                           Text(
+                          //                             places.data()['name'],
+                          //                             overflow: TextOverflow
+                          //                                 .ellipsis,
+                          //                             style: GoogleFonts
+                          //                                 .montserrat(
+                          //                               textStyle: TextStyle(
+                          //                                 color:
+                          //                                     darkPrimaryColor,
+                          //                                 fontSize: 25,
+                          //                                 fontWeight:
+                          //                                     FontWeight.bold,
+                          //                               ),
+                          //                             ),
+                          //                           ),
+                          //                           SizedBox(
+                          //                             height:
+                          //                                 size.height * 0.03,
+                          //                           ),
+                          //                           Text(
+                          //                             places.data()[
+                          //                                         'description'] !=
+                          //                                     null
+                          //                                 ? places.data()[
+                          //                                     'description']
+                          //                                 : 'No description',
+                          //                             maxLines: 2,
+                          //                             overflow: TextOverflow
+                          //                                 .ellipsis,
+                          //                             style: GoogleFonts
+                          //                                 .montserrat(
+                          //                               textStyle: TextStyle(
+                          //                                 color:
+                          //                                     darkPrimaryColor,
+                          //                                 fontSize: 15,
+                          //                               ),
+                          //                             ),
+                          //                           ),
+                          //                           SizedBox(
+                          //                             height:
+                          //                                 size.height * 0.01,
+                          //                           ),
+                          //                           Text(
+                          //                             places.data()['by'] !=
+                          //                                     null
+                          //                                 ? places
+                          //                                     .data()['by']
+                          //                                 : 'No company',
+                          //                             maxLines: 2,
+                          //                             overflow: TextOverflow
+                          //                                 .ellipsis,
+                          //                             style: GoogleFonts
+                          //                                 .montserrat(
+                          //                               textStyle: TextStyle(
+                          //                                 color:
+                          //                                     darkPrimaryColor,
+                          //                                 fontSize: 15,
+                          //                               ),
+                          //                             ),
+                          //                           ),
+                          //                           SizedBox(
+                          //                             height:
+                          //                                 size.height * 0.04,
+                          //                           ),
+                          //                           Row(
+                          //                             mainAxisAlignment:
+                          //                                 MainAxisAlignment
+                          //                                     .center,
+                          //                             children: <Widget>[
+                          //                               RoundedButton(
+                          //                                 width: 0.3,
+                          //                                 height: 0.07,
+                          //                                 text: 'On Map',
+                          //                                 press: () async {
+                          //                                   setState(() {
+                          //                                     loading = true;
+                          //                                   });
+                          //                                   Navigator.push(
+                          //                                     context,
+                          //                                     SlideRightRoute(
+                          //                                       page:
+                          //                                           HomeScreen(
+                          //                                         selected:
+                          //                                             'map',
+                          //                                         data: [
+                          //                                           places.data()[
+                          //                                               'lat'],
+                          //                                           places.data()[
+                          //                                               'lon']
+                          //                                         ],
+                          //                                       ),
+                          //                                     ),
+                          //                                   );
+                          //                                 },
+                          //                                 color:
+                          //                                     darkPrimaryColor,
+                          //                                 textColor:
+                          //                                     whiteColor,
+                          //                               ),
+                          //                               SizedBox(
+                          //                                 width: size.width *
+                          //                                     0.04,
+                          //                               ),
+                          //                               RoundedButton(
+                          //                                 width: 0.3,
+                          //                                 height: 0.07,
+                          //                                 text: 'Order',
+                          //                                 press: () async {
+                          //                                   setState(() {
+                          //                                     loading = true;
+                          //                                   });
+                          //                                   Navigator.push(
+                          //                                     context,
+                          //                                     SlideRightRoute(
+                          //                                       page:
+                          //                                           HomeScreen(
+                          //                                         selected:
+                          //                                             'favourites',
+                          //                                         data: null,
+                          //                                       ),
+                          //                                     ),
+                          //                                   );
+                          //                                 },
+                          //                                 color:
+                          //                                     darkPrimaryColor,
+                          //                                 textColor:
+                          //                                     whiteColor,
+                          //                               ),
+                          //                             ],
+                          //                           ),
+                          //                         ],
+                          //                       ),
+                          //                     ),
+                          //                   ),
+                          //                 );
+                          //               },
+                          //             ),
+                          //           );
+                          //   },
+                          // ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

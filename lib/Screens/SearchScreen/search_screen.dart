@@ -95,9 +95,9 @@ class _SearchScreenState extends State<SearchScreen> {
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser.uid)
         .get();
-    setState(() {
-      _favs = dataL.data()['favourites'];
-    });
+      setState(() {
+        _favs = dataL.data()['favourites'];
+      });
   }
 
   @override
@@ -196,7 +196,6 @@ class _SearchScreenState extends State<SearchScreen> {
                                                   pw: 45,
                                                   size: 40,
                                                   onTap: () {
-                                                    setState(() {
                                                       FirebaseFirestore.instance
                                                           .collection('users')
                                                           .doc(FirebaseAuth
@@ -212,10 +211,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                                               .id
                                                         ])
                                                       });
-                                                    });
                                                   },
                                                   onTap2: () {
-                                                    setState(() {
                                                       FirebaseFirestore.instance
                                                           .collection('users')
                                                           .doc(FirebaseAuth
@@ -231,7 +228,6 @@ class _SearchScreenState extends State<SearchScreen> {
                                                               .id
                                                         ])
                                                       });
-                                                    });
                                                   },
                                                 ),
                                               ],

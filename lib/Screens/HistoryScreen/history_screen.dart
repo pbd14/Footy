@@ -45,7 +45,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     ),
                     Tab(
                       child: Text(
-                        'History',
+                        'Schedule',
                         style: GoogleFonts.montserrat(
                           textStyle: TextStyle(
                               color: whiteColor,

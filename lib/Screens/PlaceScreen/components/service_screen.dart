@@ -651,6 +651,8 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                                     'nonver'
                                                                 ? 'unfinished'
                                                                 : 'verification_needed',
+                                                            'seen_status':
+                                                                'unseen',
                                                           });
                                                           setState(() {
                                                             selectedDate =

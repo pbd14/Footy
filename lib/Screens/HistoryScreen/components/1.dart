@@ -141,11 +141,28 @@ class _History1State extends State<History1> {
             scrollDirection: Axis.vertical,
             slivers: slivers.length != 0
                 ? [
-                    SliverGrid.count(
-                      children: [
+                    SliverList(
+                      delegate: SliverChildListDelegate([
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Center(
+                          child: Text(
+                            'Ongoing',
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.montserrat(
+                              textStyle: TextStyle(
+                                color: darkPrimaryColor,
+                                fontSize: 25,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
                         for (var book in slivers)
                           FlatButton(
-                            padding: const EdgeInsets.fromLTRB(6, 1, 6, 1),
                             onPressed: () {
                               setState(() {
                                 loading = true;
@@ -161,30 +178,143 @@ class _History1State extends State<History1> {
                                 loading = false;
                               });
                             },
-                            child: Container(
-                              alignment: Alignment.center,
-                              color: darkPrimaryColor,
-                              child: Text(
-                                placesSlivers[book] != null
-                                    ? Place.fromSnapshot(placesSlivers[book])
-                                        .name
-                                    : 'Place',
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.montserrat(
-                                  textStyle: TextStyle(
-                                    color: whiteColor,
-                                    fontSize: 20,
+                            child: CardW(
+                              width: 0.8,
+                              ph: 140,
+                              bgColor: darkPrimaryColor,
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: 20,
                                   ),
-                                ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          10, 0, 10, 0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            alignment: Alignment.centerLeft,
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  DateFormat.yMMMd()
+                                                      .format(
+                                                          Booking.fromSnapshot(
+                                                                  book)
+                                                              .timestamp_date
+                                                              .toDate())
+                                                      .toString(),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: GoogleFonts.montserrat(
+                                                    textStyle: TextStyle(
+                                                      color: whiteColor,
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text(
+                                                  Booking.fromSnapshot(book)
+                                                          .from +
+                                                      ' - ' +
+                                                      Booking.fromSnapshot(book)
+                                                          .to,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: GoogleFonts.montserrat(
+                                                    textStyle: TextStyle(
+                                                      color: whiteColor,
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: size.width * 0.1,
+                                          ),
+                                          Flexible(
+                                            child: Container(
+                                              alignment: Alignment.centerLeft,
+                                              child: Column(
+                                                children: [
+                                                  Text(
+                                                    placesSlivers[book] != null
+                                                        ? Place.fromSnapshot(
+                                                                placesSlivers[
+                                                                    book])
+                                                            .name
+
+                                                        //             _places != null
+                                                        //                 ? _places[Booking.fromSnapshot(
+                                                        //                                     book)
+                                                        //                                 .id]
+                                                        //                             .name !=
+                                                        //                         null
+                                                        //                     ? _places[Booking
+                                                        //                                 .fromSnapshot(
+                                                        //                                     book)
+                                                        //                             .id]
+                                                        //                         .name
+                                                        //                     : 'Place'
+                                                        : 'Place',
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style:
+                                                        GoogleFonts.montserrat(
+                                                      textStyle: TextStyle(
+                                                        color: whiteColor,
+                                                        fontSize: 15,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                      ],
-                      crossAxisCount: 2,
+                      ]),
                     ),
                     SliverList(
                       delegate: SliverChildListDelegate(
                         [
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Center(
+                          child: Text(
+                            'Upcoming',
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.montserrat(
+                              textStyle: TextStyle(
+                                color: darkPrimaryColor,
+                                fontSize: 25,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
                           for (var book in _bookings)
                             CardW(
                               width: 0.8,

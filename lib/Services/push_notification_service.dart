@@ -5,11 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Models/PushNotificationMessage.dart';
-import 'package:flutter_complete_guide/Screens/HistoryScreen/history_screen.dart';
 import 'package:flutter_complete_guide/constants.dart';
-import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'package:flutter_complete_guide/Screens/OnEventScreen/on_event_screen.dart';
 
 class PushNotificationService {
   final FirebaseMessaging _fcm;

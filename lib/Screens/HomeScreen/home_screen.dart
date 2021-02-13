@@ -33,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isNotif = false;
   int _selectedIndex = 0;
   int notifCounter = 0;
+  // ignore: cancel_subscriptions
   StreamSubscription<QuerySnapshot> subscription;
   static List<Widget> _widgetOptions = <Widget>[
     StreamProvider<List<Place>>.value(

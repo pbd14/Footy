@@ -38,6 +38,7 @@ class _LabelButtonState extends State<LabelButton> {
   bool isColored = false;
   bool isOne = true;
   Color labelColor;
+  // ignore: cancel_subscriptions
   StreamSubscription<DocumentSnapshot> subscription;
   List res = [];
 

@@ -1,9 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_complete_guide/Models/Booking.dart';
-import 'package:flutter_complete_guide/Models/Place.dart';
-import 'package:flutter_complete_guide/Screens/MapScreen/map_screen.dart';
 import 'package:flutter_complete_guide/Screens/OnEventScreen/on_event_screen.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
 import 'package:flutter_complete_guide/constants.dart';
@@ -11,7 +6,6 @@ import 'package:flutter_complete_guide/widgets/card.dart';
 import 'package:flutter_complete_guide/widgets/rounded_button.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 
 class FootyScreen extends StatefulWidget {
   @override
@@ -20,10 +14,6 @@ class FootyScreen extends StatefulWidget {
 
 class _FootyScreenState extends State<FootyScreen> {
   bool loading = false;
-  List _bookings;
-  Map _places = {'test': 'test'};
-  Map placesSlivers = {};
-  List _bookings1 = [];
   List slivers = [];
   List<Widget> sliversList = [];
 
@@ -61,11 +51,7 @@ class _FootyScreenState extends State<FootyScreen> {
                               child: Container(
                                 alignment: Alignment.center,
                                 color: darkPrimaryColor,
-                                child: Text(
-                                  placesSlivers[book] != null
-                                      ? Place.fromSnapshot(placesSlivers[book])
-                                          .name
-                                      : 'Place',
+                                child: Text('Place',
                                   overflow: TextOverflow.ellipsis,
                                   style: GoogleFonts.montserrat(
                                     textStyle: TextStyle(

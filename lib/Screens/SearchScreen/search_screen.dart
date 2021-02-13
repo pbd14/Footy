@@ -72,9 +72,9 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   void initState() {
-    super.initState();
     _searchController.addListener(_onSearchChanged);
     prepareLabel();
+    super.initState();
   }
 
   @override

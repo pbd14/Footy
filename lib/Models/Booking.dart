@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Booking {
+  // ignore: non_constant_identifier_names
   final String placeId, userId, status, type, info, seen_status, id;
   final double price;
   final int serviceId;
@@ -21,6 +22,7 @@ class Booking {
       this.timestamp_date,
       this.type,
       this.info,
+      // ignore: non_constant_identifier_names
       this.seen_status,
       this.id});
 

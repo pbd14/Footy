@@ -36,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // ignore: cancel_subscriptions
   StreamSubscription<QuerySnapshot> subscription;
   static List<Widget> _widgetOptions = <Widget>[
+    ProfileScreen(),
     StreamProvider<List<Place>>.value(
       value: PlaceDB().places,
       child: MapPage(
@@ -45,7 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
     SearchScreen(),
     HistoryScreen(),
-    ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -111,6 +111,10 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.map),
             label: 'Map',
           ),
@@ -149,10 +153,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   )
                 : Icon(Icons.access_alarm),
             label: 'History',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.face),
-            label: 'Profile',
           ),
         ],
         currentIndex: _selectedIndex,

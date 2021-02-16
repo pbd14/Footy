@@ -14,6 +14,7 @@ import 'package:flutter_complete_guide/widgets/rounded_button.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class History1 extends StatefulWidget {
   @override
@@ -124,6 +125,41 @@ class _History1State extends State<History1> {
       //       .update({'seen_status': 'seen2'});
       // }
     }
+  }
+
+  // ignore: unused_element
+  List<Meeting> _getDataSource() {
+    var meetings = <Meeting>[];
+    for (var book in _bookings) {
+      final DateTime today = Booking.fromSnapshot(book).timestamp_date.toDate();
+      final DateTime startTime = DateTime(
+        today.year,
+        today.month,
+        today.day,
+        DateFormat.Hm().parse(Booking.fromSnapshot(book).from).hour,
+        DateFormat.Hm().parse(Booking.fromSnapshot(book).from).minute,
+      );
+      final DateTime endTime = DateTime(
+        today.year,
+        today.month,
+        today.day,
+        DateFormat.Hm().parse(Booking.fromSnapshot(book).to).hour,
+        DateFormat.Hm().parse(Booking.fromSnapshot(book).to).minute,
+      );
+      meetings.add(Meeting(
+          _places != null
+              ? _places[Booking.fromSnapshot(book).id].name != null
+                  ? _places[Booking.fromSnapshot(book).id].name
+                  : 'Place'
+              : 'Place',
+          startTime,
+          endTime,
+          Booking.fromSnapshot(book).status == 'unfinished'
+              ? darkPrimaryColor
+              : Colors.red,
+          false));
+    }
+    return meetings;
   }
 
   @override
@@ -300,20 +336,20 @@ class _History1State extends State<History1> {
                             height: 20,
                           ),
                           Center(
-                          child: Text(
-                            'Upcoming',
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.montserrat(
-                              textStyle: TextStyle(
-                                color: darkPrimaryColor,
-                                fontSize: 25,
+                            child: Text(
+                              'Upcoming',
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.montserrat(
+                                textStyle: TextStyle(
+                                  color: darkPrimaryColor,
+                                  fontSize: 25,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
+                          SizedBox(
+                            height: 15,
+                          ),
                           for (var book in _bookings)
                             CardW(
                               ph: 170,
@@ -612,24 +648,59 @@ class _History1State extends State<History1> {
                     SliverList(
                       delegate: SliverChildListDelegate(
                         [
+                          Center(
+                            child: Container(
+                              height: 450,
+                              width: size.width * 0.8,
+                              child: SfCalendar(
+                                dataSource: MeetingDataSource(_getDataSource()),
+                                todayHighlightColor: darkPrimaryColor,
+                                cellBorderColor: darkPrimaryColor,
+                                allowViewNavigation: true,
+                                view: CalendarView.month,
+                                firstDayOfWeek: 1,
+                                monthViewSettings: MonthViewSettings(
+                                  showAgenda: true,
+                                  agendaStyle: AgendaStyle(
+                                    dateTextStyle: GoogleFonts.montserrat(
+                                      textStyle: TextStyle(
+                                        color: darkPrimaryColor,
+                                      ),
+                                    ),
+                                    dayTextStyle: GoogleFonts.montserrat(
+                                      textStyle: TextStyle(
+                                        color: darkPrimaryColor,
+                                      ),
+                                    ),
+                                    appointmentTextStyle:
+                                        GoogleFonts.montserrat(
+                                      textStyle: TextStyle(
+                                        color: whiteColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                           SizedBox(
                             height: 20,
                           ),
                           Center(
-                          child: Text(
-                            'Upcoming',
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.montserrat(
-                              textStyle: TextStyle(
-                                color: darkPrimaryColor,
-                                fontSize: 25,
+                            child: Text(
+                              'Upcoming',
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.montserrat(
+                                textStyle: TextStyle(
+                                  color: darkPrimaryColor,
+                                  fontSize: 25,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
+                          SizedBox(
+                            height: 15,
+                          ),
                           for (var book in _bookings)
                             CardW(
                               ph: 170,
@@ -928,4 +999,45 @@ class _History1State extends State<History1> {
                   ],
           );
   }
+}
+
+class MeetingDataSource extends CalendarDataSource {
+  MeetingDataSource(List<Meeting> source) {
+    appointments = source;
+  }
+
+  @override
+  DateTime getStartTime(int index) {
+    return appointments[index].from;
+  }
+
+  @override
+  DateTime getEndTime(int index) {
+    return appointments[index].to;
+  }
+
+  @override
+  String getSubject(int index) {
+    return appointments[index].eventName;
+  }
+
+  @override
+  Color getColor(int index) {
+    return appointments[index].background;
+  }
+
+  @override
+  bool isAllDay(int index) {
+    return appointments[index].isAllDay;
+  }
+}
+
+class Meeting {
+  Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay);
+
+  String eventName;
+  DateTime from;
+  DateTime to;
+  Color background;
+  bool isAllDay;
 }

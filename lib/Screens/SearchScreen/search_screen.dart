@@ -102,7 +102,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('BUILD');
     Size size = MediaQuery.of(context).size;
     // prepareLabel();
     return loading

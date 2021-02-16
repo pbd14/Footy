@@ -11,7 +11,6 @@ import 'package:intl/intl.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
 import 'package:flutter_complete_guide/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class OnEventScreen extends StatefulWidget {
   final dynamic booking;
@@ -21,7 +20,7 @@ class OnEventScreen extends StatefulWidget {
 }
 
 class _OnEventScreenState extends State<OnEventScreen> {
-  GoogleMapController _mapController;
+  // GoogleMapController _mapController;
   bool loading = false;
   var place;
 
@@ -35,19 +34,19 @@ class _OnEventScreenState extends State<OnEventScreen> {
     });
   }
 
-  void _setMapStyle() async {
-    String style = await DefaultAssetBundle.of(context)
-        .loadString('assets/images/map_style.json');
-    _mapController.setMapStyle(style);
-  }
+  // void _setMapStyle() async {
+  //   String style = await DefaultAssetBundle.of(context)
+  //       .loadString('assets/images/map_style.json');
+  //   _mapController.setMapStyle(style);
+  // }
 
-  void _onMapCreated(GoogleMapController controller) {
-    _mapController = controller;
-    setState(() {
-      loading = false;
-    });
-    _setMapStyle();
-  }
+  // void _onMapCreated(GoogleMapController controller) {
+  //   _mapController = controller;
+  //   setState(() {
+  //     loading = false;
+  //   });
+  //   _setMapStyle();
+  // }
 
   @override
   void initState() {

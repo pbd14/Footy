@@ -111,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             });
                             if (codeSent) {
                               dynamic res = await AuthService()
-                                  .signInWithOTP(smsCode, verificationId);
+                                  .signInWithOTP(smsCode, verificationId, context);
                               if (res == null) {
                                 setState(() {
                                   error = 'Enter valid data';
@@ -177,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
   verifyPhone(phoneNo) async {
     final PhoneVerificationCompleted verified =
         (PhoneAuthCredential authResult) {
-      AuthService().signIn(authResult);
+      AuthService().signIn(authResult, context);
     };
 
     final PhoneVerificationFailed verificationFailed =
@@ -191,6 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final PhoneCodeSent smsSent = (String verId, [int forceResend]) {
       this.verificationId = verId;
       setState(() {
+        this.error = '';
         this.codeSent = true;
         this.loading = false;
       });

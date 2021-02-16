@@ -2,19 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// ignore: must_be_immutable
 class SomethingWentWrongScreen extends StatelessWidget {
+  String error;
+  SomethingWentWrongScreen({Key key, this.error : 'Something Went Wrong'})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: whiteColor,
-      body: Center(
-        child: Text(
-          'SOMETHING WENT WRONG',
-          style: GoogleFonts.montserrat(
-            textStyle: TextStyle(
-              color: primaryColor,
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
+          child: Text(
+            error,
+            style: GoogleFonts.montserrat(
+              textStyle: TextStyle(
+                color: primaryColor,
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),

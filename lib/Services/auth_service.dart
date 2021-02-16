@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_complete_guide/Screens/HomeScreen/home_screen.dart';
 import 'package:flutter_complete_guide/Screens/LoginScreen/login_screen.dart';
+import 'package:flutter_complete_guide/Screens/sww_screen.dart';
 import 'package:flutter_complete_guide/Services/push_notification_service.dart';
+import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
 
 class AuthService {
   static final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
@@ -25,14 +27,30 @@ class AuthService {
         });
   }
 
-  signOut() {
-    dynamic res = FirebaseAuth.instance.signOut();
+  signOut(BuildContext context) {
+    dynamic res = FirebaseAuth.instance.signOut().catchError((error) {
+      Navigator.push(
+          context,
+          SlideRightRoute(
+              page: SomethingWentWrongScreen(
+            error: "Failed to sign out: ${error.message}",
+          )));
+    });
     return res;
   }
 
-  signIn(PhoneAuthCredential authCredential) {
+  signIn(PhoneAuthCredential authCredential, BuildContext context) {
     try {
-      dynamic res = FirebaseAuth.instance.signInWithCredential(authCredential);
+      dynamic res = FirebaseAuth.instance
+          .signInWithCredential(authCredential)
+          .catchError((error) {
+        Navigator.push(
+            context,
+            SlideRightRoute(
+                page: SomethingWentWrongScreen(
+              error: "Something went wrong: ${error.message}",
+            )));
+      });
       FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser.uid)
@@ -50,13 +68,13 @@ class AuthService {
     }
   }
 
-  signInWithOTP(smsCode, verId) {
+  signInWithOTP(smsCode, verId, BuildContext context) {
     try {
       PhoneAuthCredential authCredential = PhoneAuthProvider.credential(
         verificationId: verId,
         smsCode: smsCode,
       );
-      dynamic res = signIn(authCredential);
+      dynamic res = signIn(authCredential, context);
       return res;
     } catch (e) {
       return null;

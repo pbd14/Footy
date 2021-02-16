@@ -2,6 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Models/Booking.dart';
 import 'package:flutter_complete_guide/Models/Place.dart';
+import 'package:flutter_complete_guide/Screens/MapScreen/map_screen.dart';
+import 'package:flutter_complete_guide/widgets/card.dart';
+import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
+import 'package:flutter_countdown_timer/current_remaining_time.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
 import 'package:flutter_complete_guide/constants.dart';
@@ -62,46 +67,76 @@ class _OnEventScreenState extends State<OnEventScreen> {
             body: CustomScrollView(
               slivers: [
                 SliverAppBar(
-                  expandedHeight: size.height * 0.4,
-                  backgroundColor: darkPrimaryColor,
-                  floating: false,
-                  pinned: false,
-                  snap: false,
-                  flexibleSpace: GoogleMap(
-                    mapType: MapType.normal,
-                    minMaxZoomPreference: MinMaxZoomPreference(10.0, 40.0),
-                    myLocationEnabled: true,
-                    myLocationButtonEnabled: true,
-                    mapToolbarEnabled: false,
-                    onMapCreated: _onMapCreated,
-                    initialCameraPosition: CameraPosition(
-                      target: LatLng(Place.fromSnapshot(place).lat,
-                          Place.fromSnapshot(place).lon),
-                      zoom: 15,
+                    expandedHeight: size.height * 0.4,
+                    backgroundColor: darkPrimaryColor,
+                    floating: false,
+                    pinned: false,
+                    snap: false,
+                    flexibleSpace: Center(
+                      child: Text(
+                        Place.fromSnapshot(place).name != null
+                            ? Place.fromSnapshot(place).name
+                            : 'Place',
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.montserrat(
+                          textStyle: TextStyle(
+                            color: whiteColor,
+                            fontSize: 30,
+                          ),
+                        ),
+                      ),
+                    )),
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    SizedBox(
+                      height: size.height * 0.04,
                     ),
-                    markers: Set.from([
-                      Marker(
-                          markerId: MarkerId('1'),
-                          draggable: false,
-                          position: LatLng(Place.fromSnapshot(place).lat,
-                              Place.fromSnapshot(place).lon))
-                    ]),
-                  ),
-                ),
-                // SliverList(
-                //   delegate: SliverChildListDelegate([
+                    // Container(
+                    //   height: 400,
+                    //   child: GoogleMap(
+                    //     mapType: MapType.normal,
+                    //     minMaxZoomPreference: MinMaxZoomPreference(10.0, 40.0),
+                    //     myLocationEnabled: true,
+                    //     myLocationButtonEnabled: true,
+                    //     mapToolbarEnabled: false,
+                    //     onMapCreated: _onMapCreated,
+                    //     initialCameraPosition: CameraPosition(
+                    //       target: LatLng(Place.fromSnapshot(place).lat,
+                    //           Place.fromSnapshot(place).lon),
+                    //       zoom: 15,
+                    //     ),
+                    //     markers: Set.from([
+                    //       Marker(
+                    //           markerId: MarkerId('1'),
+                    //           draggable: false,
+                    //           position: LatLng(Place.fromSnapshot(place).lat,
+                    //               Place.fromSnapshot(place).lon))
+                    //     ]),
+                    //   ),
+                    // ),
+                    CountdownTimer(
+                      endTime:
+                          DateTime.now().millisecondsSinceEpoch + 1000 * 30,
+                      widgetBuilder: (_, CurrentRemainingTime time) {
+                        if (time == null) {
+                          return Text('Game over');
+                        }
+                        return Text(
+                            'days: [ ${time.days} ], hours: [ ${time.hours} ], min: [ ${time.min} ], sec: [ ${time.sec} ]');
+                      },
+                    ),
 
-                //   ]),
-                // ),
-                SliverFillRemaining(
-                  child: Container(
-                    child: Center(
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(20, 0, 15, 0),
+                    Center(
+                      child: CardW(
+                        ph: 70,
+                        bgColor: darkPrimaryColor,
                         child: Column(
-                          children: <Widget>[
+                          children: [
                             SizedBox(
-                              height: size.height * 0.04,
+                              height: 20,
+                            ),
+                            SizedBox(
+                              width: size.width * 0.8,
                             ),
                             Text(
                               DateFormat.yMMMd()
@@ -112,11 +147,33 @@ class _OnEventScreenState extends State<OnEventScreen> {
                               overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.montserrat(
                                 textStyle: TextStyle(
-                                  color: darkPrimaryColor,
+                                  color: whiteColor,
                                   fontSize: 25,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Center(
+                      child: CardW(
+                        ph: 70,
+                        bgColor: darkPrimaryColor,
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 20,
+                            ),
+                            SizedBox(
+                              width: size.width * 0.8,
                             ),
                             Text(
                               Booking.fromSnapshot(widget.booking).from +
@@ -125,50 +182,69 @@ class _OnEventScreenState extends State<OnEventScreen> {
                               overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.montserrat(
                                 textStyle: TextStyle(
-                                  color: darkPrimaryColor,
-                                  fontSize: 20,
+                                  color: whiteColor,
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ),
-                            Text(
-                              Place.fromSnapshot(place).name != null
-                                  ? Place.fromSnapshot(place).name
-                                  : 'Place',
-                              overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                                  color: darkPrimaryColor,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                Booking.fromSnapshot(widget.booking).info !=
-                                        null
-                                    ? Booking.fromSnapshot(widget.booking).info
-                                    : 'No info',
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.montserrat(
-                                  textStyle: TextStyle(
-                                    color: darkPrimaryColor,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: size.height * 0.02,
-                            ),
-                            SizedBox(
-                              height: size.height * 0.05,
                             ),
                           ],
                         ),
                       ),
                     ),
-                  ),
-                )
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Center(
+                      child: FlatButton(
+                        onPressed: () {
+                          setState(() {
+                            loading = true;
+                          });
+                          Navigator.push(
+                            context,
+                            SlideRightRoute(
+                              page: MapScreen(
+                                data: {
+                                  'lat': Place.fromSnapshot(place).lat,
+                                  'lon': Place.fromSnapshot(place).lon
+                                },
+                              ),
+                            ),
+                          );
+                          setState(() {
+                            loading = false;
+                          });
+                        },
+                        child: CardW(
+                          ph: 70,
+                          bgColor: darkPrimaryColor,
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 20,
+                              ),
+                              SizedBox(
+                                width: size.width * 0.6,
+                              ),
+                              Text(
+                                'On Map',
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    color: whiteColor,
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ]),
+                ),
               ],
 
               // SliverAppBar(

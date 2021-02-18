@@ -42,7 +42,8 @@ dependencies:
   syncfusion_flutter_calendar: ^18.4.32
   date_format: ^1.0.9
   overlay_support: ^1.0.5
-  flutter_countdown_timer: ^3.0.0
+  flutter_rating_bar: ^3.2.0+1
+  # flutter_countdown_timer: ^3.0.0
   # workmanager: ^0.2.3
   # flutter_local_notifications: ^3.0.2
   firebase_messaging: ^5.1.4

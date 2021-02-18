@@ -4,6 +4,7 @@ class Place {
   final String name, description, by, id;
   final double lat, lon;
   final List images, services;
+  final Map rates;
 
   Place(
       {this.name,
@@ -13,6 +14,7 @@ class Place {
       this.by,
       this.images,
       this.services,
+      this.rates,
       this.id});
 
   Place.fromSnapshot(DocumentSnapshot snapshot)
@@ -23,5 +25,6 @@ class Place {
         lon = snapshot.data()['lon'],
         images = snapshot.data()['images'],
         services = snapshot.data()['services'],
+        rates = snapshot.data()['rates'],
         id = snapshot.id;
 }

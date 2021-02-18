@@ -5,8 +5,7 @@ import 'package:flutter_complete_guide/Models/Place.dart';
 import 'package:flutter_complete_guide/Screens/MapScreen/map_screen.dart';
 import 'package:flutter_complete_guide/widgets/card.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
-import 'package:flutter_countdown_timer/current_remaining_time.dart';
-import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
 import 'package:flutter_complete_guide/constants.dart';
@@ -22,6 +21,7 @@ class OnEventScreen extends StatefulWidget {
 class _OnEventScreenState extends State<OnEventScreen> {
   // GoogleMapController _mapController;
   bool loading = false;
+  double initRat = 3;
   var place;
 
   Future<void> prepare() async {
@@ -30,23 +30,17 @@ class _OnEventScreenState extends State<OnEventScreen> {
         .doc(Booking.fromSnapshot(widget.booking).placeId)
         .get();
     setState(() {
+      if (Place.fromSnapshot(place).rates != null) {
+        if (Place.fromSnapshot(place)
+            .rates
+            .containsKey(Booking.fromSnapshot(widget.booking).id)) {
+          initRat = Place.fromSnapshot(place)
+              .rates[Booking.fromSnapshot(widget.booking).id];
+        }
+      }
       loading = false;
     });
   }
-
-  // void _setMapStyle() async {
-  //   String style = await DefaultAssetBundle.of(context)
-  //       .loadString('assets/images/map_style.json');
-  //   _mapController.setMapStyle(style);
-  // }
-
-  // void _onMapCreated(GoogleMapController controller) {
-  //   _mapController = controller;
-  //   setState(() {
-  //     loading = false;
-  //   });
-  //   _setMapStyle();
-  // }
 
   @override
   void initState() {
@@ -73,7 +67,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                     snap: false,
                     flexibleSpace: Center(
                       child: Text(
-                        Place.fromSnapshot(place).name != null
+                        Place.fromSnapshot(place) != null
                             ? Place.fromSnapshot(place).name
                             : 'Place',
                         overflow: TextOverflow.ellipsis,
@@ -111,23 +105,11 @@ class _OnEventScreenState extends State<OnEventScreen> {
                     //           position: LatLng(Place.fromSnapshot(place).lat,
                     //               Place.fromSnapshot(place).lon))
                     //     ]),
-                    //   ),
-                    // ),
-                    CountdownTimer(
-                      endTime:
-                          DateTime.now().millisecondsSinceEpoch + 1000 * 30,
-                      widgetBuilder: (_, CurrentRemainingTime time) {
-                        if (time == null) {
-                          return Text('Game over');
-                        }
-                        return Text(
-                            'days: [ ${time.days} ], hours: [ ${time.hours} ], min: [ ${time.min} ], sec: [ ${time.sec} ]');
-                      },
-                    ),
+                    //   )
 
                     Center(
                       child: CardW(
-                        ph: 70,
+                        ph: 140,
                         bgColor: darkPrimaryColor,
                         child: Column(
                           children: [
@@ -155,25 +137,6 @@ class _OnEventScreenState extends State<OnEventScreen> {
                             SizedBox(
                               height: 5,
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Center(
-                      child: CardW(
-                        ph: 70,
-                        bgColor: darkPrimaryColor,
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 20,
-                            ),
-                            SizedBox(
-                              width: size.width * 0.8,
-                            ),
                             Text(
                               Booking.fromSnapshot(widget.booking).from +
                                   ' - ' +
@@ -182,8 +145,23 @@ class _OnEventScreenState extends State<OnEventScreen> {
                               style: GoogleFonts.montserrat(
                                 textStyle: TextStyle(
                                   color: whiteColor,
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              Booking.fromSnapshot(widget.booking)
+                                      .price
+                                      .toString() +
+                                  " So'm",
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.montserrat(
+                                textStyle: TextStyle(
+                                  color: whiteColor,
+                                  fontSize: 15,
                                 ),
                               ),
                             ),
@@ -232,7 +210,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                 style: GoogleFonts.montserrat(
                                   textStyle: TextStyle(
                                     color: whiteColor,
-                                    fontSize: 25,
+                                    fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -242,6 +220,31 @@ class _OnEventScreenState extends State<OnEventScreen> {
                         ),
                       ),
                     ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Center(
+                      child: RatingBar.builder(
+                        initialRating: initRat,
+                        minRating: 1,
+                        direction: Axis.horizontal,
+                        allowHalfRating: true,
+                        itemCount: 5,
+                        itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                        itemBuilder: (context, _) => Icon(
+                          Icons.star,
+                          color: darkPrimaryColor,
+                        ),
+                        onRatingUpdate: (rating) {
+                          var dataBooking =
+                              Booking.fromSnapshot(widget.booking).id;
+                          FirebaseFirestore.instance
+                              .collection('locations')
+                              .doc(Place.fromSnapshot(place).id)
+                              .update({'rates.$dataBooking': rating});
+                        },
+                      ),
+                    )
                   ]),
                 ),
               ],

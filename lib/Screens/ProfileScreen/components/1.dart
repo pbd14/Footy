@@ -16,6 +16,12 @@ class _ProfileScreen1State extends State<ProfileScreen1> {
   String name;
   TextEditingController _nameController = TextEditingController();
 
+  @override
+  void dispose(){
+    _nameController.dispose();
+    super.dispose();
+  }
+
   Future<void> loadData() async {
     var snaps = await FirebaseFirestore.instance
         .collection('users')

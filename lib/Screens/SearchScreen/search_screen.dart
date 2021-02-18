@@ -95,9 +95,9 @@ class _SearchScreenState extends State<SearchScreen> {
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser.uid)
         .get();
-      setState(() {
-        _favs = dataL.data()['favourites'];
-      });
+    setState(() {
+      _favs = dataL.data()['favourites'];
+    });
   }
 
   @override
@@ -195,38 +195,36 @@ class _SearchScreenState extends State<SearchScreen> {
                                                   pw: 45,
                                                   size: 40,
                                                   onTap: () {
-                                                      FirebaseFirestore.instance
-                                                          .collection('users')
-                                                          .doc(FirebaseAuth
-                                                              .instance
-                                                              .currentUser
-                                                              .uid)
-                                                          .update({
-                                                        'favourites': FieldValue
-                                                            .arrayUnion([
-                                                          Place.fromSnapshot(
-                                                                  _results[
-                                                                      index])
-                                                              .id
-                                                        ])
-                                                      });
+                                                    FirebaseFirestore.instance
+                                                        .collection('users')
+                                                        .doc(FirebaseAuth
+                                                            .instance
+                                                            .currentUser
+                                                            .uid)
+                                                        .update({
+                                                      'favourites': FieldValue
+                                                          .arrayUnion([
+                                                        Place.fromSnapshot(
+                                                                _results[index])
+                                                            .id
+                                                      ])
+                                                    });
                                                   },
                                                   onTap2: () {
-                                                      FirebaseFirestore.instance
-                                                          .collection('users')
-                                                          .doc(FirebaseAuth
-                                                              .instance
-                                                              .currentUser
-                                                              .uid)
-                                                          .update({
-                                                        'favourites': FieldValue
-                                                            .arrayRemove([
-                                                          Place.fromSnapshot(
-                                                                  _results[
-                                                                      index])
-                                                              .id
-                                                        ])
-                                                      });
+                                                    FirebaseFirestore.instance
+                                                        .collection('users')
+                                                        .doc(FirebaseAuth
+                                                            .instance
+                                                            .currentUser
+                                                            .uid)
+                                                        .update({
+                                                      'favourites': FieldValue
+                                                          .arrayRemove([
+                                                        Place.fromSnapshot(
+                                                                _results[index])
+                                                            .id
+                                                      ])
+                                                    });
                                                   },
                                                 ),
                                               ],

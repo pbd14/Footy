@@ -44,6 +44,14 @@ class _PlaceScreen2State extends State<PlaceScreen2> {
   TextEditingController _timeController = TextEditingController();
   TextEditingController _timeController2 = TextEditingController();
 
+  @override
+  void dispose(){
+    _dateController.dispose();
+    _timeController.dispose();
+    _timeController2.dispose();
+    super.dispose();
+  }
+
   Future<void> _verify(time1, time2) async {
     double dtime1 = selectedTime.minute + selectedTime.hour * 60.0;
     double dtime2 = selectedTime2.minute + selectedTime2.hour * 60.0;

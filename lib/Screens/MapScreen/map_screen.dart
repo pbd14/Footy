@@ -22,6 +22,11 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
     super.initState();
   }
+  @override
+  void dispose(){
+    _mapController.dispose();
+    super.dispose();
+  }
 
   void _setMapStyle() async {
     String style = await DefaultAssetBundle.of(context)

@@ -105,6 +105,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
@@ -195,6 +201,13 @@ class _MapPageState extends State<MapPage> {
     loading = widget.isLoading;
     _getPermission();
     _getUserLocation();
+  }
+
+  @override
+  void dispose(){
+    _mapController.dispose();
+    _mapIdleSubscription.cancel();
+    super.dispose();
   }
 
   void _getPermission() async {

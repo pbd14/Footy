@@ -19,7 +19,6 @@ class OnEventScreen extends StatefulWidget {
 }
 
 class _OnEventScreenState extends State<OnEventScreen> {
-  // GoogleMapController _mapController;
   bool loading = false;
   double initRat = 3;
   var place;

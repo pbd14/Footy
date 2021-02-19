@@ -661,6 +661,9 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                                 : 'verification_needed',
                                                             'seen_status':
                                                                 'unseen',
+                                                            'isRated': false,
+                                                            'rating': 0,
+                                                            'rates': [],
                                                           });
                                                           setState(() {
                                                             selectedDate =

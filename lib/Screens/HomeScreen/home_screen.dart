@@ -38,7 +38,6 @@ class _HomeScreenState extends State<HomeScreen> {
   // ignore: cancel_subscriptions
   StreamSubscription<QuerySnapshot> subscription;
   static List<Widget> _widgetOptions = <Widget>[
-    ProfileScreen(),
     StreamProvider<List<Place>>.value(
       value: PlaceDB().places,
       child: MapPage(
@@ -48,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
     SearchScreen(),
     HistoryScreen(),
+    ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -119,10 +119,6 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.map),
             label: 'Map',
           ),
@@ -162,6 +158,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 : Icon(Icons.access_alarm),
             label: 'History',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: darkPrimaryColor,
@@ -194,6 +194,8 @@ class _MapPageState extends State<MapPage> {
   GoogleMapController _mapController;
   // ignore: avoid_init_to_null
   static LatLng _initialPosition = null;
+  double ratingSum = 0;
+  double rating = 1;
 
   @override
   void initState() {
@@ -201,12 +203,12 @@ class _MapPageState extends State<MapPage> {
     loading = widget.isLoading;
     _getPermission();
     _getUserLocation();
+    prepare();
   }
 
   @override
-  void dispose(){
+  void dispose() {
     _mapController.dispose();
-    _mapIdleSubscription.cancel();
     super.dispose();
   }
 
@@ -236,14 +238,11 @@ class _MapPageState extends State<MapPage> {
   void _getUserLocation() async {
     geolocator.Position position = await geolocator.Geolocator()
         .getCurrentPosition(desiredAccuracy: geolocator.LocationAccuracy.high);
-    List<geolocator.Placemark> placemark = await geolocator.Geolocator()
-        .placemarkFromCoordinates(position.latitude, position.longitude);
     if (this.mounted) {
       setState(() {
         _initialPosition = LatLng(position.latitude, position.longitude);
       });
     }
-    print('${placemark[0].name}');
   }
 
   void _setMapStyle() async {
@@ -260,21 +259,41 @@ class _MapPageState extends State<MapPage> {
     _setMapStyle();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    final places = Provider.of<List<Place>>(context);
+  void prepare() async {
+    // final places = Provider.of<List<Place>>(context);
+    var data = await FirebaseFirestore.instance.collection('locations').get();
+    final places = data.docs;
+
+    print('BUILD');
     setState(() {
       if (places != null) {
         places.forEach((place) {
+          if (Place.fromSnapshot(place).rates != null) {
+            if (Place.fromSnapshot(place).rates.length != 0) {
+              for (var rate in Place.fromSnapshot(place).rates.values) {
+                ratingSum += rate;
+              }
+              rating = ratingSum / Place.fromSnapshot(place).rates.length;
+            }
+          }
+
+          // FirebaseFirestore.instance
+          //     .collection('locations')
+          //     .doc('BZorwr8lMphWTavotdsy')
+          //     .get()
+          //     .then((value) {
+          //   print(value.data()['name']);
+          //   print(value.data()['rates']);
+          // });
+
           PointObject point = PointObject(
             child: Column(
               children: <Widget>[
                 SizedBox(
-                  height: size.height * 0.04,
+                  height: 40,
                 ),
                 Text(
-                  place.name,
+                  Place.fromSnapshot(place).name,
                   overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.montserrat(
                     textStyle: TextStyle(
@@ -285,10 +304,12 @@ class _MapPageState extends State<MapPage> {
                   ),
                 ),
                 SizedBox(
-                  height: size.height * 0.015,
+                  height: 10,
                 ),
                 Text(
-                  place.by,
+                  Place.fromSnapshot(place).by != null
+                      ? Place.fromSnapshot(place).by
+                      : 'By',
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
                   style: GoogleFonts.montserrat(
@@ -299,12 +320,37 @@ class _MapPageState extends State<MapPage> {
                   ),
                 ),
                 SizedBox(
-                  height: size.height * 0.04,
+                  height: 40,
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: Row(
                     children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.star,
+                            color: Colors.yellow,
+                          ),
+                          SizedBox(
+                            width: 7,
+                          ),
+                          Text(
+                            rating.toString() + '/5',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            style: GoogleFonts.montserrat(
+                              textStyle: TextStyle(
+                                color: darkPrimaryColor,
+                                fontSize: 15,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
                       Expanded(
                         child: RoundedButton(
                           pw: 60,
@@ -319,14 +365,20 @@ class _MapPageState extends State<MapPage> {
                                 SlideRightRoute(
                                   page: PlaceScreen(
                                     data: {
-                                      'name': place.name, //0
-                                      'description': place.description, //1
-                                      'by': place.by, //2
-                                      'lat': place.lat, //3
-                                      'lon': place.lon, //4
-                                      'images': place.images, //5
-                                      'services': place.services, //6
-                                      'id': place.id, //7
+                                      'name':
+                                          Place.fromSnapshot(place).name, //0
+                                      'description': Place.fromSnapshot(place)
+                                          .description, //1
+                                      'by': Place.fromSnapshot(place).by, //2
+                                      'lat': Place.fromSnapshot(place).lat, //3
+                                      'lon': Place.fromSnapshot(place).lon, //4
+                                      'images':
+                                          Place.fromSnapshot(place).images, //5
+                                      'services':
+                                          Place.fromSnapshot(place).services,
+                                      'rates':
+                                          Place.fromSnapshot(place).rates, //6
+                                      'id': Place.fromSnapshot(place).id, //7
                                     },
                                   ),
                                 ));
@@ -398,16 +450,22 @@ class _MapPageState extends State<MapPage> {
                 )
               ],
             ),
-            location: LatLng(place.lat, place.lon),
+            location: LatLng(
+                Place.fromSnapshot(place).lat, Place.fromSnapshot(place).lon),
           );
           _markers.add(Marker(
-            markerId: MarkerId(place.name),
-            position: LatLng(place.lat, place.lon),
+            markerId: MarkerId(Place.fromSnapshot(place).name),
+            position: LatLng(
+                Place.fromSnapshot(place).lat, Place.fromSnapshot(place).lon),
             onTap: () => _onTap(point),
           ));
         });
       }
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: _initialPosition == null
           ? LoadingScreen()

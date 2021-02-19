@@ -73,7 +73,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void initState() {
     _searchController.addListener(_onSearchChanged);
-    prepareLabel();
+    // prepareLabel();
     super.initState();
   }
 
@@ -90,15 +90,15 @@ class _SearchScreenState extends State<SearchScreen> {
     resultsLoaded = getPlaces();
   }
 
-  void prepareLabel() async {
-    var dataL = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser.uid)
-        .get();
-    setState(() {
-      _favs = dataL.data()['favourites'];
-    });
-  }
+  // void prepareLabel() async {
+  //   var dataL = await FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(FirebaseAuth.instance.currentUser.uid)
+  //       .get();
+  //   setState(() {
+  //     _favs = dataL.data()['favourites'];
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -172,61 +172,62 @@ class _SearchScreenState extends State<SearchScreen> {
                                                     ),
                                                   ),
                                                 ),
-                                                LabelButton(
-                                                  isC: _favs.contains(
-                                                    Place.fromSnapshot(
-                                                            _results[index])
-                                                        .id,
-                                                  )
-                                                      ? true
-                                                      : false,
-                                                  reverse: FirebaseFirestore
-                                                      .instance
-                                                      .collection('users')
-                                                      .doc(FirebaseAuth.instance
-                                                          .currentUser.uid),
-                                                  containsValue:
-                                                      Place.fromSnapshot(
-                                                              _results[index])
-                                                          .id,
-                                                  color1: Colors.red,
-                                                  color2: lightPrimaryColor,
-                                                  ph: 45,
-                                                  pw: 45,
-                                                  size: 40,
-                                                  onTap: () {
-                                                    FirebaseFirestore.instance
-                                                        .collection('users')
-                                                        .doc(FirebaseAuth
-                                                            .instance
-                                                            .currentUser
-                                                            .uid)
-                                                        .update({
-                                                      'favourites': FieldValue
-                                                          .arrayUnion([
-                                                        Place.fromSnapshot(
-                                                                _results[index])
-                                                            .id
-                                                      ])
-                                                    });
-                                                  },
-                                                  onTap2: () {
-                                                    FirebaseFirestore.instance
-                                                        .collection('users')
-                                                        .doc(FirebaseAuth
-                                                            .instance
-                                                            .currentUser
-                                                            .uid)
-                                                        .update({
-                                                      'favourites': FieldValue
-                                                          .arrayRemove([
-                                                        Place.fromSnapshot(
-                                                                _results[index])
-                                                            .id
-                                                      ])
-                                                    });
-                                                  },
-                                                ),
+                                                
+                                                // LabelButton(
+                                                //   isC: _favs.contains(
+                                                //     Place.fromSnapshot(
+                                                //             _results[index])
+                                                //         .id,
+                                                //   )
+                                                //       ? true
+                                                //       : false,
+                                                //   reverse: FirebaseFirestore
+                                                //       .instance
+                                                //       .collection('users')
+                                                //       .doc(FirebaseAuth.instance
+                                                //           .currentUser.uid),
+                                                //   containsValue:
+                                                //       Place.fromSnapshot(
+                                                //               _results[index])
+                                                //           .id,
+                                                //   color1: Colors.red,
+                                                //   color2: lightPrimaryColor,
+                                                //   ph: 45,
+                                                //   pw: 45,
+                                                //   size: 40,
+                                                //   onTap: () {
+                                                //     FirebaseFirestore.instance
+                                                //         .collection('users')
+                                                //         .doc(FirebaseAuth
+                                                //             .instance
+                                                //             .currentUser
+                                                //             .uid)
+                                                //         .update({
+                                                //       'favourites': FieldValue
+                                                //           .arrayUnion([
+                                                //         Place.fromSnapshot(
+                                                //                 _results[index])
+                                                //             .id
+                                                //       ])
+                                                //     });
+                                                //   },
+                                                //   onTap2: () {
+                                                //     FirebaseFirestore.instance
+                                                //         .collection('users')
+                                                //         .doc(FirebaseAuth
+                                                //             .instance
+                                                //             .currentUser
+                                                //             .uid)
+                                                //         .update({
+                                                //       'favourites': FieldValue
+                                                //           .arrayRemove([
+                                                //         Place.fromSnapshot(
+                                                //                 _results[index])
+                                                //             .id
+                                                //       ])
+                                                //     });
+                                                //   },
+                                                // ),
                                               ],
                                             ),
                                             SizedBox(

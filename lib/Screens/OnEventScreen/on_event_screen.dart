@@ -232,7 +232,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                         itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
                         itemBuilder: (context, _) => Icon(
                           Icons.star,
-                          color: darkPrimaryColor,
+                          color: Colors.yellow,
                         ),
                         onRatingUpdate: (rating) {
                           var dataBooking =
@@ -240,7 +240,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                           FirebaseFirestore.instance
                               .collection('locations')
                               .doc(Place.fromSnapshot(place).id)
-                              .update({'rates.$dataBooking': rating});
+                              .update({'rates.$dataBooking': rating, 'isRated' : true,});
                         },
                       ),
                     )

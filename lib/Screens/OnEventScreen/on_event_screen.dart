@@ -240,7 +240,13 @@ class _OnEventScreenState extends State<OnEventScreen> {
                           FirebaseFirestore.instance
                               .collection('locations')
                               .doc(Place.fromSnapshot(place).id)
-                              .update({'rates.$dataBooking': rating, 'isRated' : true,});
+                              .update({
+                            'rates.$dataBooking': rating,
+                          });
+                          FirebaseFirestore.instance
+                              .collection('bookings')
+                              .doc(Booking.fromSnapshot(widget.booking).id)
+                              .update({'isRated': true});
                         },
                       ),
                     )

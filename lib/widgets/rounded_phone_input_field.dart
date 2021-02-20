@@ -15,19 +15,22 @@ class RoundedPhoneInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFieldContainer(
-      child: TextFormField(
-        validator: (val) => val.isEmpty ? 'Enter the phone' : null,
-        keyboardType: TextInputType.phone,
-        onChanged: onChanged,
-        cursorColor: primaryColor,
-        decoration: InputDecoration(
-          icon: Icon(
-            icon,
-            color: darkPrimaryColor,
+    return Container(
+      height: 70,
+      child: TextFieldContainer(
+        child: TextFormField(
+          validator: (val) => val.isEmpty ? 'Enter the phone' : null,
+          keyboardType: TextInputType.phone,
+          onChanged: onChanged,
+          cursorColor: primaryColor,
+          decoration: InputDecoration(
+            icon: Icon(
+              icon,
+              color: darkPrimaryColor,
+            ),
+            hintText: hintText,
+            border: InputBorder.none,
           ),
-          hintText: hintText,
-          border: InputBorder.none,
         ),
       ),
     );

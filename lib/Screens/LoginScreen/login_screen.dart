@@ -58,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       SizedBox(
-                        height: size.height * 0.03,
+                        height: 20,
                       ),
                       Text(
                         'Get Started',
@@ -70,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(height: size.height * 0.1),
+                      SizedBox(height: 30),
                       !codeSent
                           ? RoundedPhoneInputField(
                               hintText: "Your Phone",
@@ -92,17 +92,17 @@ class _LoginScreenState extends State<LoginScreen> {
                             )
                           : SizedBox(height: size.height * 0),
                       codeSent
-                          ? SizedBox(height: size.height * 0.04)
+                          ? SizedBox(height: 20)
                           : SizedBox(height: size.height * 0),
 
                       // RoundedPasswordField(
                       //   hintText: "Password",
                       //   onChanged: (value) {},
                       // ),
-                      SizedBox(height: size.height * 0.04),
+                      SizedBox(height: 20),
                       RoundedButton(
                         width: 0.7,
-                        height: 0.085,
+                        ph: 55,
                         text: codeSent ? 'GO' : 'SEND CODE',
                         press: () async {
                           if (_formKey.currentState.validate()) {
@@ -127,12 +127,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         textColor: whiteColor,
                       ),
                       codeSent
-                          ? SizedBox(height: size.height * 0.08)
+                          ? SizedBox(height: 55)
                           : SizedBox(height: size.height * 0),
                       codeSent
                           ? RoundedButton(
                             width: 0.7,
-                            height: 0.085,
+                            ph: 55,
                               text: 'Re-enter the phone',
                               press: () {
                                 Navigator.push(context,
@@ -143,7 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             )
                           : SizedBox(height: size.height * 0),
                       SizedBox(
-                        height: size.height * 0.02,
+                        height: 20,
                       ),
                       Padding(
                         padding: const EdgeInsets.all(20.0),

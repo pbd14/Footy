@@ -23,7 +23,7 @@ class RoundedTextInput extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      height: size.height * 0.1,
+      height: 70,
       child: TextFieldContainer(
         child: TextFormField(
           controller: controller,

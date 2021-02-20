@@ -195,7 +195,7 @@ class _MapPageState extends State<MapPage> {
   // ignore: avoid_init_to_null
   static LatLng _initialPosition = null;
   double ratingSum = 0;
-  double rating = 1;
+  double rating = 0;
 
   @override
   void initState() {
@@ -336,7 +336,7 @@ class _MapPageState extends State<MapPage> {
                             width: 7,
                           ),
                           Text(
-                            rating.roundToDouble().toString() + '/5',
+                            rating.toStringAsFixed(1) + '/5',
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
                             style: GoogleFonts.montserrat(

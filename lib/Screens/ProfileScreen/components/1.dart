@@ -1,9 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
+import 'package:flutter_complete_guide/Services/auth_service.dart';
 import 'package:flutter_complete_guide/constants.dart';
 import 'package:flutter_complete_guide/widgets/card.dart';
+import 'package:flutter_complete_guide/widgets/rounded_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ProfileScreen1 extends StatefulWidget {
@@ -12,40 +13,10 @@ class ProfileScreen1 extends StatefulWidget {
 }
 
 class _ProfileScreen1State extends State<ProfileScreen1> {
-  bool loading = true;
-  String name;
-  TextEditingController _nameController = TextEditingController();
-
-  @override
-  void dispose(){
-    _nameController.dispose();
-    super.dispose();
-  }
-
-  Future<void> loadData() async {
-    var snaps = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser.uid)
-        .get();
-    setState(() {
-      name = snaps.data()['name'] != null ? snaps.data()['name'] : 'No name';
-      loading = false;
-    });
-  }
-
-  _onNameChanged() async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser.uid)
-        .update({
-      'name': _nameController.text,
-    });
-  }
+  bool loading = false;
 
   @override
   void initState() {
-    loadData();
-    _nameController.addListener(_onNameChanged);
     super.initState();
   }
 
@@ -90,20 +61,23 @@ class _ProfileScreen1State extends State<ProfileScreen1> {
                             ],
                           ),
                           SizedBox(
-                            height: size.height * 0.04,
+                            height: 30,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                            child: TextFormField(
-                              controller: _nameController,
-                              decoration: InputDecoration(
-                                labelText: name,
-                                border: OutlineInputBorder(),
-                                suffixIcon: Icon(
-                                  Icons.person,
-                                ),
-                              ),
-                            ),
+                          RoundedButton(
+                            width: 0.5,
+                            height: 0.07,
+                            text: 'Sign out',
+                            press: () {
+                              setState(() {
+                                loading = true;
+                              });
+                              AuthService().signOut(context);
+                              setState(() {
+                                loading = false;
+                              });
+                            },
+                            color: darkPrimaryColor,
+                            textColor: whiteColor,
                           ),
                         ],
                       ),

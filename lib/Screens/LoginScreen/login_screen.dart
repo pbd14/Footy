@@ -178,6 +178,9 @@ class _LoginScreenState extends State<LoginScreen> {
     final PhoneVerificationCompleted verified =
         (PhoneAuthCredential authResult) {
       AuthService().signIn(authResult, context);
+      setState(() {
+        loading = false;
+      });
     };
 
     final PhoneVerificationFailed verificationFailed =

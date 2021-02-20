@@ -336,7 +336,7 @@ class _MapPageState extends State<MapPage> {
                             width: 7,
                           ),
                           Text(
-                            rating.toString() + '/5',
+                            rating.roundToDouble().toString() + '/5',
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
                             style: GoogleFonts.montserrat(

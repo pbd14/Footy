@@ -38,10 +38,10 @@ class _ProfileScreen2State extends State<ProfileScreen2> {
         .orderBy('name')
         .get();
     for (var doc in data.docs) {
-      print('LOOK WE HAVE ID');
-      print(_favs);
-      if (_favs.contains(doc.reference.id.toString())) {
-        _places.add(doc);
+      if (_favs != null) {
+        if (_favs.contains(doc.reference.id.toString())) {
+          _places.add(doc);
+        }
       }
     }
     setState(() {

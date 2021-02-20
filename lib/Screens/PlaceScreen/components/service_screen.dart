@@ -562,7 +562,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                             verifying
                                 ? CardW(
                                     width: 0.9,
-                                    height: 0.4,
+                                    ph: 400,
                                     child: loading1
                                         ? LoadingScreen()
                                         : verified
@@ -584,6 +584,9 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                         ),
                                                       ),
                                                     ),
+                                                    SizedBox(
+                                                      height: 5,
+                                                    ),
                                                     Text(
                                                       'From: ' + _time,
                                                       style: GoogleFonts
@@ -594,6 +597,9 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                           fontSize: 20,
                                                         ),
                                                       ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 5,
                                                     ),
                                                     Text(
                                                       'To: ' + _time2,
@@ -606,6 +612,9 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                         ),
                                                       ),
                                                     ),
+                                                    SizedBox(
+                                                      height: 5,
+                                                    ),
                                                     Text(
                                                       price.toString() +
                                                           " So'm ",
@@ -617,6 +626,9 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                           fontSize: 20,
                                                         ),
                                                       ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 5,
                                                     ),
                                                     SizedBox(
                                                       width: size.width * 0.1,
@@ -710,6 +722,95 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                         textColor: whiteColor,
                                                       ),
                                                     ),
+                                                    // Builder(
+                                                    //   builder: (context) =>
+                                                    //       RoundedButton(
+                                                    //     width: 0.5,
+                                                    //     height: 0.07,
+                                                    //     text: 'Book',
+                                                    //     press: () {
+                                                    //       setState(() {
+                                                    //         loading = true;
+                                                    //       });
+                                                    //       FirebaseFirestore
+                                                    //           .instance
+                                                    //           .collection(
+                                                    //               'bookings')
+                                                    //           .doc()
+                                                    //           .set({
+                                                    //         'placeId':
+                                                    //             widget.placeId,
+                                                    //         'serviceId': widget
+                                                    //             .serviceId,
+                                                    //         'userId':
+                                                    //             FirebaseAuth
+                                                    //                 .instance
+                                                    //                 .currentUser
+                                                    //                 .uid,
+                                                    //         'price': price
+                                                    //             .roundToDouble(),
+                                                    //         'from': _time,
+                                                    //         'to': _time2,
+                                                    //         'date': selectedDate
+                                                    //             .toString(),
+                                                    //         'timestamp_date':
+                                                    //             selectedDate,
+                                                    //         'status': widget.data[
+                                                    //                     'type'] ==
+                                                    //                 'nonver'
+                                                    //             ? 'unfinished'
+                                                    //             : 'verification_needed',
+                                                    //         'seen_status':
+                                                    //             'unseen',
+                                                    //         'isRated': false,
+                                                    //       });
+                                                    //       setState(() {
+                                                    //         selectedDate =
+                                                    //             DateTime.now();
+                                                    //         _time = null;
+                                                    //         _time2 = null;
+                                                    //         duration = 0;
+                                                    //         price = 0;
+                                                    //         selectedTime =
+                                                    //             TimeOfDay(
+                                                    //                 hour: 00,
+                                                    //                 minute: 00);
+                                                    //         selectedTime2 =
+                                                    //             TimeOfDay(
+                                                    //                 hour: 00,
+                                                    //                 minute: 00);
+                                                    //         verified = false;
+                                                    //         loading1 = false;
+                                                    //         verifying = false;
+                                                    //         loading = false;
+                                                    //         selectedDate =
+                                                    //             DateTime.now();
+                                                    //         Scaffold.of(context)
+                                                    //             .showSnackBar(
+                                                    //           SnackBar(
+                                                    //             backgroundColor:
+                                                    //                 darkPrimaryColor,
+                                                    //             content: Text(
+                                                    //               'Booking was successful',
+                                                    //               style: GoogleFonts
+                                                    //                   .montserrat(
+                                                    //                 textStyle:
+                                                    //                     TextStyle(
+                                                    //                   color:
+                                                    //                       whiteColor,
+                                                    //                   fontSize:
+                                                    //                       30,
+                                                    //                 ),
+                                                    //               ),
+                                                    //             ),
+                                                    //           ),
+                                                    //         );
+                                                    //       });
+                                                    //     },
+                                                    //     color: darkPrimaryColor,
+                                                    //     textColor: whiteColor,
+                                                    //   ),
+                                                    // ),
                                                   ],
                                                 ),
                                               )

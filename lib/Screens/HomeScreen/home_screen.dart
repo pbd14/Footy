@@ -199,6 +199,8 @@ class _MapPageState extends State<MapPage> {
   double rating = 0;
   Widget categoryIcon;
   Color cardColor;
+  BitmapDescriptor pinLocationIcon;
+  String categoryLine = 'assets/icons/default.png';
 
   @override
   void initState() {
@@ -267,10 +269,9 @@ class _MapPageState extends State<MapPage> {
     var data = await FirebaseFirestore.instance.collection('locations').get();
     final places = data.docs;
 
-    print('BUILD');
     setState(() {
       if (places != null) {
-        places.forEach((place) {
+        places.forEach((place) async {
           if (Place.fromSnapshot(place).rates != null) {
             if (Place.fromSnapshot(place).rates.length != 0) {
               for (var rate in Place.fromSnapshot(place).rates.values) {
@@ -292,6 +293,7 @@ class _MapPageState extends State<MapPage> {
           switch (Place.fromSnapshot(place).category) {
             case 'sport':
               {
+                categoryLine = 'assets/icons/sport.png';
                 cardColor = darkPrimaryColor;
                 categoryIcon = Icon(
                   Icons.sports_soccer,
@@ -303,6 +305,7 @@ class _MapPageState extends State<MapPage> {
 
             case 'entertainment':
               {
+                categoryLine = 'assets/icons/entertainment.png';
                 cardColor = Colors.yellow[800];
                 categoryIcon = Icon(
                   Icons.auto_awesome,
@@ -314,6 +317,7 @@ class _MapPageState extends State<MapPage> {
 
             default:
               {
+                categoryLine = 'assets/icons/default.png';
                 cardColor = Colors.blueGrey[900];
                 categoryIcon = Icon(
                   CupertinoIcons.globe,
@@ -323,6 +327,8 @@ class _MapPageState extends State<MapPage> {
               }
               break;
           }
+          print('COLOR');
+          print(cardColor);
 
           PointObject point = PointObject(
             child: Container(
@@ -494,7 +500,6 @@ class _MapPageState extends State<MapPage> {
                                   background: Colors.red,
                                 );
                               });
-                              ;
                             });
                           },
                         )
@@ -507,11 +512,14 @@ class _MapPageState extends State<MapPage> {
             location: LatLng(
                 Place.fromSnapshot(place).lat, Place.fromSnapshot(place).lon),
           );
+          pinLocationIcon = await BitmapDescriptor.fromAssetImage(
+              ImageConfiguration(devicePixelRatio: 2.5), categoryLine);
           _markers.add(Marker(
             markerId: MarkerId(Place.fromSnapshot(place).name),
             position: LatLng(
                 Place.fromSnapshot(place).lat, Place.fromSnapshot(place).lon),
             onTap: () => _onTap(point),
+            icon: pinLocationIcon,
           ));
         });
       }

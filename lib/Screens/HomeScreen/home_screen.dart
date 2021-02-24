@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_complete_guide/Models/Place.dart';
 import 'package:flutter_complete_guide/Models/PushNotificationMessage.dart';
 import 'package:flutter_complete_guide/Screens/PlaceScreen/place_screen.dart';
@@ -196,6 +197,8 @@ class _MapPageState extends State<MapPage> {
   static LatLng _initialPosition = null;
   double ratingSum = 0;
   double rating = 0;
+  Widget categoryIcon;
+  Color cardColor;
 
   @override
   void initState() {
@@ -286,169 +289,220 @@ class _MapPageState extends State<MapPage> {
           //   print(value.data()['rates']);
           // });
 
+          switch (Place.fromSnapshot(place).category) {
+            case 'sport':
+              {
+                cardColor = darkPrimaryColor;
+                categoryIcon = Icon(
+                  Icons.sports_soccer,
+                  size: 24,
+                  color: whiteColor,
+                );
+              }
+              break;
+
+            case 'entertainment':
+              {
+                cardColor = Colors.yellow[800];
+                categoryIcon = Icon(
+                  Icons.auto_awesome,
+                  size: 24,
+                  color: whiteColor,
+                );
+              }
+              break;
+
+            default:
+              {
+                cardColor = Colors.blueGrey[900];
+                categoryIcon = Icon(
+                  CupertinoIcons.globe,
+                  size: 24,
+                  color: whiteColor,
+                );
+              }
+              break;
+          }
+
           PointObject point = PointObject(
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: 40,
-                ),
-                Text(
-                  Place.fromSnapshot(place).name,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.montserrat(
-                    textStyle: TextStyle(
-                      color: darkPrimaryColor,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+            child: Container(
+              color: cardColor,
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 40,
+                  ),
+                  Text(
+                    Place.fromSnapshot(place).name,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.montserrat(
+                      textStyle: TextStyle(
+                        color: whiteColor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  Place.fromSnapshot(place).by != null
-                      ? Place.fromSnapshot(place).by
-                      : 'By',
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                  style: GoogleFonts.montserrat(
-                    textStyle: TextStyle(
-                      color: darkPrimaryColor,
-                      fontSize: 10,
-                    ),
+                  SizedBox(
+                    height: 10,
                   ),
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: Row(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.star,
-                            color: Colors.yellow,
+                      Text(
+                        Place.fromSnapshot(place).by != null
+                            ? Place.fromSnapshot(place).by
+                            : 'By',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: GoogleFonts.montserrat(
+                          textStyle: TextStyle(
+                            color: whiteColor,
+                            fontSize: 17,
                           ),
-                          SizedBox(
-                            width: 7,
-                          ),
-                          Text(
-                            rating.toStringAsFixed(1) + '/5',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                            style: GoogleFonts.montserrat(
-                              textStyle: TextStyle(
-                                color: darkPrimaryColor,
-                                fontSize: 15,
-                              ),
-                            ),
-                          )
-                        ],
+                        ),
                       ),
                       SizedBox(
                         width: 10,
                       ),
-                      Expanded(
-                        child: RoundedButton(
-                          pw: 60,
-                          ph: 40,
-                          text: 'Book',
-                          press: () {
-                            setState(() {
-                              loading = true;
-                            });
-                            Navigator.push(
-                                context,
-                                SlideRightRoute(
-                                  page: PlaceScreen(
-                                    data: {
-                                      'name':
-                                          Place.fromSnapshot(place).name, //0
-                                      'description': Place.fromSnapshot(place)
-                                          .description, //1
-                                      'by': Place.fromSnapshot(place).by, //2
-                                      'lat': Place.fromSnapshot(place).lat, //3
-                                      'lon': Place.fromSnapshot(place).lon, //4
-                                      'images':
-                                          Place.fromSnapshot(place).images, //5
-                                      'services':
-                                          Place.fromSnapshot(place).services,
-                                      'rates':
-                                          Place.fromSnapshot(place).rates, //6
-                                      'id': Place.fromSnapshot(place).id, //7
-                                    },
-                                  ),
-                                ));
-                            setState(() {
-                              loading = false;
-                            });
-                          },
-                          color: darkPrimaryColor,
-                          textColor: whiteColor,
-                        ),
-                      ),
-                      LabelButton(
-                        isC: false,
-                        reverse: FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(FirebaseAuth.instance.currentUser.uid),
-                        containsValue: place.id,
-                        color1: Colors.red,
-                        color2: lightPrimaryColor,
-                        ph: 45,
-                        pw: 45,
-                        size: 40,
-                        onTap: () {
-                          setState(() {
-                            FirebaseFirestore.instance
-                                .collection('users')
-                                .doc(FirebaseAuth.instance.currentUser.uid)
-                                .update({
-                              'favourites': FieldValue.arrayUnion([place.id])
-                            }).catchError((error) {
-                              PushNotificationMessage notification =
-                                  PushNotificationMessage(
-                                title: 'Fail',
-                                body: 'Failed to update favourites',
-                              );
-                              showSimpleNotification(
-                                Container(child: Text(notification.body)),
-                                position: NotificationPosition.top,
-                                background: Colors.red,
-                              );
-                            });
-                          });
-                        },
-                        onTap2: () {
-                          setState(() {
-                            FirebaseFirestore.instance
-                                .collection('users')
-                                .doc(FirebaseAuth.instance.currentUser.uid)
-                                .update({
-                              'favourites': FieldValue.arrayRemove([place.id])
-                            }).catchError((error) {
-                              PushNotificationMessage notification =
-                                  PushNotificationMessage(
-                                title: 'Fail',
-                                body: 'Failed to update favourites',
-                              );
-                              showSimpleNotification(
-                                Container(child: Text(notification.body)),
-                                position: NotificationPosition.top,
-                                background: Colors.red,
-                              );
-                            });
-                            ;
-                          });
-                        },
-                      )
+                      categoryIcon,
                     ],
                   ),
-                )
-              ],
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: Row(
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.star,
+                              color: whiteColor,
+                            ),
+                            SizedBox(
+                              width: 7,
+                            ),
+                            Text(
+                              rating.toStringAsFixed(1) + '/5',
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              style: GoogleFonts.montserrat(
+                                textStyle: TextStyle(
+                                  color: whiteColor,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: RoundedButton(
+                            pw: 60,
+                            ph: 40,
+                            text: 'Book',
+                            press: () {
+                              setState(() {
+                                loading = true;
+                              });
+                              Navigator.push(
+                                  context,
+                                  SlideRightRoute(
+                                    page: PlaceScreen(
+                                      data: {
+                                        'name':
+                                            Place.fromSnapshot(place).name, //0
+                                        'description': Place.fromSnapshot(place)
+                                            .description, //1
+                                        'by': Place.fromSnapshot(place).by, //2
+                                        'lat':
+                                            Place.fromSnapshot(place).lat, //3
+                                        'lon':
+                                            Place.fromSnapshot(place).lon, //4
+                                        'images': Place.fromSnapshot(place)
+                                            .images, //5
+                                        'services':
+                                            Place.fromSnapshot(place).services,
+                                        'rates':
+                                            Place.fromSnapshot(place).rates,
+                                        'category': Place.fromSnapshot(place)
+                                            .category, //6
+                                        'id': Place.fromSnapshot(place).id, //7
+                                      },
+                                    ),
+                                  ));
+                              setState(() {
+                                loading = false;
+                              });
+                            },
+                            color: whiteColor,
+                            textColor: darkPrimaryColor,
+                          ),
+                        ),
+                        LabelButton(
+                          isC: false,
+                          reverse: FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(FirebaseAuth.instance.currentUser.uid),
+                          containsValue: place.id,
+                          color1: Colors.red,
+                          color2: lightPrimaryColor,
+                          ph: 45,
+                          pw: 45,
+                          size: 40,
+                          onTap: () {
+                            setState(() {
+                              FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(FirebaseAuth.instance.currentUser.uid)
+                                  .update({
+                                'favourites': FieldValue.arrayUnion([place.id])
+                              }).catchError((error) {
+                                PushNotificationMessage notification =
+                                    PushNotificationMessage(
+                                  title: 'Fail',
+                                  body: 'Failed to update favourites',
+                                );
+                                showSimpleNotification(
+                                  Container(child: Text(notification.body)),
+                                  position: NotificationPosition.top,
+                                  background: Colors.red,
+                                );
+                              });
+                            });
+                          },
+                          onTap2: () {
+                            setState(() {
+                              FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(FirebaseAuth.instance.currentUser.uid)
+                                  .update({
+                                'favourites': FieldValue.arrayRemove([place.id])
+                              }).catchError((error) {
+                                PushNotificationMessage notification =
+                                    PushNotificationMessage(
+                                  title: 'Fail',
+                                  body: 'Failed to update favourites',
+                                );
+                                showSimpleNotification(
+                                  Container(child: Text(notification.body)),
+                                  position: NotificationPosition.top,
+                                  background: Colors.red,
+                                );
+                              });
+                              ;
+                            });
+                          },
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
             location: LatLng(
                 Place.fromSnapshot(place).lat, Place.fromSnapshot(place).lon),

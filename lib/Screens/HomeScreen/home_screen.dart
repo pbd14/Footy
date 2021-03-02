@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:math';
+import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,11 +11,13 @@ import 'package:flutter_complete_guide/Screens/PlaceScreen/place_screen.dart';
 import 'package:flutter_complete_guide/Services/db/place_db.dart';
 import 'package:flutter_complete_guide/widgets/ciw.dart';
 import 'package:flutter_complete_guide/widgets/label_button.dart';
+import 'package:flutter_complete_guide/widgets/map_marker.dart';
 import 'package:flutter_complete_guide/widgets/point_object.dart';
 import 'package:flutter_complete_guide/widgets/rounded_button.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
 import 'package:geolocator/geolocator.dart' as geolocator;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -202,6 +205,9 @@ class _MapPageState extends State<MapPage> {
   BitmapDescriptor pinLocationIcon;
   String categoryLine = 'assets/icons/default.png';
 
+  ClusterManager _manager;
+  List<ClusterItem<Place>> items = [];
+
   @override
   void initState() {
     super.initState();
@@ -215,6 +221,13 @@ class _MapPageState extends State<MapPage> {
   void dispose() {
     _mapController.dispose();
     super.dispose();
+  }
+
+  void _updateMarkers(Set<Marker> markers) {
+    print('Updated ${markers.length} markers');
+    setState(() {
+      this._markers = markers;
+    });
   }
 
   void _getPermission() async {
@@ -262,6 +275,7 @@ class _MapPageState extends State<MapPage> {
       loading = false;
     });
     _setMapStyle();
+    _manager.setMapController(controller);
   }
 
   void prepare() async {
@@ -327,8 +341,9 @@ class _MapPageState extends State<MapPage> {
               }
               break;
           }
-          print('COLOR');
-          print(cardColor);
+
+          items.add(ClusterItem(LatLng(
+              Place.fromSnapshot(place).lat, Place.fromSnapshot(place).lon)));
 
           PointObject point = PointObject(
             child: Container(
@@ -522,6 +537,8 @@ class _MapPageState extends State<MapPage> {
             icon: pinLocationIcon,
           ));
         });
+        _manager = ClusterManager<Place>(items, _updateMarkers,
+            markerBuilder: _markerBuilder, initialZoom: 15);
       }
     });
   }
@@ -549,6 +566,7 @@ class _MapPageState extends State<MapPage> {
                   ),
                   markers: _markers,
                   onCameraMove: (newPosition) {
+                    _manager.onCameraMove(newPosition);
                     _mapIdleSubscription?.cancel();
                     _mapIdleSubscription =
                         Future.delayed(Duration(milliseconds: 150))
@@ -565,6 +583,7 @@ class _MapPageState extends State<MapPage> {
                       }
                     });
                   },
+                  onCameraIdle: _manager.updateMap,
                 ),
                 (loading)
                     ? Positioned.fill(
@@ -590,6 +609,54 @@ class _MapPageState extends State<MapPage> {
             ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+  }
+
+  Future<Marker> Function(Cluster<Place>) get _markerBuilder =>
+      (cluster) async {
+        return Marker(
+          markerId: MarkerId(cluster.getId()),
+          position: cluster.location,
+          onTap: () {
+            print('---- $cluster');
+            cluster.items.forEach((p) => print(p));
+          },
+          icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
+              text: cluster.isMultiple ? cluster.count.toString() : null),
+        );
+      };
+
+  Future<BitmapDescriptor> _getMarkerBitmap(int size, {String text}) async {
+    assert(size != null);
+
+    final PictureRecorder pictureRecorder = PictureRecorder();
+    final Canvas canvas = Canvas(pictureRecorder);
+    final Paint paint1 = Paint()..color = Colors.red;
+    final Paint paint2 = Paint()..color = Colors.white;
+
+    canvas.drawCircle(Offset(size / 2, size / 2), size / 2.0, paint1);
+    canvas.drawCircle(Offset(size / 2, size / 2), size / 2.2, paint2);
+    canvas.drawCircle(Offset(size / 2, size / 2), size / 2.8, paint1);
+
+    if (text != null) {
+      TextPainter painter = TextPainter(textDirection: TextDirection.ltr);
+      painter.text = TextSpan(
+        text: text,
+        style: TextStyle(
+            fontSize: size / 3,
+            color: Colors.white,
+            fontWeight: FontWeight.normal),
+      );
+      painter.layout();
+      painter.paint(
+        canvas,
+        Offset(size / 2 - painter.width / 2, size / 2 - painter.height / 2),
+      );
+    }
+
+    final img = await pictureRecorder.endRecording().toImage(size, size);
+    final data = await img.toByteData(format: ImageByteFormat.png);
+
+    return BitmapDescriptor.fromBytes(data.buffer.asUint8List());
   }
 
   _onTap(PointObject point) async {

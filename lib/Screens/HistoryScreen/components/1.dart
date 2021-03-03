@@ -787,6 +787,10 @@ class _History1State extends State<History1> {
                                                       Booking.fromSnapshot(book)
                                                           .id]
                                                   .services,
+                                              'rates': _places[
+                                                      Booking.fromSnapshot(book)
+                                                          .id]
+                                                  .rates,
                                               'id': _places[
                                                       Booking.fromSnapshot(book)
                                                           .id]

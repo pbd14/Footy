@@ -48,17 +48,21 @@ class _LabelButtonState extends State<LabelButton> {
     subscription = widget.reverse.snapshots().listen((docsnap) {
       if (docsnap.data()['favourites'] != null) {
         if (docsnap.data()['favourites'].contains(widget.containsValue)) {
-          setState(() {
-            isColored = true;
-            isOne = false;
-          });
+          if (this.mounted) {
+            setState(() {
+              isColored = true;
+              isOne = false;
+            });
+          }
         } else if (!docsnap
             .data()['favourites']
             .contains(widget.containsValue)) {
-          setState(() {
-            isColored = false;
-            isOne = true;
-          });
+          if (this.mounted) {
+            setState(() {
+              isColored = false;
+              isOne = true;
+            });
+          }
         }
       }
     });

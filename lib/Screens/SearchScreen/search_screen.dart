@@ -360,6 +360,11 @@ class _SearchScreenState extends State<SearchScreen> {
                                                                         _results[
                                                                             index])
                                                                 .services,
+                                                            'rates': Place
+                                                                    .fromSnapshot(
+                                                                        _results[
+                                                                            index])
+                                                                .rates,
                                                             'id': Place.fromSnapshot(
                                                                     _results[
                                                                         index])

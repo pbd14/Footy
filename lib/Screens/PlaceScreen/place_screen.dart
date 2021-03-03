@@ -1,9 +1,14 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/Models/PushNotificationMessage.dart';
 import 'package:flutter_complete_guide/Screens/PlaceScreen/components/service_screen.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
+import 'package:flutter_complete_guide/widgets/label_button.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:overlay_support/overlay_support.dart';
 import '../../constants.dart';
 
 // ignore: must_be_immutable
@@ -22,6 +27,8 @@ class _PlaceScreenState extends State<PlaceScreen> {
   bool loading = false;
   double duration = 0;
   double price = 0;
+  double rating = 0;
+  double ratingSum = 0;
 
   bool verified = false;
   bool loading1 = false;
@@ -34,6 +41,14 @@ class _PlaceScreenState extends State<PlaceScreen> {
     super.initState();
     for (String img in widget.data['images']) {
       imgList.add(img);
+    }
+    if (widget.data['rates'] != null) {
+      if (widget.data['rates'].length != 0) {
+        for (var rate in widget.data['rates'].values) {
+          ratingSum += rate;
+        }
+        rating = ratingSum / widget.data['rates'].length;
+      }
     }
   }
 
@@ -52,7 +67,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
               slivers: [
                 SliverAppBar(
                   expandedHeight: size.height * 0.3,
-                  backgroundColor: darkPrimaryColor,
+                  backgroundColor: whiteColor,
                   floating: false,
                   pinned: false,
                   snap: false,
@@ -117,11 +132,10 @@ class _PlaceScreenState extends State<PlaceScreen> {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: size.height * 0.02,
+                                    height: 15,
                                   ),
                                   Text(
                                     widget.data['description'],
-                                    overflow: TextOverflow.ellipsis,
                                     style: GoogleFonts.montserrat(
                                       textStyle: TextStyle(
                                         color: darkPrimaryColor,
@@ -130,16 +144,136 @@ class _PlaceScreenState extends State<PlaceScreen> {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: size.height * 0.015,
+                                    height: 25,
                                   ),
-                                  Text(
-                                    'By ' + widget.data['by'],
-                                    style: GoogleFonts.montserrat(
-                                      textStyle: TextStyle(
-                                        color: darkPrimaryColor,
-                                        fontSize: 20,
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Rating',
+                                        style: GoogleFonts.montserrat(
+                                          textStyle: TextStyle(
+                                            color: darkPrimaryColor,
+                                            fontSize: 24,
+                                          ),
+                                        ),
                                       ),
-                                    ),
+                                      SizedBox(
+                                        width: 20,
+                                      ),
+                                      Icon(
+                                        Icons.star,
+                                        color: darkPrimaryColor,
+                                      ),
+                                      SizedBox(
+                                        width: 7,
+                                      ),
+                                      Text(
+                                        rating.toStringAsFixed(1) + '/5',
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        style: GoogleFonts.montserrat(
+                                          textStyle: TextStyle(
+                                            color: darkPrimaryColor,
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        height: 50,
+                                        width: size.width * 0.58,
+                                        color: lightPrimaryColor,
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          'By ' + widget.data['by'],
+                                          style: GoogleFonts.montserrat(
+                                            textStyle: TextStyle(
+                                              color: darkPrimaryColor,
+                                              fontSize: 20,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      LabelButton(
+                                        isC: false,
+                                        reverse: FirebaseFirestore.instance
+                                            .collection('users')
+                                            .doc(FirebaseAuth
+                                                .instance.currentUser.uid),
+                                        containsValue: widget.data['id'],
+                                        color1: Colors.red,
+                                        color2: lightPrimaryColor,
+                                        ph: 45,
+                                        pw: 45,
+                                        size: 40,
+                                        onTap: () {
+                                          setState(() {
+                                            FirebaseFirestore.instance
+                                                .collection('users')
+                                                .doc(FirebaseAuth
+                                                    .instance.currentUser.uid)
+                                                .update({
+                                              'favourites':
+                                                  FieldValue.arrayUnion(
+                                                      [widget.data['id']])
+                                            }).catchError((error) {
+                                              PushNotificationMessage
+                                                  notification =
+                                                  PushNotificationMessage(
+                                                title: 'Fail',
+                                                body:
+                                                    'Failed to update favourites',
+                                              );
+                                              showSimpleNotification(
+                                                Container(
+                                                    child: Text(
+                                                        notification.body)),
+                                                position:
+                                                    NotificationPosition.top,
+                                                background: Colors.red,
+                                              );
+                                            });
+                                          });
+                                        },
+                                        onTap2: () {
+                                          setState(() {
+                                            FirebaseFirestore.instance
+                                                .collection('users')
+                                                .doc(FirebaseAuth
+                                                    .instance.currentUser.uid)
+                                                .update({
+                                              'favourites':
+                                                  FieldValue.arrayRemove(
+                                                      [widget.data['id']])
+                                            }).catchError((error) {
+                                              PushNotificationMessage
+                                                  notification =
+                                                  PushNotificationMessage(
+                                                title: 'Fail',
+                                                body:
+                                                    'Failed to update favourites',
+                                              );
+                                              showSimpleNotification(
+                                                Container(
+                                                    child: Text(
+                                                        notification.body)),
+                                                position:
+                                                    NotificationPosition.top,
+                                                background: Colors.red,
+                                              );
+                                            });
+                                          });
+                                        },
+                                      ),
+                                    ],
                                   ),
                                 ]),
                           ),
@@ -158,7 +292,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                       ),
                     ),
                     SizedBox(
-                      height: size.height * 0.02,
+                      height: 20,
                     ),
                     for (var service in widget.data['services'])
                       FlatButton(
@@ -209,7 +343,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                         ),
                       ),
                     SizedBox(
-                      height: size.height * 0.015,
+                      height: 15,
                     ),
                   ]),
                 ),

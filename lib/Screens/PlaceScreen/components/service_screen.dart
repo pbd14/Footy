@@ -40,6 +40,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
   String dateTime;
 
   List imgList = [];
+  List alreadyBookings = [];
 
   DateTime selectedDate = DateTime.now();
 
@@ -187,6 +188,18 @@ class _PlaceScreenState extends State<ServiceScreen> {
         _dateController.text = DateFormat.yMMMd().format(selectedDate);
         _dow = DateFormat.E().format(selectedDate);
       });
+      var data1 = await FirebaseFirestore.instance
+          .collection('bookings')
+          .where(
+            'date',
+            isEqualTo: selectedDate.toString(),
+          )
+          .where(
+            'serviceId',
+            isEqualTo: widget.serviceId,
+          )
+          .get();
+      alreadyBookings = data1.docs;
       if (_dow != null && _time != null && _time2 != null) {
         setState(() {
           loading1 = true;
@@ -324,50 +337,6 @@ class _PlaceScreenState extends State<ServiceScreen> {
               slivers: [
                 SliverList(
                   delegate: SliverChildListDelegate([
-                    Container(
-                      color: whiteColor,
-                      width: size.width * 0.85,
-                      height: size.height * 0.35,
-                      margin: EdgeInsets.fromLTRB(size.width * 0.045,
-                          size.height * 0, size.width * 0.045, size.height * 0),
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                          child: SingleChildScrollView(
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    widget.data['name'],
-                                    style: GoogleFonts.montserrat(
-                                      textStyle: TextStyle(
-                                        color: darkPrimaryColor,
-                                        fontSize: 30,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: size.height * 0.02,
-                                  ),
-                                  Text(
-                                    widget.data['spm'],
-                                    overflow: TextOverflow.ellipsis,
-                                    style: GoogleFonts.montserrat(
-                                      textStyle: TextStyle(
-                                        color: darkPrimaryColor,
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: size.height * 0.02,
-                                  ),
-                                ]),
-                          ),
-                        ),
-                      ),
-                    ),
                     SingleChildScrollView(
                       child: Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -375,7 +344,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                         child: Column(
                           children: <Widget>[
                             SizedBox(
-                              height: size.height * 0.04,
+                              height: 25,
                             ),
                             Center(
                               child: Text(
@@ -402,7 +371,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                               ),
                             ),
                             SizedBox(
-                              height: size.height * 0.04,
+                              height: 25,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -455,18 +424,73 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                 ? widget.data['days'][_dow]['status'] ==
                                         'closed'
                                     ? Container()
-                                    : Center(
-                                        child: Text(
-                                          'Working from ' +
-                                              widget.data['days'][_dow]
-                                                  ['from'] +
-                                              ' - ' +
-                                              widget.data['days'][_dow]['to'],
-                                          style: GoogleFonts.montserrat(
-                                            textStyle: TextStyle(
-                                              color: darkPrimaryColor,
-                                              fontSize: 20,
-                                            ),
+                                    : ClipRRect(
+                                        borderRadius: BorderRadius.circular(29),
+                                        child: Container(
+                                          padding:
+                                              EdgeInsets.fromLTRB(30, 30, 30, 30),
+                                          alignment: Alignment.center,
+                                          color: darkPrimaryColor,
+                                          child: Column(
+                                            children: [
+                                              Center(
+                                                child: Text(
+                                                  'Working from ' +
+                                                      widget.data['days'][_dow]
+                                                          ['from'] +
+                                                      ' - ' +
+                                                      widget.data['days'][_dow]
+                                                          ['to'],
+                                                  style: GoogleFonts.montserrat(
+                                                    textStyle: TextStyle(
+                                                      color: whiteColor,
+                                                      fontSize: 20,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              alreadyBookings.length != 0
+                                                  ? Center(
+                                                      child: Text(
+                                                        'Already booked',
+                                                        style: GoogleFonts
+                                                            .montserrat(
+                                                          textStyle: TextStyle(
+                                                            color:
+                                                                whiteColor,
+                                                            fontSize: 20,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : Container(),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              for (var book in alreadyBookings)
+                                                Center(
+                                                  child: Text(
+                                                    Booking.fromSnapshot(book)
+                                                            .from
+                                                            .toString() +
+                                                        ' - ' +
+                                                        Booking.fromSnapshot(
+                                                                book)
+                                                            .to
+                                                            .toString(),
+                                                    style:
+                                                        GoogleFonts.montserrat(
+                                                      textStyle: TextStyle(
+                                                        color: whiteColor,
+                                                        fontSize: 20,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                            ],
                                           ),
                                         ),
                                       )
@@ -562,7 +586,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                             verifying
                                 ? CardW(
                                     width: 0.9,
-                                    ph: 400,
+                                    ph: 300,
                                     child: loading1
                                         ? LoadingScreen()
                                         : verified

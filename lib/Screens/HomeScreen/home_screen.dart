@@ -11,7 +11,6 @@ import 'package:flutter_complete_guide/Screens/PlaceScreen/place_screen.dart';
 import 'package:flutter_complete_guide/Services/db/place_db.dart';
 import 'package:flutter_complete_guide/widgets/ciw.dart';
 import 'package:flutter_complete_guide/widgets/label_button.dart';
-import 'package:flutter_complete_guide/widgets/map_marker.dart';
 import 'package:flutter_complete_guide/widgets/point_object.dart';
 import 'package:flutter_complete_guide/widgets/rounded_button.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
@@ -538,7 +537,7 @@ class _MapPageState extends State<MapPage> {
           ));
         });
         _manager = ClusterManager<Place>(items, _updateMarkers,
-            markerBuilder: _markerBuilder, initialZoom: 15);
+            markerBuilder: _markerBuilder, initialZoom: 10);
       }
     });
   }
@@ -613,16 +612,475 @@ class _MapPageState extends State<MapPage> {
 
   Future<Marker> Function(Cluster<Place>) get _markerBuilder =>
       (cluster) async {
-        return Marker(
-          markerId: MarkerId(cluster.getId()),
-          position: cluster.location,
-          onTap: () {
-            print('---- $cluster');
-            cluster.items.forEach((p) => print(p));
-          },
-          icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
-              text: cluster.isMultiple ? cluster.count.toString() : null),
-        );
+        print('CLUSTERS HERE');
+        print(cluster.items);
+        String mcategoryLine;
+        Color mcardColor;
+        Widget mcategoryIcon;
+        Place place = cluster.items.first;
+        switch (place != null ? place.category : 'def') {
+          case 'sport':
+            {
+              mcategoryLine = 'assets/icons/sport.png';
+              mcardColor = darkPrimaryColor;
+              mcategoryIcon = Icon(
+                Icons.sports_soccer,
+                size: 24,
+                color: whiteColor,
+              );
+            }
+            break;
+
+          case 'entertainment':
+            {
+              mcategoryLine = 'assets/icons/entertainment.png';
+              mcardColor = Colors.yellow[800];
+              mcategoryIcon = Icon(
+                Icons.auto_awesome,
+                size: 24,
+                color: whiteColor,
+              );
+            }
+            break;
+          case 'def':
+            {
+              mcategoryLine = 'assets/icons/default.png';
+              mcardColor = Colors.blueGrey[900];
+              mcategoryIcon = Icon(
+                CupertinoIcons.globe,
+                size: 24,
+                color: whiteColor,
+              );
+            }
+            break;
+
+          default:
+            {
+              mcategoryLine = 'assets/icons/default.png';
+              mcardColor = Colors.blueGrey[900];
+              mcategoryIcon = Icon(
+                CupertinoIcons.globe,
+                size: 24,
+                color: whiteColor,
+              );
+            }
+            break;
+        }
+        BitmapDescriptor thisPinLocationIcon =
+            await BitmapDescriptor.fromAssetImage(
+                ImageConfiguration(devicePixelRatio: 2.5), mcategoryLine);
+        return cluster.isMultiple
+            ? Marker(
+                markerId: MarkerId(cluster.getId()),
+                position: cluster.location,
+                onTap: () {
+                  print('---- $cluster');
+                  cluster.items.forEach((p) => print(p));
+                },
+                icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
+                    text: cluster.isMultiple ? cluster.count.toString() : null),
+              )
+            : place != null
+                ? Marker(
+                    markerId: MarkerId(place.name),
+                    position: LatLng(place.lat, place.lon),
+                    onTap: () => _onTap(
+                      PointObject(
+                        child: Container(
+                          color: mcardColor,
+                          child: Column(
+                            children: <Widget>[
+                              SizedBox(
+                                height: 40,
+                              ),
+                              Text(
+                                place.name,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    color: whiteColor,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    place.by != null ? place.by : 'By',
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: GoogleFonts.montserrat(
+                                      textStyle: TextStyle(
+                                        color: whiteColor,
+                                        fontSize: 17,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  mcategoryIcon,
+                                ],
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                child: Row(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.star,
+                                          color: whiteColor,
+                                        ),
+                                        SizedBox(
+                                          width: 7,
+                                        ),
+                                        Text(
+                                          rating.toStringAsFixed(1) + '/5',
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                          style: GoogleFonts.montserrat(
+                                            textStyle: TextStyle(
+                                              color: whiteColor,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Expanded(
+                                      child: RoundedButton(
+                                        pw: 60,
+                                        ph: 40,
+                                        text: 'Book',
+                                        press: () {
+                                          setState(() {
+                                            loading = true;
+                                          });
+                                          Navigator.push(
+                                              context,
+                                              SlideRightRoute(
+                                                page: PlaceScreen(
+                                                  data: {
+                                                    'name': place.name, //0
+                                                    'description':
+                                                        place.description, //1
+                                                    'by': place.by, //2
+                                                    'lat': place.lat, //3
+                                                    'lon': place.lon, //4
+                                                    'images': place.images, //5
+                                                    'services': place.services,
+                                                    'rates': place.rates,
+                                                    'category':
+                                                        place.category, //6
+                                                    'id': place.id, //7
+                                                  },
+                                                ),
+                                              ));
+                                          setState(() {
+                                            loading = false;
+                                          });
+                                        },
+                                        color: whiteColor,
+                                        textColor: darkPrimaryColor,
+                                      ),
+                                    ),
+                                    LabelButton(
+                                      isC: false,
+                                      reverse: FirebaseFirestore.instance
+                                          .collection('users')
+                                          .doc(FirebaseAuth
+                                              .instance.currentUser.uid),
+                                      containsValue: place.id,
+                                      color1: Colors.red,
+                                      color2: lightPrimaryColor,
+                                      ph: 45,
+                                      pw: 45,
+                                      size: 40,
+                                      onTap: () {
+                                        setState(() {
+                                          FirebaseFirestore.instance
+                                              .collection('users')
+                                              .doc(FirebaseAuth
+                                                  .instance.currentUser.uid)
+                                              .update({
+                                            'favourites': FieldValue.arrayUnion(
+                                                [place.id])
+                                          }).catchError((error) {
+                                            PushNotificationMessage
+                                                notification =
+                                                PushNotificationMessage(
+                                              title: 'Fail',
+                                              body:
+                                                  'Failed to update favourites',
+                                            );
+                                            showSimpleNotification(
+                                              Container(
+                                                  child:
+                                                      Text(notification.body)),
+                                              position:
+                                                  NotificationPosition.top,
+                                              background: Colors.red,
+                                            );
+                                          });
+                                        });
+                                      },
+                                      onTap2: () {
+                                        setState(() {
+                                          FirebaseFirestore.instance
+                                              .collection('users')
+                                              .doc(FirebaseAuth
+                                                  .instance.currentUser.uid)
+                                              .update({
+                                            'favourites':
+                                                FieldValue.arrayRemove(
+                                                    [place.id])
+                                          }).catchError((error) {
+                                            PushNotificationMessage
+                                                notification =
+                                                PushNotificationMessage(
+                                              title: 'Fail',
+                                              body:
+                                                  'Failed to update favourites',
+                                            );
+                                            showSimpleNotification(
+                                              Container(
+                                                  child:
+                                                      Text(notification.body)),
+                                              position:
+                                                  NotificationPosition.top,
+                                              background: Colors.red,
+                                            );
+                                          });
+                                        });
+                                      },
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        location: LatLng(place.lat, place.lon),
+                      ),
+                    ),
+                    icon: thisPinLocationIcon,
+                  )
+                : Marker(
+                    markerId: MarkerId(cluster.getId()),
+                    position: cluster.location,
+                    onTap: () {
+                      print('OLD CLUSTER');
+                      cluster.items.forEach((p) => print(p));
+                    },
+                    icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
+                        text: cluster.isMultiple
+                            ? cluster.count.toString()
+                            : null),
+                  );
+
+        //   cluster.items.forEach((place) async {
+        //     BitmapDescriptor thisPinLocationIcon =
+        //         await BitmapDescriptor.fromAssetImage(
+        //             ImageConfiguration(devicePixelRatio: 2.5), categoryLine);
+        // thisMarker = Marker(
+        //   markerId: MarkerId(place.name),
+        //   position: LatLng(place.lat, place.lon),
+        //   onTap: () => _onTap(
+        //     PointObject(
+        //       child: Container(
+        //         color: cardColor,
+        //         child: Column(
+        //           children: <Widget>[
+        //             SizedBox(
+        //               height: 40,
+        //             ),
+        //             Text(
+        //               place.name,
+        //               overflow: TextOverflow.ellipsis,
+        //               style: GoogleFonts.montserrat(
+        //                 textStyle: TextStyle(
+        //                   color: whiteColor,
+        //                   fontSize: 20,
+        //                   fontWeight: FontWeight.bold,
+        //                 ),
+        //               ),
+        //             ),
+        //             SizedBox(
+        //               height: 10,
+        //             ),
+        //             Row(
+        //               mainAxisAlignment: MainAxisAlignment.center,
+        //               children: [
+        //                 Text(
+        //                   place.by != null ? place.by : 'By',
+        //                   overflow: TextOverflow.ellipsis,
+        //                   maxLines: 1,
+        //                   style: GoogleFonts.montserrat(
+        //                     textStyle: TextStyle(
+        //                       color: whiteColor,
+        //                       fontSize: 17,
+        //                     ),
+        //                   ),
+        //                 ),
+        //                 SizedBox(
+        //                   width: 10,
+        //                 ),
+        //                 categoryIcon,
+        //               ],
+        //             ),
+        //             SizedBox(
+        //               height: 20,
+        //             ),
+        //             Padding(
+        //               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+        //               child: Row(
+        //                 children: [
+        //                   Row(
+        //                     children: [
+        //                       Icon(
+        //                         Icons.star,
+        //                         color: whiteColor,
+        //                       ),
+        //                       SizedBox(
+        //                         width: 7,
+        //                       ),
+        //                       Text(
+        //                         rating.toStringAsFixed(1) + '/5',
+        //                         overflow: TextOverflow.ellipsis,
+        //                         maxLines: 2,
+        //                         style: GoogleFonts.montserrat(
+        //                           textStyle: TextStyle(
+        //                             color: whiteColor,
+        //                             fontSize: 15,
+        //                           ),
+        //                         ),
+        //                       )
+        //                     ],
+        //                   ),
+        //                   SizedBox(
+        //                     width: 10,
+        //                   ),
+        //                   Expanded(
+        //                     child: RoundedButton(
+        //                       pw: 60,
+        //                       ph: 40,
+        //                       text: 'Book',
+        //                       press: () {
+        //                         setState(() {
+        //                           loading = true;
+        //                         });
+        //                         Navigator.push(
+        //                             context,
+        //                             SlideRightRoute(
+        //                               page: PlaceScreen(
+        //                                 data: {
+        //                                   'name': place.name, //0
+        //                                   'description':
+        //                                       place.description, //1
+        //                                   'by': place.by, //2
+        //                                   'lat': place.lat, //3
+        //                                   'lon': place.lon, //4
+        //                                   'images': place.images, //5
+        //                                   'services': place.services,
+        //                                   'rates': place.rates,
+        //                                   'category': place.category, //6
+        //                                   'id': place.id, //7
+        //                                 },
+        //                               ),
+        //                             ));
+        //                         setState(() {
+        //                           loading = false;
+        //                         });
+        //                       },
+        //                       color: whiteColor,
+        //                       textColor: darkPrimaryColor,
+        //                     ),
+        //                   ),
+        //                   LabelButton(
+        //                     isC: false,
+        //                     reverse: FirebaseFirestore.instance
+        //                         .collection('users')
+        //                         .doc(FirebaseAuth.instance.currentUser.uid),
+        //                     containsValue: place.id,
+        //                     color1: Colors.red,
+        //                     color2: lightPrimaryColor,
+        //                     ph: 45,
+        //                     pw: 45,
+        //                     size: 40,
+        //                     onTap: () {
+        //                       setState(() {
+        //                         FirebaseFirestore.instance
+        //                             .collection('users')
+        //                             .doc(FirebaseAuth
+        //                                 .instance.currentUser.uid)
+        //                             .update({
+        //                           'favourites':
+        //                               FieldValue.arrayUnion([place.id])
+        //                         }).catchError((error) {
+        //                           PushNotificationMessage notification =
+        //                               PushNotificationMessage(
+        //                             title: 'Fail',
+        //                             body: 'Failed to update favourites',
+        //                           );
+        //                           showSimpleNotification(
+        //                             Container(
+        //                                 child: Text(notification.body)),
+        //                             position: NotificationPosition.top,
+        //                             background: Colors.red,
+        //                           );
+        //                         });
+        //                       });
+        //                     },
+        //                     onTap2: () {
+        //                       setState(() {
+        //                         FirebaseFirestore.instance
+        //                             .collection('users')
+        //                             .doc(FirebaseAuth
+        //                                 .instance.currentUser.uid)
+        //                             .update({
+        //                           'favourites':
+        //                               FieldValue.arrayRemove([place.id])
+        //                         }).catchError((error) {
+        //                           PushNotificationMessage notification =
+        //                               PushNotificationMessage(
+        //                             title: 'Fail',
+        //                             body: 'Failed to update favourites',
+        //                           );
+        //                           showSimpleNotification(
+        //                             Container(
+        //                                 child: Text(notification.body)),
+        //                             position: NotificationPosition.top,
+        //                             background: Colors.red,
+        //                           );
+        //                         });
+        //                       });
+        //                     },
+        //                   )
+        //                 ],
+        //               ),
+        //             )
+        //           ],
+        //         ),
+        //       ),
+        //       location: LatLng(place.lat, place.lon),
+        //     ),
+        //   ),
+        //   icon: thisPinLocationIcon,
+        // );
+        //   });
       };
 
   Future<BitmapDescriptor> _getMarkerBitmap(int size, {String text}) async {

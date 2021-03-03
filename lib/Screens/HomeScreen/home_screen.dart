@@ -478,6 +478,21 @@ class _MapPageState extends State<MapPage> {
                                 );
                               });
                             });
+                            Scaffold.of(context).showSnackBar(
+                              SnackBar(
+                                duration: Duration(seconds: 2),
+                                backgroundColor: darkPrimaryColor,
+                                content: Text(
+                                  'Saved to favourites',
+                                  style: GoogleFonts.montserrat(
+                                    textStyle: TextStyle(
+                                      color: whiteColor,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
                           },
                           onTap2: () {
                             setState(() {
@@ -499,6 +514,21 @@ class _MapPageState extends State<MapPage> {
                                 );
                               });
                             });
+                            Scaffold.of(context).showSnackBar(
+                              SnackBar(
+                                duration: Duration(seconds: 2),
+                                backgroundColor: Colors.red,
+                                content: Text(
+                                  'Removed from favourites',
+                                  style: GoogleFonts.montserrat(
+                                    textStyle: TextStyle(
+                                      color: whiteColor,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
                           },
                         )
                       ],

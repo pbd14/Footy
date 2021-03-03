@@ -12,7 +12,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
   String stext;
   bool loading = false;
 
@@ -35,7 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   tabs: [
                     Tab(
                       child: Text(
-                        'Profile',
+                        'Favourites',
                         style: GoogleFonts.montserrat(
                           textStyle: TextStyle(
                               color: whiteColor,
@@ -46,7 +45,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     Tab(
                       child: Text(
-                        'Favourites',
+                        'Profile',
                         style: GoogleFonts.montserrat(
                           textStyle: TextStyle(
                               color: whiteColor,
@@ -54,14 +53,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               fontSize: 20),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
               body: TabBarView(
                 children: [
-                  ProfileScreen1(),
                   ProfileScreen2(),
+                  ProfileScreen1(),
                 ],
               ),
             ),

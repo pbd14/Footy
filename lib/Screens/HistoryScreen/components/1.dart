@@ -187,10 +187,12 @@ class _History1State extends State<History1> {
         placesSlivers.addAll({book: place});
       }
     }
-    setState(() {
-      error = false;
-      loading = false;
-    });
+    if (this.mounted) {
+      setState(() {
+        error = false;
+        loading = false;
+      });
+    }
     for (dynamic book in _bookings1) {
       if (Booking.fromSnapshot(book).seen_status == 'unseen') {
         FirebaseFirestore.instance
@@ -854,6 +856,22 @@ class _History1State extends State<History1> {
                                                 }
                                               });
                                             });
+                                            Scaffold.of(context).showSnackBar(
+                                              SnackBar(
+                                                duration: Duration(seconds: 2),
+                                                backgroundColor:
+                                                    darkPrimaryColor,
+                                                content: Text(
+                                                  'Saved to favourites',
+                                                  style: GoogleFonts.montserrat(
+                                                    textStyle: TextStyle(
+                                                      color: whiteColor,
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            );
                                           },
                                           onTap2: () {
                                             setState(() {
@@ -894,6 +912,21 @@ class _History1State extends State<History1> {
                                                 }
                                               });
                                             });
+                                            Scaffold.of(context).showSnackBar(
+                                              SnackBar(
+                                                duration: Duration(seconds: 2),
+                                                backgroundColor: Colors.red,
+                                                content: Text(
+                                                  'Removed from favourites',
+                                                  style: GoogleFonts.montserrat(
+                                                    textStyle: TextStyle(
+                                                      color: whiteColor,
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            );
                                           },
                                         )
                                       : Container(),

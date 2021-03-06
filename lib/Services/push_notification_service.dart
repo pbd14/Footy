@@ -22,7 +22,7 @@ class PushNotificationService {
     FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser.uid)
-        .set({'fcm_token': token});
+        .update({'fcm_token': token});
 
     print("FirebaseMessaging token: $token");
     _fcm.configure(

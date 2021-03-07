@@ -4,6 +4,7 @@ import 'package:flutter_complete_guide/Models/Booking.dart';
 import 'package:flutter_complete_guide/Models/Place.dart';
 import 'package:flutter_complete_guide/Screens/MapScreen/map_screen.dart';
 import 'package:flutter_complete_guide/widgets/card.dart';
+import 'package:flutter_complete_guide/widgets/rounded_button.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
@@ -59,7 +60,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
             body: CustomScrollView(
               slivers: [
                 SliverAppBar(
-                    expandedHeight: size.height * 0.4,
+                    expandedHeight: size.height * 0.2,
                     backgroundColor: darkPrimaryColor,
                     floating: false,
                     pinned: false,
@@ -80,8 +81,81 @@ class _OnEventScreenState extends State<OnEventScreen> {
                     )),
                 SliverList(
                   delegate: SliverChildListDelegate([
+                    // SizedBox(
+                    //   height: 20,
+                    // ),
+                    // CardW(
+                    //   width: 0.9,
+                    //   ph: 300,
+                    //   child: Center(
+                    //     child: Column(
+                    //       mainAxisAlignment: MainAxisAlignment.center,
+                    //       children: <Widget>[
+                    //         Text(
+                    //           DateFormat.yMMMd()
+                    //               .format(DateTime.parse(
+                    //                   Booking.fromSnapshot(widget.booking)
+                    //                       .date))
+                    //               .toString(),
+                    //           style: GoogleFonts.montserrat(
+                    //             textStyle: TextStyle(
+                    //               color: darkPrimaryColor,
+                    //               fontSize: 20,
+                    //             ),
+                    //           ),
+                    //         ),
+                    //         SizedBox(
+                    //           height: 5,
+                    //         ),
+                    //         Text(
+                    //           'From: ' +
+                    //               Booking.fromSnapshot(widget.booking).from,
+                    //           style: GoogleFonts.montserrat(
+                    //             textStyle: TextStyle(
+                    //               color: darkPrimaryColor,
+                    //               fontSize: 20,
+                    //             ),
+                    //           ),
+                    //         ),
+                    //         SizedBox(
+                    //           height: 5,
+                    //         ),
+                    //         Text(
+                    //           'To: ' + Booking.fromSnapshot(widget.booking).to,
+                    //           style: GoogleFonts.montserrat(
+                    //             textStyle: TextStyle(
+                    //               color: darkPrimaryColor,
+                    //               fontSize: 20,
+                    //             ),
+                    //           ),
+                    //         ),
+                    //         SizedBox(
+                    //           height: 5,
+                    //         ),
+                    //         Text(
+                    //           Booking.fromSnapshot(widget.booking)
+                    //                   .price
+                    //                   .toString() +
+                    //               " So'm ",
+                    //           style: GoogleFonts.montserrat(
+                    //             textStyle: TextStyle(
+                    //               color: darkPrimaryColor,
+                    //               fontSize: 20,
+                    //             ),
+                    //           ),
+                    //         ),
+                    //         SizedBox(
+                    //           height: 5,
+                    //         ),
+                    //         SizedBox(
+                    //           width: size.width * 0.1,
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
                     SizedBox(
-                      height: size.height * 0.04,
+                      height: 20,
                     ),
                     // Container(
                     //   height: 400,
@@ -249,56 +323,13 @@ class _OnEventScreenState extends State<OnEventScreen> {
                               .update({'isRated': true});
                         },
                       ),
-                    )
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
                   ]),
                 ),
               ],
-
-              // SliverAppBar(
-              //   expandedHeight: size.height * 0.4,
-              //   backgroundColor: darkPrimaryColor,
-              //   flexibleSpace: Text(
-              //     'App bar',
-              // overflow: TextOverflow.ellipsis,
-              // style: GoogleFonts.montserrat(
-              //   textStyle: TextStyle(
-              //     color: darkPrimaryColor,
-              //     fontSize: 25,
-              //     fontWeight: FontWeight.bold,
-              //   ),
-              // ),
-              // ),
-              // flexibleSpace: GoogleMap(
-              //   mapType: MapType.normal,
-              //   minMaxZoomPreference: MinMaxZoomPreference(10.0, 40.0),
-              //   myLocationEnabled: true,
-              //   myLocationButtonEnabled: true,
-              //   mapToolbarEnabled: false,
-              //   onMapCreated: _onMapCreated,
-              //   initialCameraPosition: CameraPosition(
-              //     target: LatLng(Place.fromSnapshot(place).lat,
-              //         Place.fromSnapshot(place).lon),
-              //     zoom: 15,
-              //   ),
-              //   markers: _markers,
-              // ),
-              // ),
-              // SliverList(
-              //   delegate: SliverChildListDelegate([
-              //     Text(
-              //       'No events',
-              //       overflow: TextOverflow.ellipsis,
-              //       style: GoogleFonts.montserrat(
-              //         textStyle: TextStyle(
-              //           color: darkPrimaryColor,
-              //           fontSize: 25,
-              //           fontWeight: FontWeight.bold,
-              //         ),
-              //       ),
-              //     ),
-              //   ]),
-              // ),
-              // ],
             ),
           );
   }

@@ -32,6 +32,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
   bool verified = false;
   bool loading1 = false;
   bool verifying = false;
+  bool can = true;
 
   // ignore: unused_field
   String _setTime, _setTime2, _setDate, error;
@@ -50,6 +51,8 @@ class _PlaceScreenState extends State<ServiceScreen> {
   TextEditingController _dateController = TextEditingController();
   TextEditingController _timeController = TextEditingController();
   TextEditingController _timeController2 = TextEditingController();
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void dispose() {
@@ -89,6 +92,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
         loading1 = false;
         verified = false;
       });
+      return;
     } else {
       if (widget.data['days'][_dow]['status'] == 'closed') {
         setState(() {
@@ -175,6 +179,108 @@ class _PlaceScreenState extends State<ServiceScreen> {
     }
   }
 
+  Future<void> _bookButton(time1, time2) async {
+    double dtime1 = selectedTime.minute + selectedTime.hour * 60.0;
+    double dtime2 = selectedTime2.minute + selectedTime2.hour * 60.0;
+    double dNow = DateTime.now().minute + DateTime.now().hour * 60.0;
+    var bPlaceData = await FirebaseFirestore.instance
+        .collection('locations')
+        .doc(widget.placeId)
+        .get();
+    if (selectedDate.isBefore(DateTime.now())) {
+      if (selectedDate.day != DateTime.now().day) {
+        setState(() {
+          can = false;
+        });
+        return;
+      } else {
+        if (dtime1 < dNow) {
+          setState(() {
+            can = false;
+          });
+          return;
+        }
+      }
+    }
+
+    if (dtime1 >= dtime2) {
+      setState(() {
+        can = false;
+      });
+      return;
+    } else {
+      if (bPlaceData.data()['services'][widget.serviceId]['days'][_dow]
+              ['status'] ==
+          'closed') {
+        setState(() {
+          can = false;
+        });
+        return;
+      } else {
+        TimeOfDay placeTo = TimeOfDay.fromDateTime(DateFormat.Hm().parse(
+            bPlaceData.data()['services'][widget.serviceId]['days'][_dow]
+                ['to']));
+        TimeOfDay placeFrom = TimeOfDay.fromDateTime(DateFormat.Hm().parse(
+            bPlaceData.data()['services'][widget.serviceId]['days'][_dow]
+                ['from']));
+        double dplaceTo = placeTo.minute + placeTo.hour * 60.0;
+        double dplaceFrom = placeFrom.minute + placeFrom.hour * 60.0;
+        if (dtime1 < dplaceFrom || dtime2 < dplaceFrom) {
+          setState(() {
+            can = false;
+          });
+          return;
+        }
+        if (dtime1 > dplaceTo || dtime2 > dplaceTo) {
+          setState(() {
+            can = false;
+          });
+          return;
+        }
+        if (dtime1 >= dplaceFrom && dtime2 <= dplaceTo) {
+          var data = await FirebaseFirestore.instance
+              .collection('bookings')
+              .where(
+                'date',
+                isEqualTo: selectedDate.toString(),
+              )
+              .where(
+                'serviceId',
+                isEqualTo: widget.serviceId,
+              )
+              .get();
+          List _bookings = data.docs;
+          for (DocumentSnapshot booking in _bookings) {
+            TimeOfDay bookingTo = TimeOfDay.fromDateTime(
+                DateFormat.Hm().parse(Booking.fromSnapshot(booking).to));
+            TimeOfDay bookingFrom = TimeOfDay.fromDateTime(
+                DateFormat.Hm().parse(Booking.fromSnapshot(booking).from));
+            double dbookingTo = bookingTo.minute + bookingTo.hour * 60.0;
+            double dbookingFrom = bookingFrom.minute + bookingFrom.hour * 60.0;
+            if (dtime1 >= dbookingFrom && dtime1 < dbookingTo) {
+              setState(() {
+                can = false;
+              });
+              return;
+            }
+            if (dtime2 <= dbookingTo && dtime2 > dbookingFrom) {
+              setState(() {
+                can = false;
+              });
+              return;
+            }
+            if (dtime1 <= dbookingFrom && dtime2 >= dbookingTo) {
+              setState(() {
+                can = false;
+              });
+              return;
+            }
+          }
+        }
+      }
+    }
+  }
+
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
@@ -190,6 +296,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
       });
       var data1 = await FirebaseFirestore.instance
           .collection('bookings')
+          .orderBy('timestamp_date')
           .where(
             'date',
             isEqualTo: selectedDate.toString(),
@@ -330,6 +437,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
     return loading
         ? LoadingScreen()
         : Scaffold(
+            key: _scaffoldKey,
             appBar: AppBar(
               backgroundColor: primaryColor,
             ),
@@ -427,8 +535,8 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                     : ClipRRect(
                                         borderRadius: BorderRadius.circular(29),
                                         child: Container(
-                                          padding:
-                                              EdgeInsets.fromLTRB(30, 30, 30, 30),
+                                          padding: EdgeInsets.fromLTRB(
+                                              30, 30, 30, 30),
                                           alignment: Alignment.center,
                                           color: darkPrimaryColor,
                                           child: Column(
@@ -459,8 +567,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                         style: GoogleFonts
                                                             .montserrat(
                                                           textStyle: TextStyle(
-                                                            color:
-                                                                whiteColor,
+                                                            color: whiteColor,
                                                             fontSize: 20,
                                                           ),
                                                         ),
@@ -663,84 +770,179 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                         width: 0.5,
                                                         height: 0.07,
                                                         text: 'Book',
-                                                        press: () {
+                                                        press: () async {
                                                           setState(() {
                                                             loading = true;
                                                           });
-                                                          FirebaseFirestore
-                                                              .instance
-                                                              .collection(
-                                                                  'bookings')
-                                                              .doc()
-                                                              .set({
-                                                            'placeId':
-                                                                widget.placeId,
-                                                            'serviceId': widget
-                                                                .serviceId,
-                                                            'userId':
-                                                                FirebaseAuth
-                                                                    .instance
-                                                                    .currentUser
-                                                                    .uid,
-                                                            'price': price
-                                                                .roundToDouble(),
-                                                            'from': _time,
-                                                            'to': _time2,
-                                                            'date': selectedDate
-                                                                .toString(),
-                                                            'timestamp_date':
-                                                                selectedDate,
-                                                            'status': widget.data[
-                                                                        'type'] ==
-                                                                    'nonver'
-                                                                ? 'unfinished'
-                                                                : 'verification_needed',
-                                                            'seen_status':
-                                                                'unseen',
-                                                            'isRated': false,
-                                                          });
-                                                          setState(() {
-                                                            selectedDate =
-                                                                DateTime.now();
-                                                            _time = null;
-                                                            _time2 = null;
-                                                            duration = 0;
-                                                            price = 0;
-                                                            selectedTime =
-                                                                TimeOfDay(
-                                                                    hour: 00,
-                                                                    minute: 00);
-                                                            selectedTime2 =
-                                                                TimeOfDay(
-                                                                    hour: 00,
-                                                                    minute: 00);
-                                                            verified = false;
-                                                            loading1 = false;
-                                                            verifying = false;
-                                                            loading = false;
-                                                            selectedDate =
-                                                                DateTime.now();
-                                                            Scaffold.of(context)
-                                                                .showSnackBar(
-                                                              SnackBar(
-                                                                backgroundColor:
-                                                                    darkPrimaryColor,
-                                                                content: Text(
-                                                                  'Booking was successful',
-                                                                  style: GoogleFonts
-                                                                      .montserrat(
-                                                                    textStyle:
-                                                                        TextStyle(
-                                                                      color:
-                                                                          whiteColor,
-                                                                      fontSize:
-                                                                          30,
+                                                          await _bookButton(
+                                                            formatDate(
+                                                                DateTime(
+                                                                    2019,
+                                                                    08,
+                                                                    1,
+                                                                    selectedTime
+                                                                        .hour,
+                                                                    selectedTime
+                                                                        .minute),
+                                                                [HH, ':', nn]),
+                                                            formatDate(
+                                                                DateTime(
+                                                                    2019,
+                                                                    08,
+                                                                    1,
+                                                                    selectedTime2
+                                                                        .hour,
+                                                                    selectedTime2.minute),
+                                                                [HH, ':', nn]),
+                                                          );
+                                                          can
+                                                              ? WidgetsBinding
+                                                                  .instance
+                                                                  .addPostFrameCallback(
+                                                                      (_) {
+                                                                  _scaffoldKey
+                                                                      .currentState
+                                                                      .showSnackBar(
+                                                                          SnackBar(
+                                                                    backgroundColor:
+                                                                        darkPrimaryColor,
+                                                                    content:
+                                                                        Text(
+                                                                      'Booking was successful',
+                                                                      style: GoogleFonts
+                                                                          .montserrat(
+                                                                        textStyle:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              whiteColor,
+                                                                          fontSize:
+                                                                              30,
+                                                                        ),
+                                                                      ),
                                                                     ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            );
-                                                          });
+                                                                  ));
+                                                                })
+                                                              : WidgetsBinding
+                                                                  .instance
+                                                                  .addPostFrameCallback(
+                                                                      (_) {
+                                                                  _scaffoldKey
+                                                                      .currentState
+                                                                      .showSnackBar(
+                                                                          SnackBar(
+                                                                    backgroundColor:
+                                                                        Colors
+                                                                            .red,
+                                                                    content:
+                                                                        Text(
+                                                                      'Failed to book',
+                                                                      style: GoogleFonts
+                                                                          .montserrat(
+                                                                        textStyle:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              whiteColor,
+                                                                          fontSize:
+                                                                              30,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ));
+                                                                });
+
+                                                          if (can) {
+                                                            FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    'bookings')
+                                                                .doc()
+                                                                .set({
+                                                              'placeId': widget
+                                                                  .placeId,
+                                                              'serviceId': widget
+                                                                  .serviceId,
+                                                              'userId':
+                                                                  FirebaseAuth
+                                                                      .instance
+                                                                      .currentUser
+                                                                      .uid,
+                                                              'price': price
+                                                                  .roundToDouble(),
+                                                              'from': _time,
+                                                              'to': _time2,
+                                                              'date': selectedDate
+                                                                  .toString(),
+                                                              'timestamp_date':
+                                                                  selectedDate,
+                                                              'status': widget.data[
+                                                                          'type'] ==
+                                                                      'nonver'
+                                                                  ? 'unfinished'
+                                                                  : 'verification_needed',
+                                                              'seen_status':
+                                                                  'unseen',
+                                                              'isRated': false,
+                                                            });
+                                                            setState(() {
+                                                              selectedDate =
+                                                                  DateTime
+                                                                      .now();
+                                                              _time = null;
+                                                              _time2 = null;
+                                                              duration = 0;
+                                                              price = 0;
+                                                              selectedTime =
+                                                                  TimeOfDay(
+                                                                      hour: 00,
+                                                                      minute:
+                                                                          00);
+                                                              selectedTime2 =
+                                                                  TimeOfDay(
+                                                                      hour: 00,
+                                                                      minute:
+                                                                          00);
+                                                              _setDate = null;
+                                                              _dow = null;
+                                                              verified = false;
+                                                              loading1 = false;
+                                                              verifying = false;
+                                                              loading = false;
+                                                              can = true;
+                                                              selectedDate =
+                                                                  DateTime
+                                                                      .now();
+                                                            });
+                                                          } else {
+                                                            setState(() {
+                                                              selectedDate =
+                                                                  DateTime
+                                                                      .now();
+                                                              _time = null;
+                                                              _time2 = null;
+                                                              duration = 0;
+                                                              price = 0;
+                                                              selectedTime =
+                                                                  TimeOfDay(
+                                                                      hour: 00,
+                                                                      minute:
+                                                                          00);
+                                                              selectedTime2 =
+                                                                  TimeOfDay(
+                                                                      hour: 00,
+                                                                      minute:
+                                                                          00);
+                                                              _setDate = null;
+                                                              _dow = null;
+                                                              verified = false;
+                                                              loading1 = false;
+                                                              verifying = false;
+                                                              loading = false;
+                                                              can = true;
+                                                              selectedDate =
+                                                                  DateTime
+                                                                      .now();
+                                                            });
+                                                          }
                                                         },
                                                         color: darkPrimaryColor,
                                                         textColor: whiteColor,

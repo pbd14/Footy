@@ -284,10 +284,13 @@ class _History1State extends State<History1> {
         unrplacesSlivers.addAll({book: place});
       }
     }
-    setState(() {
-      error = false;
-      loading = false;
-    });
+
+    if (this.mounted) {
+      setState(() {
+        error = false;
+        loading = false;
+      });
+    }
 
     for (dynamic book in _bookings) {
       if (Booking.fromSnapshot(book).seen_status == 'seen1') {

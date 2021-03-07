@@ -4,7 +4,6 @@ import 'package:flutter_complete_guide/Models/Booking.dart';
 import 'package:flutter_complete_guide/Models/Place.dart';
 import 'package:flutter_complete_guide/Screens/MapScreen/map_screen.dart';
 import 'package:flutter_complete_guide/widgets/card.dart';
-import 'package:flutter_complete_guide/widgets/rounded_button.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
@@ -23,6 +22,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
   bool loading = false;
   double initRat = 3;
   var place;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Future<void> prepare() async {
     place = await FirebaseFirestore.instance
@@ -54,6 +54,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
     return loading
         ? LoadingScreen()
         : Scaffold(
+            key: _scaffoldKey,
             appBar: AppBar(
               backgroundColor: primaryColor,
             ),
@@ -67,7 +68,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                     snap: false,
                     flexibleSpace: Center(
                       child: Text(
-                        Place.fromSnapshot(place) != null
+                        place != null
                             ? Place.fromSnapshot(place).name
                             : 'Place',
                         overflow: TextOverflow.ellipsis,
@@ -321,6 +322,20 @@ class _OnEventScreenState extends State<OnEventScreen> {
                               .collection('bookings')
                               .doc(Booking.fromSnapshot(widget.booking).id)
                               .update({'isRated': true});
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            _scaffoldKey.currentState.showSnackBar(SnackBar(
+                              backgroundColor: darkPrimaryColor,
+                              content: Text(
+                                'Rating was saved',
+                                style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    color: whiteColor,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ),
+                            ));
+                          });
                         },
                       ),
                     ),

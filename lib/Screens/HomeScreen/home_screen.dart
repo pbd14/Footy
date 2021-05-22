@@ -115,13 +115,17 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: _widgetOptions,
       ),
+      // Center(
+      //   child: _widgetOptions.elementAt(_selectedIndex),
+      // ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.map),
+            icon: Icon(CupertinoIcons.map_pin_ellipse),
             label: 'Map',
           ),
           BottomNavigationBarItem(
@@ -157,11 +161,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       )
                     ],
                   )
-                : Icon(Icons.access_alarm),
+                : Icon(CupertinoIcons.clock),
             label: 'History',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+            icon: Icon(CupertinoIcons.person_alt),
             label: 'Profile',
           ),
         ],
@@ -661,52 +665,6 @@ class _MapPageState extends State<MapPage> {
   }
 }
 
-// class FlutterPage extends StatelessWidget {
-//   final Color backgroundColor;
-//   final String title;
-
-//   const FlutterPage({Key key, this.backgroundColor, this.title})
-//       : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       width: double.infinity,
-//       height: double.infinity,
-//       alignment: Alignment.center,
-//       color: backgroundColor,
-//       padding: EdgeInsets.symmetric(
-//           horizontal: MediaQuery.of(context).size.width * 0.1, vertical: 120.0),
-//       child: Column(
-//         children: <Widget>[
-//           Text(title,
-//               style: TextStyle(
-//                 color: const Color(0xBB000000),
-//                 fontSize: 35.0,
-//                 fontWeight: FontWeight.w700,
-//               )),
-//               RoundedButton(
-//                 width: 0.7,
-//                 height: 0.085,
-//                 text: 'SIGN OUT',
-//                 press: () {
-//                   // setState(() {
-//                   //   loading = true;
-//                   // });
-//                   dynamic res = AuthService().signOut();
-//                   // if(res == null){
-//                   //   loading = false;
-//                   // }
-//                 },
-//                 color: darkPrimaryColor,
-//                 textColor: whiteColor,
-//               )
-//         ],
-//       ),
-//     );
-//   }
-// }
-
 class PageReveal extends StatelessWidget {
   final double revealPercent;
   final Widget child;
@@ -746,66 +704,3 @@ class CircleRevealClipper extends CustomClipper<Rect> {
     return true;
   }
 }
-
-// class _HomeScreenState extends State<HomeScreen> {
-//   String phoneNo;
-//   String smsCode;
-//   String verificationId;
-//   bool loading = false;
-
-//   @override
-//   Widget build(BuildContext context) {
-
-//     Size size = MediaQuery.of(context).size;
-//     return loading ? LoadingScreen() : Scaffold(
-//       backgroundColor: whiteColor,
-//       body: SingleChildScrollView(
-//         child: Background(
-//           child: Column(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: <Widget>[
-//               Text(
-//                 'WELCOME TO FOOTY',
-//                 style: GoogleFonts.montserrat(
-//                   textStyle: TextStyle(
-//                     color: whiteColor,
-//                     fontSize: 30,
-//                     fontWeight: FontWeight.bold,
-//                   ),
-//                 ),
-//               ),
-//               SizedBox(
-//                 height: size.height * 0.03,
-//               ),
-//               Text(
-//                 'HOME',
-//                 style: GoogleFonts.montserrat(
-//                   textStyle: TextStyle(
-//                     color: whiteColor,
-//                     fontSize: 25,
-//                     fontWeight: FontWeight.bold,
-//                   ),
-//                 ),
-//               ),
-//               SizedBox(height: size.height * 0.2),
-//               RoundedButton(
-//                 text: 'SIGN OUT',
-//                 press: () {
-//                   setState(() {
-//                     loading = true;
-//                   });
-//                   dynamic res = AuthService().signOut();
-//                   if(res == null){
-//                     loading = false;
-//                   }
-//                 },
-//                 color: darkPrimaryColor,
-//                 textColor: whiteColor,
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }

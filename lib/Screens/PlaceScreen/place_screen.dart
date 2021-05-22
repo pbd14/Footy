@@ -270,7 +270,6 @@ class _PlaceScreenState extends State<PlaceScreen> {
                                                 background: Colors.red,
                                               );
                                             });
-                                            
                                           });
                                         },
                                       ),
@@ -296,7 +295,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                       height: 20,
                     ),
                     for (var service in widget.data['services'])
-                      FlatButton(
+                      TextButton(
                         onPressed: () {
                           setState(() {
                             loading = true;

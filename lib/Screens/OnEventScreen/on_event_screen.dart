@@ -247,7 +247,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                       height: 5,
                     ),
                     Center(
-                      child: FlatButton(
+                      child: TextButton(
                         onPressed: () {
                           setState(() {
                             loading = true;

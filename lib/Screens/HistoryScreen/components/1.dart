@@ -439,7 +439,7 @@ class _History1State extends State<History1> {
                             height: 15,
                           ),
                           for (var book in slivers)
-                            FlatButton(
+                            TextButton(
                               onPressed: () {
                                 setState(() {
                                   loading = true;
@@ -863,7 +863,7 @@ class _History1State extends State<History1> {
                                                 }
                                               });
                                             });
-                                            Scaffold.of(context).showSnackBar(
+                                            ScaffoldMessenger.of(context).showSnackBar(
                                               SnackBar(
                                                 duration: Duration(seconds: 2),
                                                 backgroundColor:
@@ -919,7 +919,7 @@ class _History1State extends State<History1> {
                                                 }
                                               });
                                             });
-                                            Scaffold.of(context).showSnackBar(
+                                            ScaffoldMessenger.of(context).showSnackBar(
                                               SnackBar(
                                                 duration: Duration(seconds: 2),
                                                 backgroundColor: Colors.red,
@@ -970,7 +970,7 @@ class _History1State extends State<History1> {
                             height: 15,
                           ),
                           for (var book in unratedBooks)
-                            FlatButton(
+                            TextButton(
                               onPressed: () {
                                 setState(() {
                                   loading = true;

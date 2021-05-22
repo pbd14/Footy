@@ -31,8 +31,7 @@ class _FootyScreenState extends State<FootyScreen> {
                       SliverGrid.count(
                         children: [
                           for (var book in slivers)
-                            FlatButton(
-                              padding: const EdgeInsets.fromLTRB(6, 1, 6, 1),
+                            TextButton(
                               onPressed: () {
                                 setState(() {
                                   loading = true;

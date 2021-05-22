@@ -21,6 +21,7 @@ class RoundedTextInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     Size size = MediaQuery.of(context).size;
     return Container(
       height: 70,

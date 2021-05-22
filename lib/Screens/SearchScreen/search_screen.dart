@@ -22,7 +22,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   List _allResults = [];
   List _results = [];
-  List _favs = [];
+  // List _favs = [];
 
   Future resultsLoaded;
 

@@ -40,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
   StreamSubscription<QuerySnapshot> subscription;
   static List<Widget> _widgetOptions = <Widget>[
     StreamProvider<List<Place>>.value(
+      initialData: [],
       value: PlaceDB().places,
       child: MapPage(
         data: null,
@@ -241,8 +242,9 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _getUserLocation() async {
-    geolocator.Position position = await geolocator.Geolocator()
-        .getCurrentPosition(desiredAccuracy: geolocator.LocationAccuracy.high);
+    geolocator.Position position =
+        await geolocator.Geolocator.getCurrentPosition(
+            desiredAccuracy: geolocator.LocationAccuracy.high);
     if (this.mounted) {
       setState(() {
         _initialPosition = LatLng(position.latitude, position.longitude);
@@ -478,7 +480,7 @@ class _MapPageState extends State<MapPage> {
                                 );
                               });
                             });
-                            Scaffold.of(context).showSnackBar(
+                            ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 duration: Duration(seconds: 2),
                                 backgroundColor: darkPrimaryColor,
@@ -514,7 +516,7 @@ class _MapPageState extends State<MapPage> {
                                 );
                               });
                             });
-                            Scaffold.of(context).showSnackBar(
+                            ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 duration: Duration(seconds: 2),
                                 backgroundColor: Colors.red,

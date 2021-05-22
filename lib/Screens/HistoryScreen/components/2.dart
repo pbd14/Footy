@@ -263,7 +263,7 @@ class _History2State extends State<History2> {
                                                     ])
                                                   });
                                                 });
-                                                Scaffold.of(context)
+                                                ScaffoldMessenger.of(context)
                                                     .showSnackBar(
                                                   SnackBar(
                                                     duration:
@@ -300,7 +300,7 @@ class _History2State extends State<History2> {
                                                     ])
                                                   });
                                                 });
-                                                Scaffold.of(context)
+                                                ScaffoldMessenger.of(context)
                                                     .showSnackBar(
                                                   SnackBar(
                                                     duration:

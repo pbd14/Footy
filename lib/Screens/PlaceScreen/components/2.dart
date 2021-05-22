@@ -601,7 +601,7 @@ class _PlaceScreen2State extends State<PlaceScreen2> {
                                                     loading = false;
                                                     selectedDate =
                                                         DateTime.now();
-                                                    Scaffold.of(context)
+                                                    ScaffoldMessenger.of(context)
                                                         .showSnackBar(
                                                       SnackBar(
                                                         backgroundColor:

@@ -3,10 +3,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_complete_guide/Models/PushNotificationMessage.dart';
-import 'package:flutter_complete_guide/constants.dart';
-import 'package:overlay_support/overlay_support.dart';
 
 class PushNotificationService {
   final FirebaseMessaging _fcm;
@@ -15,7 +11,7 @@ class PushNotificationService {
 
   Future init() async {
     if (Platform.isIOS) {
-      _fcm.requestNotificationPermissions(IosNotificationSettings());
+      _fcm.requestPermission();
     }
 
     String token = await _fcm.getToken();
@@ -27,70 +23,70 @@ class PushNotificationService {
     }
 
     print("FirebaseMessaging token: $token");
-    _fcm.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        // Navigator.of(context).push(SlideRightRoute(page: HistoryScreen()));
-        // if (Platform.isAndroid) {
-        PushNotificationMessage notification = PushNotificationMessage(
-          title: message['notification']['title'],
-          body: message['notification']['body'],
-        );
-        showSimpleNotification(
-          Container(child: Text(notification.body)),
-          position: NotificationPosition.top,
-          background: darkPrimaryColor,
-        );
-        // }
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        if (Platform.isAndroid || Platform.isIOS) {
-          PushNotificationMessage notification = PushNotificationMessage(
-            title: message['notification']['title'],
-            body: message['notification']['body'],
-          );
-          showSimpleNotification(
-            Container(child: Text(notification.body)),
-            position: NotificationPosition.top,
-            background: darkPrimaryColor,
-          );
-        }
-        if (Platform.isAndroid || Platform.isIOS) {
-          PushNotificationMessage notification = PushNotificationMessage(
-            title: message['notification']['title'],
-            body: message['notification']['body'],
-          );
-          showSimpleNotification(
-            Container(child: Text(notification.body)),
-            position: NotificationPosition.top,
-            background: darkPrimaryColor,
-          );
-        }
-      },
-      onResume: (Map<String, dynamic> message) async {
-        if (Platform.isAndroid || Platform.isIOS) {
-          PushNotificationMessage notification = PushNotificationMessage(
-            title: message['notification']['title'],
-            body: message['notification']['body'],
-          );
-          showSimpleNotification(
-            Container(child: Text(notification.body)),
-            position: NotificationPosition.top,
-            background: darkPrimaryColor,
-          );
-        }
-        if (Platform.isAndroid || Platform.isIOS) {
-          PushNotificationMessage notification = PushNotificationMessage(
-            title: message['notification']['title'],
-            body: message['notification']['body'],
-          );
-          showSimpleNotification(
-            Container(child: Text(notification.body)),
-            position: NotificationPosition.top,
-            background: darkPrimaryColor,
-          );
-        }
-      },
-    );
+    // _fcm.configure(
+    //   onMessage: (Map<String, dynamic> message) async {
+    //     // Navigator.of(context).push(SlideRightRoute(page: HistoryScreen()));
+    //     // if (Platform.isAndroid) {
+    //     PushNotificationMessage notification = PushNotificationMessage(
+    //       title: message['notification']['title'],
+    //       body: message['notification']['body'],
+    //     );
+    //     showSimpleNotification(
+    //       Container(child: Text(notification.body)),
+    //       position: NotificationPosition.top,
+    //       background: darkPrimaryColor,
+    //     );
+    //     // }
+    //   },
+    //   onLaunch: (Map<String, dynamic> message) async {
+    //     if (Platform.isAndroid || Platform.isIOS) {
+    //       PushNotificationMessage notification = PushNotificationMessage(
+    //         title: message['notification']['title'],
+    //         body: message['notification']['body'],
+    //       );
+    //       showSimpleNotification(
+    //         Container(child: Text(notification.body)),
+    //         position: NotificationPosition.top,
+    //         background: darkPrimaryColor,
+    //       );
+    //     }
+    //     if (Platform.isAndroid || Platform.isIOS) {
+    //       PushNotificationMessage notification = PushNotificationMessage(
+    //         title: message['notification']['title'],
+    //         body: message['notification']['body'],
+    //       );
+    //       showSimpleNotification(
+    //         Container(child: Text(notification.body)),
+    //         position: NotificationPosition.top,
+    //         background: darkPrimaryColor,
+    //       );
+    //     }
+    //   },
+    //   onResume: (Map<String, dynamic> message) async {
+    //     if (Platform.isAndroid || Platform.isIOS) {
+    //       PushNotificationMessage notification = PushNotificationMessage(
+    //         title: message['notification']['title'],
+    //         body: message['notification']['body'],
+    //       );
+    //       showSimpleNotification(
+    //         Container(child: Text(notification.body)),
+    //         position: NotificationPosition.top,
+    //         background: darkPrimaryColor,
+    //       );
+    //     }
+    //     if (Platform.isAndroid || Platform.isIOS) {
+    //       PushNotificationMessage notification = PushNotificationMessage(
+    //         title: message['notification']['title'],
+    //         body: message['notification']['body'],
+    //       );
+    //       showSimpleNotification(
+    //         Container(child: Text(notification.body)),
+    //         position: NotificationPosition.top,
+    //         background: darkPrimaryColor,
+    //       );
+    //     }
+    //   },
+    // );
   }
 }
 

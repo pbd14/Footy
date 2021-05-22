@@ -10,7 +10,7 @@ import 'package:flutter_complete_guide/Services/push_notification_service.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
 
 class AuthService {
-  static final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  static final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   handleAuth() {
     return StreamBuilder(

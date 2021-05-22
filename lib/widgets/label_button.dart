@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_complete_guide/constants.dart';
 
 class LabelButton extends StatefulWidget {
   const LabelButton({
@@ -83,10 +82,10 @@ class _LabelButtonState extends State<LabelButton> {
     } else {
       labelColor = widget.color2;
     }
-    return FlatButton(
-      highlightColor: darkPrimaryColor,
-      height: widget.ph,
-      minWidth: widget.pw,
+    return TextButton(
+      // highlightColor: darkPrimaryColor,
+      // height: widget.ph,
+      // minWidth: widget.pw,
       onPressed: () {
         setState(() {
           isColored = !isColored;

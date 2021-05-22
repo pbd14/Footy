@@ -19,10 +19,12 @@ class PushNotificationService {
     }
 
     String token = await _fcm.getToken();
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser.uid)
-        .update({'fcm_token': token});
+    if (FirebaseAuth.instance.currentUser != null) {
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser.uid)
+          .update({'fcm_token': token});
+    }
 
     print("FirebaseMessaging token: $token");
     _fcm.configure(

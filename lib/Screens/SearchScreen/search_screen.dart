@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Models/Place.dart';
 import 'package:flutter_complete_guide/Screens/MapScreen/map_screen.dart';
@@ -8,7 +7,6 @@ import 'package:flutter_complete_guide/Screens/loading_screen.dart';
 import 'package:flutter_complete_guide/constants.dart';
 import 'package:flutter_complete_guide/Screens/SearchScreen/components/background.dart';
 import 'package:flutter_complete_guide/widgets/card.dart';
-import 'package:flutter_complete_guide/widgets/label_button.dart';
 import 'package:flutter_complete_guide/widgets/rounded_button.dart';
 import 'package:flutter_complete_guide/widgets/rounded_text_input.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';

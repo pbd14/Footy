@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -74,35 +75,72 @@ class _PlaceScreenState extends State<PlaceScreen> {
                   flexibleSpace: CarouselSlider(
                     options: CarouselOptions(),
                     items: imgList
-                        .map((item) => Container(
-                              child: Center(
-                                  child: Align(
-                                alignment: Alignment.topCenter,
-                                child: Image.network(
-                                  item,
-                                  fit: BoxFit.cover,
-                                  width: size.width,
-                                  loadingBuilder: (BuildContext context,
-                                      Widget child,
-                                      ImageChunkEvent loadingProgress) {
-                                    if (loadingProgress == null) return child;
-                                    return Center(
-                                      child: CircularProgressIndicator(
-                                        backgroundColor: whiteColor,
-                                        value: loadingProgress
-                                                    .expectedTotalBytes !=
-                                                null
-                                            ? loadingProgress
-                                                    .cumulativeBytesLoaded /
-                                                loadingProgress
-                                                    .expectedTotalBytes
-                                            : null,
+                        .map((item) => Center(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(30),
+                                    child: Container(
+                                      height: 200,
+                                      width: size.width,
+                                      child: CachedNetworkImage(
+                                        fit: BoxFit.cover,
+                                        filterQuality: FilterQuality.none,
+                                        height: 100,
+                                        width: 100,
+                                        placeholder: (context, url) =>
+                                            Container(
+                                          height: 50,
+                                          width: 50,
+                                          child: Transform.scale(
+                                            scale: 0.1,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2.0,
+                                              backgroundColor: primaryColor,
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                      primaryColor),
+                                            ),
+                                          ),
+                                        ),
+                                        errorWidget: (context, url, error) =>
+                                            Icon(
+                                          Icons.error,
+                                          color: primaryColor,
+                                        ),
+                                        imageUrl: item,
                                       ),
-                                    );
-                                  },
-                                ),
-                              )),
-                            ))
+                                    ),
+                                  ),
+                                )
+                            // Container(
+                            //       child: Center(
+                            //           child: Align(
+                            //         alignment: Alignment.topCenter,
+                            //         child: Image.network(
+                            //           item,
+                            //           fit: BoxFit.cover,
+                            //           width: size.width,
+                            //           loadingBuilder: (BuildContext context,
+                            //               Widget child,
+                            //               ImageChunkEvent loadingProgress) {
+                            //             if (loadingProgress == null) return child;
+                            //             return Center(
+                            //               child: CircularProgressIndicator(
+                            //                 backgroundColor: whiteColor,
+                            //                 value: loadingProgress
+                            //                             .expectedTotalBytes !=
+                            //                         null
+                            //                     ? loadingProgress
+                            //                             .cumulativeBytesLoaded /
+                            //                         loadingProgress
+                            //                             .expectedTotalBytes
+                            //                     : null,
+                            //               ),
+                            //             );
+                            //           },
+                            //         ),
+                            //       )),
+                            //     ))
+                            )
                         .toList(),
                   ),
                 ),

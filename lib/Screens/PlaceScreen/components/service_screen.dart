@@ -8,7 +8,6 @@ import 'package:flutter_complete_guide/widgets/card.dart';
 import 'package:flutter_complete_guide/widgets/rounded_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-
 import '../../../constants.dart';
 
 // ignore: must_be_immutable

@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Models/Booking.dart';
 import 'package:flutter_complete_guide/Models/Place.dart';
+import 'package:flutter_complete_guide/Models/PushNotificationMessage.dart';
 import 'package:flutter_complete_guide/Screens/MapScreen/map_screen.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
 import 'package:flutter_complete_guide/constants.dart';
@@ -12,22 +16,26 @@ import 'package:flutter_complete_guide/widgets/rounded_button.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 class History2 extends StatefulWidget {
   @override
   _History2State createState() => _History2State();
 }
 
-class _History2State extends State<History2> {
+class _History2State extends State<History2>
+    with AutomaticKeepAliveClientMixin<History2> {
+  @override
+  bool get wantKeepAlive => true;
   bool loading = false;
-  List _bookings;
+  List _bookings = [];
   Map _places = {};
 
   Future<void> loadData() async {
     setState(() {
       loading = true;
     });
-    var data = await FirebaseFirestore.instance
+    QuerySnapshot data = await FirebaseFirestore.instance
         .collection('bookings')
         .orderBy(
           'timestamp_date',
@@ -41,21 +49,33 @@ class _History2State extends State<History2> {
           'userId',
           isEqualTo: FirebaseAuth.instance.currentUser.uid,
         )
+        .limit(20)
         .get();
     _bookings = data.docs;
-    for (dynamic book in _bookings) {
-      var data1 = await FirebaseFirestore.instance
+    for (QueryDocumentSnapshot book in _bookings) {
+      DocumentSnapshot data1 = await FirebaseFirestore.instance
           .collection('locations')
           .doc(Booking.fromSnapshot(book).placeId)
           .get();
-      var data2 = Place.fromSnapshot(data1);
       _places.addAll({
-        Booking.fromSnapshot(book).id: data2,
+        Booking.fromSnapshot(book).id: Place.fromSnapshot(data1),
       });
     }
     setState(() {
       loading = false;
     });
+  }
+
+  Future<void> _refresh() {
+    setState(() {
+      loading = true;
+    });
+    _bookings = [];
+    _places = {};
+    loadData();
+    Completer<Null> completer = new Completer<Null>();
+    completer.complete();
+    return completer.future;
   }
 
   @override
@@ -69,30 +89,32 @@ class _History2State extends State<History2> {
     Size size = MediaQuery.of(context).size;
     return loading
         ? LoadingScreen()
-        : CustomScrollView(
-            scrollDirection: Axis.vertical,
-            slivers: [
-              _bookings != null
-                  ? SliverList(
-                      delegate: SliverChildListDelegate([
-                        for (var book in _bookings)
-                          CardW(
-                            ph: 170,
-                            child: Container(
-                              padding: EdgeInsets.all(6),
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Expanded(
+        : RefreshIndicator(
+            onRefresh: _refresh,
+            child: CustomScrollView(
+              scrollDirection: Axis.vertical,
+              slivers: [
+                _bookings != null
+                    ? SliverList(
+                        delegate: SliverChildListDelegate([
+                          for (var book in _bookings)
+                            Container(
+                              margin: EdgeInsets.symmetric(horizontal: 10.0),
+                              // padding: EdgeInsets.all(10),
+                              child: Card(
+                                margin: EdgeInsets.all(5),
+                                elevation: 10,
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
                                     child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         Container(
-                                          alignment: Alignment.centerLeft,
+                                          width: size.width * 0.5,
                                           child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 DateFormat.yMMMd()
@@ -109,6 +131,50 @@ class _History2State extends State<History2> {
                                                     fontSize: 20,
                                                     fontWeight: FontWeight.bold,
                                                   ),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Text(
+                                                Booking.fromSnapshot(book)
+                                                        .from +
+                                                    ' - ' +
+                                                    Booking.fromSnapshot(book)
+                                                        .to,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: GoogleFonts.montserrat(
+                                                  textStyle: TextStyle(
+                                                    color: darkPrimaryColor,
+                                                    fontSize: 20,
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Text(
+                                                _places != null
+                                                    ? _places[Booking.fromSnapshot(
+                                                                        book)
+                                                                    .id]
+                                                                .name !=
+                                                            null
+                                                        ? _places[Booking
+                                                                    .fromSnapshot(
+                                                                        book)
+                                                                .id]
+                                                            .name
+                                                        : 'Place'
+                                                    : 'Place',
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: GoogleFonts.montserrat(
+                                                  textStyle: TextStyle(
+                                                      color: darkPrimaryColor,
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w400),
                                                 ),
                                               ),
                                               SizedBox(
@@ -133,220 +199,589 @@ class _History2State extends State<History2> {
                                             ],
                                           ),
                                         ),
-                                        SizedBox(
-                                          width: size.width * 0.2,
-                                        ),
-                                        Flexible(
+                                        Align(
+                                          alignment: Alignment.centerRight,
                                           child: Container(
-                                            alignment: Alignment.centerLeft,
+                                            width: size.width * 0.3,
                                             child: Column(
+                                              // crossAxisAlignment:
+                                              //     CrossAxisAlignment.end,
                                               children: [
-                                                Text(
-                                                  _places != null
-                                                      ? _places[Booking.fromSnapshot(
-                                                                          book)
-                                                                      .id]
-                                                                  .name !=
-                                                              null
-                                                          ? _places[Booking
-                                                                      .fromSnapshot(
-                                                                          book)
-                                                                  .id]
-                                                              .name
-                                                          : 'Place'
-                                                      : 'Place',
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: GoogleFonts.montserrat(
-                                                    textStyle: TextStyle(
-                                                      color: darkPrimaryColor,
-                                                      fontSize: 20,
-                                                    ),
+                                                _places != null
+                                                    ? LabelButton(
+                                                        isC: false,
+                                                        reverse:
+                                                            FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    'users')
+                                                                .doc(FirebaseAuth
+                                                                    .instance
+                                                                    .currentUser
+                                                                    .uid),
+                                                        containsValue: _places[
+                                                                Booking.fromSnapshot(
+                                                                        book)
+                                                                    .id]
+                                                            .id,
+                                                        color1: Colors.red,
+                                                        color2:
+                                                            lightPrimaryColor,
+                                                        size: 30,
+                                                        onTap: () {
+                                                          setState(() {
+                                                            FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    'users')
+                                                                .doc(FirebaseAuth
+                                                                    .instance
+                                                                    .currentUser
+                                                                    .uid)
+                                                                .update({
+                                                              'favourites':
+                                                                  FieldValue
+                                                                      .arrayUnion([
+                                                                _places[Booking.fromSnapshot(
+                                                                            book)
+                                                                        .id]
+                                                                    .id
+                                                              ])
+                                                            }).catchError(
+                                                                    (error) {
+                                                              PushNotificationMessage
+                                                                  notification =
+                                                                  PushNotificationMessage(
+                                                                title: 'Fail',
+                                                                body:
+                                                                    'Failed to update favourites',
+                                                              );
+                                                              showSimpleNotification(
+                                                                Container(
+                                                                    child: Text(
+                                                                        notification
+                                                                            .body)),
+                                                                position:
+                                                                    NotificationPosition
+                                                                        .top,
+                                                                background:
+                                                                    Colors.red,
+                                                              );
+                                                              if (this
+                                                                  .mounted) {
+                                                                setState(() {
+                                                                  loading =
+                                                                      false;
+                                                                });
+                                                              } else {
+                                                                loading = false;
+                                                              }
+                                                            });
+                                                          });
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                            SnackBar(
+                                                              duration:
+                                                                  Duration(
+                                                                      seconds:
+                                                                          2),
+                                                              backgroundColor:
+                                                                  darkPrimaryColor,
+                                                              content: Text(
+                                                                'Saved to favourites',
+                                                                style: GoogleFonts
+                                                                    .montserrat(
+                                                                  textStyle:
+                                                                      TextStyle(
+                                                                    color:
+                                                                        whiteColor,
+                                                                    fontSize:
+                                                                        15,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                        onTap2: () {
+                                                          setState(() {
+                                                            FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    'users')
+                                                                .doc(FirebaseAuth
+                                                                    .instance
+                                                                    .currentUser
+                                                                    .uid)
+                                                                .update({
+                                                              'favourites':
+                                                                  FieldValue
+                                                                      .arrayRemove([
+                                                                _places[Booking.fromSnapshot(
+                                                                            book)
+                                                                        .id]
+                                                                    .id
+                                                              ])
+                                                            }).catchError(
+                                                                    (error) {
+                                                              PushNotificationMessage
+                                                                  notification =
+                                                                  PushNotificationMessage(
+                                                                title: 'Fail',
+                                                                body:
+                                                                    'Failed to update favourites',
+                                                              );
+                                                              showSimpleNotification(
+                                                                Container(
+                                                                    child: Text(
+                                                                        notification
+                                                                            .body)),
+                                                                position:
+                                                                    NotificationPosition
+                                                                        .top,
+                                                                background:
+                                                                    Colors.red,
+                                                              );
+                                                              if (this
+                                                                  .mounted) {
+                                                                setState(() {
+                                                                  loading =
+                                                                      false;
+                                                                });
+                                                              } else {
+                                                                loading = false;
+                                                              }
+                                                            });
+                                                          });
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                            SnackBar(
+                                                              duration:
+                                                                  Duration(
+                                                                      seconds:
+                                                                          2),
+                                                              backgroundColor:
+                                                                  Colors.red,
+                                                              content: Text(
+                                                                'Removed from favourites',
+                                                                style: GoogleFonts
+                                                                    .montserrat(
+                                                                  textStyle:
+                                                                      TextStyle(
+                                                                    color:
+                                                                        whiteColor,
+                                                                    fontSize:
+                                                                        15,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                      )
+                                                    : Container(),
+                                                SizedBox(height: 10),
+                                                IconButton(
+                                                  iconSize: 30,
+                                                  icon: Icon(
+                                                    CupertinoIcons
+                                                        .map_pin_ellipse,
+                                                    color: darkPrimaryColor,
                                                   ),
+                                                  onPressed: () async {
+                                                    setState(() {
+                                                      loading = true;
+                                                    });
+                                                    Navigator.push(
+                                                      context,
+                                                      SlideRightRoute(
+                                                        page: MapScreen(
+                                                          data: {
+                                                            'lat': _places[Booking
+                                                                        .fromSnapshot(
+                                                                            book)
+                                                                    .id]
+                                                                .lat,
+                                                            'lon': _places[Booking
+                                                                        .fromSnapshot(
+                                                                            book)
+                                                                    .id]
+                                                                .lon
+                                                          },
+                                                        ),
+                                                      ),
+                                                    );
+                                                    setState(() {
+                                                      loading = false;
+                                                    });
+                                                  },
                                                 ),
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Text(
-                                                  Booking.fromSnapshot(book)
-                                                          .from +
-                                                      ' - ' +
-                                                      Booking.fromSnapshot(book)
-                                                          .to,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: GoogleFonts.montserrat(
-                                                    textStyle: TextStyle(
-                                                      color: darkPrimaryColor,
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                ),
+                                                // IconButton(
+                                                //   icon: Icon(
+                                                //     CupertinoIcons.book,
+                                                //     color: darkPrimaryColor,
+                                                //   ),
+                                                //   onPressed: () async {
+                                                //     setState(() {
+                                                //       loading = true;
+                                                //     });
+                                                //     Navigator.push(
+                                                //       context,
+                                                //       SlideRightRoute(
+                                                //         page: PlaceScreen(
+                                                //           data: {
+                                                //             'name':
+                                                //                 Place.fromSnapshot(
+                                                //                         _results[
+                                                //                             index])
+                                                //                     .name, //0
+                                                //             'description': Place
+                                                //                     .fromSnapshot(
+                                                //                         _results[
+                                                //                             index])
+                                                //                 .description, //1
+                                                //             'by':
+                                                //                 Place.fromSnapshot(
+                                                //                         _results[
+                                                //                             index])
+                                                //                     .by, //2
+                                                //             'lat':
+                                                //                 Place.fromSnapshot(
+                                                //                         _results[
+                                                //                             index])
+                                                //                     .lat, //3
+                                                //             'lon':
+                                                //                 Place.fromSnapshot(
+                                                //                         _results[
+                                                //                             index])
+                                                //                     .lon, //4
+                                                //             'images':
+                                                //                 Place.fromSnapshot(
+                                                //                         _results[
+                                                //                             index])
+                                                //                     .images, //5
+                                                //             'services':
+                                                //                 Place.fromSnapshot(
+                                                //                         _results[
+                                                //                             index])
+                                                //                     .services,
+                                                //             'rates':
+                                                //                 Place.fromSnapshot(
+                                                //                         _results[
+                                                //                             index])
+                                                //                     .rates,
+                                                //             'id':
+                                                //                 Place.fromSnapshot(
+                                                //                         _results[
+                                                //                             index])
+                                                //                     .id, //7
+                                                //           },
+                                                //         ),
+                                                //       ),
+                                                //     );
+                                                //     setState(() {
+                                                //       loading = false;
+                                                //     });
+                                                //   },
+                                                // ),
                                               ],
                                             ),
                                           ),
-                                        ),
+                                        )
                                       ],
                                     ),
                                   ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      RoundedButton(
-                                        width: 0.3,
-                                        height: 0.07,
-                                        text: 'On Map',
-                                        press: () {
-                                          setState(() {
-                                            loading = true;
-                                          });
-                                          Navigator.push(
-                                            context,
-                                            SlideRightRoute(
-                                              page: MapScreen(
-                                                data: {
-                                                  'lat': _places[
-                                                          Booking.fromSnapshot(
-                                                                  book)
-                                                              .id]
-                                                      .lat,
-                                                  'lon': _places[
-                                                          Booking.fromSnapshot(
-                                                                  book)
-                                                              .id]
-                                                      .lon
-                                                },
-                                              ),
-                                            ),
-                                          );
-                                          setState(() {
-                                            loading = false;
-                                          });
-                                        },
-                                        color: darkPrimaryColor,
-                                        textColor: whiteColor,
-                                      ),
-                                      SizedBox(
-                                        width: size.width * 0.04,
-                                      ),
-                                      _places != null
-                                          ? LabelButton(
-                                              isC: false,
-                                              reverse: FirebaseFirestore
-                                                  .instance
-                                                  .collection('users')
-                                                  .doc(FirebaseAuth.instance
-                                                      .currentUser.uid),
-                                              containsValue: _places[
-                                                      Booking.fromSnapshot(book)
-                                                          .id]
-                                                  .id,
-                                              color1: Colors.red,
-                                              color2: lightPrimaryColor,
-                                              ph: 45,
-                                              pw: 45,
-                                              size: 40,
-                                              onTap: () {
-                                                setState(() {
-                                                  FirebaseFirestore.instance
-                                                      .collection('users')
-                                                      .doc(FirebaseAuth.instance
-                                                          .currentUser.uid)
-                                                      .update({
-                                                    'favourites':
-                                                        FieldValue.arrayUnion([
-                                                      _places[Booking
-                                                                  .fromSnapshot(
-                                                                      book)
-                                                              .id]
-                                                          .id
-                                                    ])
-                                                  });
-                                                });
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                  SnackBar(
-                                                    duration:
-                                                        Duration(seconds: 2),
-                                                    backgroundColor:
-                                                        darkPrimaryColor,
-                                                    content: Text(
-                                                      'Saved to favourites',
-                                                      style: GoogleFonts
-                                                          .montserrat(
-                                                        textStyle: TextStyle(
-                                                          color: whiteColor,
-                                                          fontSize: 15,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                              onTap2: () {
-                                                setState(() {
-                                                  FirebaseFirestore.instance
-                                                      .collection('users')
-                                                      .doc(FirebaseAuth.instance
-                                                          .currentUser.uid)
-                                                      .update({
-                                                    'favourites':
-                                                        FieldValue.arrayRemove([
-                                                      _places[Booking
-                                                                  .fromSnapshot(
-                                                                      book)
-                                                              .id]
-                                                          .id
-                                                    ])
-                                                  });
-                                                });
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                  SnackBar(
-                                                    duration:
-                                                        Duration(seconds: 2),
-                                                    backgroundColor: Colors.red,
-                                                    content: Text(
-                                                      'Removed from favourites',
-                                                      style: GoogleFonts
-                                                          .montserrat(
-                                                        textStyle: TextStyle(
-                                                          color: whiteColor,
-                                                          fontSize: 15,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            )
-                                          : Container(),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                ],
+                                ),
                               ),
                             ),
-                          ),
-                      ]),
-                    )
-                  : SliverFillRemaining(
-                      child: Center(
-                        child: Text(
-                          'No history',
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.montserrat(
-                            textStyle: TextStyle(
-                              color: darkPrimaryColor,
-                              fontSize: 25,
+                          // CardW(
+                          //   ph: 170,
+                          //   child: Container(
+                          //     padding: EdgeInsets.all(6),
+                          //     child: Column(
+                          //       children: [
+                          //         SizedBox(
+                          //           height: 20,
+                          //         ),
+                          //         Expanded(
+                          //           child: Row(
+                          //             mainAxisAlignment:
+                          //                 MainAxisAlignment.center,
+                          //             children: [
+                          //               Container(
+                          //                 alignment: Alignment.centerLeft,
+                          //                 child: Column(
+                          //                   children: [
+                          //                     Text(
+                          //                       DateFormat.yMMMd()
+                          //                           .format(
+                          //                               Booking.fromSnapshot(
+                          //                                       book)
+                          //                                   .timestamp_date
+                          //                                   .toDate())
+                          //                           .toString(),
+                          //                       overflow:
+                          //                           TextOverflow.ellipsis,
+                          //                       style: GoogleFonts.montserrat(
+                          //                         textStyle: TextStyle(
+                          //                           color: darkPrimaryColor,
+                          //                           fontSize: 20,
+                          //                           fontWeight:
+                          //                               FontWeight.bold,
+                          //                         ),
+                          //                       ),
+                          //                     ),
+                          //                     SizedBox(
+                          //                       height: 10,
+                          //                     ),
+                          //                     Text(
+                          //                       Booking.fromSnapshot(book)
+                          //                           .status,
+                          //                       overflow:
+                          //                           TextOverflow.ellipsis,
+                          //                       style: GoogleFonts.montserrat(
+                          //                         textStyle: TextStyle(
+                          //                           color:
+                          //                               Booking.fromSnapshot(
+                          //                                               book)
+                          //                                           .status ==
+                          //                                       'unfinished'
+                          //                                   ? darkPrimaryColor
+                          //                                   : Colors.red,
+                          //                           fontSize: 15,
+                          //                         ),
+                          //                       ),
+                          //                     ),
+                          //                   ],
+                          //                 ),
+                          //               ),
+                          //               SizedBox(
+                          //                 width: size.width * 0.2,
+                          //               ),
+                          //               Flexible(
+                          //                 child: Container(
+                          //                   alignment: Alignment.centerLeft,
+                          //                   child: Column(
+                          //                     children: [
+                          //                       Text(
+                          //                         _places != null
+                          //                             ? _places[Booking.fromSnapshot(
+                          //                                                 book)
+                          //                                             .id]
+                          //                                         .name !=
+                          //                                     null
+                          //                                 ? _places[Booking
+                          //                                             .fromSnapshot(
+                          //                                                 book)
+                          //                                         .id]
+                          //                                     .name
+                          //                                 : 'Place'
+                          //                             : 'Place',
+                          //                         overflow:
+                          //                             TextOverflow.ellipsis,
+                          //                         style:
+                          //                             GoogleFonts.montserrat(
+                          //                           textStyle: TextStyle(
+                          //                             color: darkPrimaryColor,
+                          //                             fontSize: 20,
+                          //                           ),
+                          //                         ),
+                          //                       ),
+                          //                       SizedBox(
+                          //                         height: 10,
+                          //                       ),
+                          //                       Text(
+                          //                         Booking.fromSnapshot(book)
+                          //                                 .from +
+                          //                             ' - ' +
+                          //                             Booking.fromSnapshot(
+                          //                                     book)
+                          //                                 .to,
+                          //                         overflow:
+                          //                             TextOverflow.ellipsis,
+                          //                         style:
+                          //                             GoogleFonts.montserrat(
+                          //                           textStyle: TextStyle(
+                          //                             color: darkPrimaryColor,
+                          //                             fontSize: 15,
+                          //                           ),
+                          //                         ),
+                          //                       ),
+                          //                     ],
+                          //                   ),
+                          //                 ),
+                          //               ),
+                          //             ],
+                          //           ),
+                          //         ),
+                          //         Row(
+                          //           mainAxisAlignment:
+                          //               MainAxisAlignment.center,
+                          //           children: <Widget>[
+                          //             RoundedButton(
+                          //               width: 0.3,
+                          //               height: 0.07,
+                          //               text: 'On Map',
+                          //               press: () {
+                          //                 setState(() {
+                          //                   loading = true;
+                          //                 });
+                          //                 Navigator.push(
+                          //                   context,
+                          //                   SlideRightRoute(
+                          //                     page: MapScreen(
+                          //                       data: {
+                          //                         'lat': _places[Booking
+                          //                                     .fromSnapshot(
+                          //                                         book)
+                          //                                 .id]
+                          //                             .lat,
+                          //                         'lon': _places[Booking
+                          //                                     .fromSnapshot(
+                          //                                         book)
+                          //                                 .id]
+                          //                             .lon
+                          //                       },
+                          //                     ),
+                          //                   ),
+                          //                 );
+                          //                 setState(() {
+                          //                   loading = false;
+                          //                 });
+                          //               },
+                          //               color: darkPrimaryColor,
+                          //               textColor: whiteColor,
+                          //             ),
+                          //             SizedBox(
+                          //               width: size.width * 0.04,
+                          //             ),
+                          //             _places != null
+                          //                 ? LabelButton(
+                          //                     isC: false,
+                          //                     reverse: FirebaseFirestore
+                          //                         .instance
+                          //                         .collection('users')
+                          //                         .doc(FirebaseAuth.instance
+                          //                             .currentUser.uid),
+                          //                     containsValue: _places[
+                          //                             Booking.fromSnapshot(
+                          //                                     book)
+                          //                                 .id]
+                          //                         .id,
+                          //                     color1: Colors.red,
+                          //                     color2: lightPrimaryColor,
+                          //                     ph: 45,
+                          //                     pw: 45,
+                          //                     size: 40,
+                          //                     onTap: () {
+                          //                       setState(() {
+                          //                         FirebaseFirestore.instance
+                          //                             .collection('users')
+                          //                             .doc(FirebaseAuth
+                          //                                 .instance
+                          //                                 .currentUser
+                          //                                 .uid)
+                          //                             .update({
+                          //                           'favourites': FieldValue
+                          //                               .arrayUnion([
+                          //                             _places[Booking
+                          //                                         .fromSnapshot(
+                          //                                             book)
+                          //                                     .id]
+                          //                                 .id
+                          //                           ])
+                          //                         });
+                          //                       });
+                          //                       ScaffoldMessenger.of(context)
+                          //                           .showSnackBar(
+                          //                         SnackBar(
+                          //                           duration:
+                          //                               Duration(seconds: 2),
+                          //                           backgroundColor:
+                          //                               darkPrimaryColor,
+                          //                           content: Text(
+                          //                             'Saved to favourites',
+                          //                             style: GoogleFonts
+                          //                                 .montserrat(
+                          //                               textStyle: TextStyle(
+                          //                                 color: whiteColor,
+                          //                                 fontSize: 15,
+                          //                               ),
+                          //                             ),
+                          //                           ),
+                          //                         ),
+                          //                       );
+                          //                     },
+                          //                     onTap2: () {
+                          //                       setState(() {
+                          //                         FirebaseFirestore.instance
+                          //                             .collection('users')
+                          //                             .doc(FirebaseAuth
+                          //                                 .instance
+                          //                                 .currentUser
+                          //                                 .uid)
+                          //                             .update({
+                          //                           'favourites': FieldValue
+                          //                               .arrayRemove([
+                          //                             _places[Booking
+                          //                                         .fromSnapshot(
+                          //                                             book)
+                          //                                     .id]
+                          //                                 .id
+                          //                           ])
+                          //                         });
+                          //                       });
+                          //                       ScaffoldMessenger.of(context)
+                          //                           .showSnackBar(
+                          //                         SnackBar(
+                          //                           duration:
+                          //                               Duration(seconds: 2),
+                          //                           backgroundColor:
+                          //                               Colors.red,
+                          //                           content: Text(
+                          //                             'Removed from favourites',
+                          //                             style: GoogleFonts
+                          //                                 .montserrat(
+                          //                               textStyle: TextStyle(
+                          //                                 color: whiteColor,
+                          //                                 fontSize: 15,
+                          //                               ),
+                          //                             ),
+                          //                           ),
+                          //                         ),
+                          //                       );
+                          //                     },
+                          //                   )
+                          //                 : Container(),
+                          //           ],
+                          //         ),
+                          //         SizedBox(
+                          //           height: 20,
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   ),
+                          // ),
+                        ]),
+                      )
+                    : SliverFillRemaining(
+                        child: Center(
+                          child: Text(
+                            'No history',
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.montserrat(
+                              textStyle: TextStyle(
+                                color: darkPrimaryColor,
+                                fontSize: 25,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-            ],
+              ],
+            ),
           );
 
     // Container(

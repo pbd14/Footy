@@ -11,7 +11,6 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
-
   String stext;
   bool loading = false;
 

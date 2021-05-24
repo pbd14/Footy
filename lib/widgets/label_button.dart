@@ -82,26 +82,29 @@ class _LabelButtonState extends State<LabelButton> {
     } else {
       labelColor = widget.color2;
     }
-    return TextButton(
-      // highlightColor: darkPrimaryColor,
-      // height: widget.ph,
-      // minWidth: widget.pw,
-      onPressed: () {
-        setState(() {
-          isColored = !isColored;
-          if (isColored) {
-            labelColor = widget.color1;
-          } else {
-            labelColor = widget.color2;
-          }
-        });
-        isOne ? widget.onTap() : widget.onTap2();
-        isOne = !isOne;
-      },
-      child: Icon(
-        Icons.bookmark,
-        color: labelColor == null ? widget.color2 : labelColor,
-        size: widget.size,
+    return Container(
+      child: TextButton(
+        // highlightColor: darkPrimaryColor,
+        // height: widget.ph,
+        // minWidth: widget.pw,
+        style: ButtonStyle(padding: MaterialStateProperty.all(EdgeInsets.zero)),
+        onPressed: () {
+          setState(() {
+            isColored = !isColored;
+            if (isColored) {
+              labelColor = widget.color1;
+            } else {
+              labelColor = widget.color2;
+            }
+          });
+          isOne ? widget.onTap() : widget.onTap2();
+          isOne = !isOne;
+        },
+        child: Icon(
+          Icons.bookmark,
+          color: labelColor == null ? widget.color2 : labelColor,
+          size: widget.size,
+        ),
       ),
     );
   }

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Models/Booking.dart';
 import 'package:flutter_complete_guide/Models/Place.dart';
 import 'package:flutter_complete_guide/Models/PushNotificationMessage.dart';
+import 'package:flutter_complete_guide/Screens/HomeScreen/home_screen.dart';
 import 'package:flutter_complete_guide/Screens/MapScreen/map_screen.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
 import 'package:flutter_complete_guide/constants.dart';
@@ -390,14 +391,16 @@ class _History2State extends State<History2>
                                                         .map_pin_ellipse,
                                                     color: darkPrimaryColor,
                                                   ),
-                                                  onPressed: () async {
+                                                  onPressed: ()  {
                                                     setState(() {
                                                       loading = true;
                                                     });
                                                     Navigator.push(
                                                       context,
                                                       SlideRightRoute(
-                                                        page: MapScreen(
+                                                        page: MapPage(
+                                                          isAppBar: true,
+                                                          isLoading: true,
                                                           data: {
                                                             'lat': _places[Booking
                                                                         .fromSnapshot(
@@ -423,7 +426,7 @@ class _History2State extends State<History2>
                                                 //     CupertinoIcons.book,
                                                 //     color: darkPrimaryColor,
                                                 //   ),
-                                                //   onPressed: () async {
+                                                //   onPressed: ()  {
                                                 //     setState(() {
                                                 //       loading = true;
                                                 //     });

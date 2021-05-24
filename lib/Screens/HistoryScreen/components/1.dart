@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Models/Booking.dart';
 import 'package:flutter_complete_guide/Models/Place.dart';
 import 'package:flutter_complete_guide/Models/PushNotificationMessage.dart';
+import 'package:flutter_complete_guide/Screens/HomeScreen/home_screen.dart';
 import 'package:flutter_complete_guide/Screens/MapScreen/map_screen.dart';
 import 'package:flutter_complete_guide/Screens/OnEventScreen/on_event_screen.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
@@ -16,7 +17,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-
 import '../../sww_screen.dart';
 
 class History1 extends StatefulWidget {
@@ -607,14 +607,16 @@ class _History1State extends State<History1>
                                                                 .map_pin_ellipse,
                                                             color: whiteColor,
                                                           ),
-                                                          onPressed: () async {
+                                                          onPressed: () {
                                                             setState(() {
                                                               loading = true;
                                                             });
                                                             Navigator.push(
                                                               context,
                                                               SlideRightRoute(
-                                                                page: MapScreen(
+                                                                page: MapPage(
+                                                                  isLoading: true,
+                                                                  isAppBar: true,
                                                                   data: {
                                                                     'lat': Place.fromSnapshot(
                                                                             placesSlivers[book])
@@ -973,14 +975,16 @@ class _History1State extends State<History1>
                                                           .map_pin_ellipse,
                                                       color: darkPrimaryColor,
                                                     ),
-                                                    onPressed: () async {
+                                                    onPressed: () {
                                                       setState(() {
                                                         loading = true;
                                                       });
                                                       Navigator.push(
                                                         context,
                                                         SlideRightRoute(
-                                                          page: MapScreen(
+                                                          page: MapPage(
+                                                            isAppBar: true,
+                                                            isLoading: true,
                                                             data: {
                                                               'lat': _places[
                                                                       Booking.fromSnapshot(
@@ -1006,7 +1010,7 @@ class _History1State extends State<History1>
                                                   //     CupertinoIcons.book,
                                                   //     color: darkPrimaryColor,
                                                   //   ),
-                                                  //   onPressed: () async {
+                                                  //   onPressed: ()  {
                                                   //     setState(() {
                                                   //       loading = true;
                                                   //     });
@@ -1247,14 +1251,16 @@ class _History1State extends State<History1>
                                                                 .map_pin_ellipse,
                                                             color: whiteColor,
                                                           ),
-                                                          onPressed: () async {
+                                                          onPressed: () {
                                                             setState(() {
                                                               loading = true;
                                                             });
                                                             Navigator.push(
                                                               context,
                                                               SlideRightRoute(
-                                                                page: MapScreen(
+                                                                page: MapPage(
+                                                                  isLoading: true,
+                                                                  isAppBar: true,
                                                                   data: {
                                                                     'lat': Place.fromSnapshot(
                                                                             unrplacesSlivers[book])

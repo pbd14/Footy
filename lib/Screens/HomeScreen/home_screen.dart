@@ -26,31 +26,62 @@ import 'package:flutter_complete_guide/constants.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
+Map<String, double> data = null;
+
 // ignore: must_be_immutable
 class HomeScreen extends StatefulWidget {
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  HomeScreenState createState() => HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen> {
   bool isNotif = false;
   int _selectedIndex = 0;
   int notifCounter = 0;
-  // ignore: cancel_subscriptions
   StreamSubscription<QuerySnapshot> subscription;
   static List<Widget> _widgetOptions = <Widget>[
-    StreamProvider<List<Place>>.value(
-      initialData: [],
-      value: PlaceDB().places,
-      child: MapPage(
-        data: null,
-        isLoading: true,
-      ),
+    MapPage(
+      data: data,
+      isLoading: true,
+      isAppBar: false,
     ),
     SearchScreen(),
     HistoryScreen(),
     ProfileScreen(),
   ];
+
+  // void goTo(double lat, double lon) {
+  //   print("YESS");
+  //   if (this.mounted) {
+  //     print('HERE');
+  //     setState(() {
+  //       _widgetOptions = <Widget>[
+  //         MapPage(
+  //           data: data,
+  //           isLoading: true,
+  //         ),
+  //         SearchScreen(),
+  //         HistoryScreen(),
+  //         ProfileScreen(),
+  //       ];
+  //       data = {'lat': lat, 'lon': lon};
+  //       _selectedIndex = 0;
+  //     });
+  //   } else {
+  //     print('NO STATE');
+  //     _widgetOptions = <Widget>[
+  //       MapPage(
+  //         data: data,
+  //         isLoading: true,
+  //       ),
+  //       SearchScreen(),
+  //       HistoryScreen(),
+  //       ProfileScreen(),
+  //     ];
+  //     data = {'lat': lat, 'lon': lon};
+  //     _selectedIndex = 0;
+  //   }
+  // }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -119,9 +150,6 @@ class _HomeScreenState extends State<HomeScreen> {
         index: _selectedIndex,
         children: _widgetOptions,
       ),
-      // Center(
-      //   child: _widgetOptions.elementAt(_selectedIndex),
-      // ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -186,8 +214,9 @@ class _HomeScreenState extends State<HomeScreen> {
 // ignore: must_be_immutable
 class MapPage extends StatefulWidget {
   bool isLoading;
+  bool isAppBar = false;
   Map data;
-  MapPage({this.isLoading, this.data});
+  MapPage({this.isLoading, this.data, this.isAppBar});
   @override
   _MapPageState createState() => _MapPageState();
 }
@@ -271,8 +300,8 @@ class _MapPageState extends State<MapPage> {
   }
 
   void prepare() async {
-    // final places = Provider.of<List<Place>>(context);
-    var data = await FirebaseFirestore.instance.collection('locations').get();
+    QuerySnapshot data =
+        await FirebaseFirestore.instance.collection('locations').get();
     final places = data.docs;
 
     setState(() {
@@ -286,16 +315,6 @@ class _MapPageState extends State<MapPage> {
               rating = ratingSum / Place.fromSnapshot(place).rates.length;
             }
           }
-
-          // FirebaseFirestore.instance
-          //     .collection('locations')
-          //     .doc('BZorwr8lMphWTavotdsy')
-          //     .get()
-          //     .then((value) {
-          //   print(value.data()['name']);
-          //   print(value.data()['rates']);
-          // });
-
           switch (Place.fromSnapshot(place).category) {
             case 'sport':
               {
@@ -563,6 +582,11 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: widget.isAppBar
+          ? AppBar(
+              backgroundColor: primaryColor,
+            )
+          : null,
       body: _initialPosition == null
           ? LoadingScreen()
           : Stack(

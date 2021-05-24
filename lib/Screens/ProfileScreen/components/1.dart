@@ -12,7 +12,10 @@ class ProfileScreen1 extends StatefulWidget {
   _ProfileScreen1State createState() => _ProfileScreen1State();
 }
 
-class _ProfileScreen1State extends State<ProfileScreen1> {
+class _ProfileScreen1State extends State<ProfileScreen1>
+    with AutomaticKeepAliveClientMixin<ProfileScreen1> {
+  @override
+  bool get wantKeepAlive => true;
   bool loading = false;
 
   @override

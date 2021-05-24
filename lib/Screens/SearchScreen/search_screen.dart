@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Models/Place.dart';
+import 'package:flutter_complete_guide/Screens/HomeScreen/home_screen.dart';
 import 'package:flutter_complete_guide/Screens/MapScreen/map_screen.dart';
 import 'package:flutter_complete_guide/Screens/PlaceScreen/place_screen.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
@@ -103,7 +104,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                 itemBuilder:
                                     (BuildContext context, int index) =>
                                         Container(
-                                  margin: EdgeInsets.symmetric(horizontal: 10.0),
+                                  margin:
+                                      EdgeInsets.symmetric(horizontal: 10.0),
                                   // padding: EdgeInsets.all(10),
                                   child: Card(
                                     margin: EdgeInsets.all(5),
@@ -112,7 +114,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                       child: Padding(
                                         padding: const EdgeInsets.all(10.0),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             Container(
                                               width: size.width * 0.5,
@@ -124,12 +127,15 @@ class _SearchScreenState extends State<SearchScreen> {
                                                     Place.fromSnapshot(
                                                             _results[index])
                                                         .name,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    style: GoogleFonts.montserrat(
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style:
+                                                        GoogleFonts.montserrat(
                                                       textStyle: TextStyle(
                                                         color: darkPrimaryColor,
                                                         fontSize: 15,
-                                                        fontWeight: FontWeight.bold,
+                                                        fontWeight:
+                                                            FontWeight.bold,
                                                       ),
                                                     ),
                                                   ),
@@ -137,8 +143,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                                     height: 10,
                                                   ),
                                                   Text(
-                                                    Place.fromSnapshot(
-                                                                    _results[index])
+                                                    Place.fromSnapshot(_results[
+                                                                    index])
                                                                 .by !=
                                                             null
                                                         ? Place.fromSnapshot(
@@ -146,10 +152,13 @@ class _SearchScreenState extends State<SearchScreen> {
                                                             .by
                                                         : 'No company',
                                                     maxLines: 2,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    style: GoogleFonts.montserrat(
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style:
+                                                        GoogleFonts.montserrat(
                                                       textStyle: TextStyle(
-                                                          color: darkPrimaryColor,
+                                                          color:
+                                                              darkPrimaryColor,
                                                           fontSize: 10,
                                                           fontWeight:
                                                               FontWeight.w400),
@@ -179,7 +188,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                                         Navigator.push(
                                                           context,
                                                           SlideRightRoute(
-                                                            page: MapScreen(
+                                                            page: MapPage(
+                                                              isAppBar: true,
+                                                              isLoading: true,
                                                               data: {
                                                                 'lat': Place.fromSnapshot(
                                                                         _results[
@@ -213,15 +224,13 @@ class _SearchScreenState extends State<SearchScreen> {
                                                           SlideRightRoute(
                                                             page: PlaceScreen(
                                                               data: {
-                                                                'name': Place
-                                                                        .fromSnapshot(
-                                                                            _results[
-                                                                                index])
+                                                                'name': Place.fromSnapshot(
+                                                                        _results[
+                                                                            index])
                                                                     .name, //0
                                                                 'description': Place
                                                                         .fromSnapshot(
-                                                                            _results[
-                                                                                index])
+                                                                            _results[index])
                                                                     .description, //1
                                                                 'by': Place.fromSnapshot(
                                                                         _results[
@@ -235,20 +244,17 @@ class _SearchScreenState extends State<SearchScreen> {
                                                                         _results[
                                                                             index])
                                                                     .lon, //4
-                                                                'images': Place
-                                                                        .fromSnapshot(
-                                                                            _results[
-                                                                                index])
+                                                                'images': Place.fromSnapshot(
+                                                                        _results[
+                                                                            index])
                                                                     .images, //5
                                                                 'services': Place
                                                                         .fromSnapshot(
-                                                                            _results[
-                                                                                index])
+                                                                            _results[index])
                                                                     .services,
-                                                                'rates': Place
-                                                                        .fromSnapshot(
-                                                                            _results[
-                                                                                index])
+                                                                'rates': Place.fromSnapshot(
+                                                                        _results[
+                                                                            index])
                                                                     .rates,
                                                                 'id': Place.fromSnapshot(
                                                                         _results[
@@ -273,204 +279,6 @@ class _SearchScreenState extends State<SearchScreen> {
                                     ),
                                   ),
                                 ),
-                                //     CardW(
-                                //   ph: 250,
-                                //   child: Center(
-                                //     child: Padding(
-                                //       padding:
-                                //           EdgeInsets.fromLTRB(20, 0, 15, 0),
-                                //       child: Column(
-                                //         children: <Widget>[
-                                //           SizedBox(
-                                //             height: size.height * 0.04,
-                                //           ),
-                                //           Row(
-                                //             mainAxisAlignment:
-                                //                 MainAxisAlignment.center,
-                                //             children: [
-                                //               SizedBox(
-                                //                 width: size.width * 0.03,
-                                //               ),
-                                //               Expanded(
-                                //                 child: Text(
-                                //                   Place.fromSnapshot(
-                                //                           _results[index])
-                                //                       .name,
-                                //                   overflow:
-                                //                       TextOverflow.ellipsis,
-                                //                   style: GoogleFonts.montserrat(
-                                //                     textStyle: TextStyle(
-                                //                       color: darkPrimaryColor,
-                                //                       fontSize: 25,
-                                //                       fontWeight:
-                                //                           FontWeight.bold,
-                                //                     ),
-                                //                   ),
-                                //                 ),
-                                //               ),
-                                //             ],
-                                //           ),
-                                //           SizedBox(
-                                //             height: size.height * 0.03,
-                                //           ),
-                                //           Text(
-                                //             Place.fromSnapshot(_results[index])
-                                //                         .description !=
-                                //                     null
-                                //                 ? Place.fromSnapshot(
-                                //                         _results[index])
-                                //                     .description
-                                //                 : 'No description',
-                                //             maxLines: 1,
-                                //             overflow: TextOverflow.ellipsis,
-                                //             textScaleFactor: 1,
-                                //             style: GoogleFonts.montserrat(
-                                //               textStyle: TextStyle(
-                                //                 color: darkPrimaryColor,
-                                //                 fontSize: 15,
-                                //               ),
-                                //             ),
-                                //           ),
-                                //           SizedBox(
-                                //             height: size.height * 0.01,
-                                //           ),
-                                //           Text(
-                                //             Place.fromSnapshot(_results[index])
-                                //                         .by !=
-                                //                     null
-                                //                 ? Place.fromSnapshot(
-                                //                         _results[index])
-                                //                     .by
-                                //                 : 'No company',
-                                //             maxLines: 2,
-                                //             overflow: TextOverflow.ellipsis,
-                                //             style: GoogleFonts.montserrat(
-                                //               textStyle: TextStyle(
-                                //                 color: darkPrimaryColor,
-                                //                 fontSize: 15,
-                                //               ),
-                                //             ),
-                                //           ),
-                                //           SizedBox(
-                                //             height: size.height * 0.04,
-                                //           ),
-                                //           Row(
-                                //             mainAxisAlignment:
-                                //                 MainAxisAlignment.center,
-                                //             children: <Widget>[
-                                //               RoundedButton(
-                                //                 width: 0.3,
-                                //                 height: 0.07,
-                                //                 text: 'On Map',
-                                //                 press: () async {
-                                //                   setState(() {
-                                //                     loading = true;
-                                //                   });
-                                //                   Navigator.push(
-                                //                     context,
-                                //                     SlideRightRoute(
-                                //                       page: MapScreen(
-                                //                         data: {
-                                //                           'lat': Place
-                                //                                   .fromSnapshot(
-                                //                                       _results[
-                                //                                           index])
-                                //                               .lat,
-                                //                           'lon': Place
-                                //                                   .fromSnapshot(
-                                //                                       _results[
-                                //                                           index])
-                                //                               .lon
-                                //                         },
-                                //                       ),
-                                //                     ),
-                                //                   );
-                                //                   setState(() {
-                                //                     loading = false;
-                                //                   });
-                                //                 },
-                                //                 color: darkPrimaryColor,
-                                //                 textColor: whiteColor,
-                                //               ),
-                                //               SizedBox(
-                                //                 width: size.width * 0.04,
-                                //               ),
-                                //               RoundedButton(
-                                //                 width: 0.3,
-                                //                 height: 0.07,
-                                //                 text: 'Book',
-                                //                 press: () async {
-                                //                   setState(() {
-                                //                     loading = true;
-                                //                   });
-                                //                   Navigator.push(
-                                //                     context,
-                                //                     SlideRightRoute(
-                                //                       page: PlaceScreen(
-                                //                         data: {
-                                //                           'name': Place
-                                //                                   .fromSnapshot(
-                                //                                       _results[
-                                //                                           index])
-                                //                               .name, //0
-                                //                           'description': Place
-                                //                                   .fromSnapshot(
-                                //                                       _results[
-                                //                                           index])
-                                //                               .description, //1
-                                //                           'by': Place
-                                //                                   .fromSnapshot(
-                                //                                       _results[
-                                //                                           index])
-                                //                               .by, //2
-                                //                           'lat': Place
-                                //                                   .fromSnapshot(
-                                //                                       _results[
-                                //                                           index])
-                                //                               .lat, //3
-                                //                           'lon': Place
-                                //                                   .fromSnapshot(
-                                //                                       _results[
-                                //                                           index])
-                                //                               .lon, //4
-                                //                           'images': Place
-                                //                                   .fromSnapshot(
-                                //                                       _results[
-                                //                                           index])
-                                //                               .images, //5
-                                //                           'services': Place
-                                //                                   .fromSnapshot(
-                                //                                       _results[
-                                //                                           index])
-                                //                               .services,
-                                //                           'rates': Place
-                                //                                   .fromSnapshot(
-                                //                                       _results[
-                                //                                           index])
-                                //                               .rates,
-                                //                           'id': Place
-                                //                                   .fromSnapshot(
-                                //                                       _results[
-                                //                                           index])
-                                //                               .id, //7
-                                //                         },
-                                //                       ),
-                                //                     ),
-                                //                   );
-                                //                   setState(() {
-                                //                     loading = false;
-                                //                   });
-                                //                 },
-                                //                 color: darkPrimaryColor,
-                                //                 textColor: whiteColor,
-                                //               ),
-                                //             ],
-                                //           ),
-                                //         ],
-                                //       ),
-                                //     ),
-                                //   ),
-                                // ),
                               ),
                       ),
                     ],

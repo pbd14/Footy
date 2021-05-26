@@ -44,6 +44,8 @@ dependencies:
   flutter_rating_bar: ^4.0.0
   firebase_messaging: ^10.0.0
   cached_network_image: ^3.0.0
+  shared_preferences: ^2.0.5
+  flutter_screen_lock: ^4.0.3
 
 dev_dependencies:
   flutter_test:

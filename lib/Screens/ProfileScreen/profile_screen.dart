@@ -45,7 +45,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     Tab(
                       child: Text(
-                        'Profile',
+                        'Activity',
                         style: GoogleFonts.montserrat(
                           textStyle: TextStyle(
                               color: whiteColor,

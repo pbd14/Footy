@@ -8,7 +8,9 @@ import 'package:flutter_complete_guide/Models/Place.dart';
 import 'package:flutter_complete_guide/Screens/HomeScreen/home_screen.dart';
 import 'package:flutter_complete_guide/Screens/MapScreen/map_screen.dart';
 import 'package:flutter_complete_guide/Screens/PlaceScreen/place_screen.dart';
+import 'package:flutter_complete_guide/Screens/ProfileScreen/components/settings.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
+import 'package:flutter_complete_guide/Services/auth_service.dart';
 import 'package:flutter_complete_guide/constants.dart';
 import 'package:flutter_complete_guide/widgets/label_button.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
@@ -77,254 +79,349 @@ class _ProfileScreen2State extends State<ProfileScreen2>
     Size size = MediaQuery.of(context).size;
     return loading
         ? LoadingScreen()
-        : RefreshIndicator(
-            onRefresh: _refresh,
-            child: CustomScrollView(scrollDirection: Axis.vertical, slivers: [
-              _places != null
-                  ? SliverList(
-                      delegate: SliverChildListDelegate([
-                        for (var place in _places)
-                          Container(
-                            margin: EdgeInsets.symmetric(horizontal: 10.0),
-                            // padding: EdgeInsets.all(10),
-                            child: Card(
-                              margin: EdgeInsets.all(5),
-                              elevation: 10,
-                              child: Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        width: size.width * 0.45,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              Place.fromSnapshot(place).name,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: GoogleFonts.montserrat(
-                                                textStyle: TextStyle(
-                                                  color: darkPrimaryColor,
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Text(
-                                              Place.fromSnapshot(place).by !=
-                                                      null
-                                                  ? Place.fromSnapshot(place).by
-                                                  : 'No company',
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: GoogleFonts.montserrat(
-                                                textStyle: TextStyle(
-                                                    color: darkPrimaryColor,
-                                                    fontSize: 10,
-                                                    fontWeight:
-                                                        FontWeight.w400),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.centerRight,
-                                        child: Container(
-                                          width: size.width * 0.35,
-                                          child: Row(
+        : Scaffold(
+            appBar: AppBar(
+                elevation: 0,
+                automaticallyImplyLeading: false,
+                toolbarHeight: size.width * 0.17,
+                backgroundColor: whiteColor,
+                centerTitle: true,
+                actions: [
+                  IconButton(
+                    icon: Icon(CupertinoIcons.gear),
+                    onPressed: () {
+                      setState(() {
+                        loading = true;
+                      });
+                      Navigator.push(
+                          context,
+                          SlideRightRoute(
+                            page: SettingsScreen(),
+                          ));
+                      setState(() {
+                        loading = false;
+                      });
+                    },
+                  ),
+                  IconButton(
+                    color: darkColor,
+                    icon: Icon(
+                      Icons.exit_to_app,
+                    ),
+                    onPressed: () {
+                      showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Выйти?'),
+                            content:
+                                const Text('Хотите ли вы выйти из аккаунта?'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  // prefs.setBool('local_auth', false);
+                                  // prefs.setString('local_password', '');
+                                  Navigator.of(context).pop(true);
+                                  AuthService().signOut(context);
+                                },
+                                child: const Text(
+                                  'Yes',
+                                  style: TextStyle(color: primaryColor),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.of(context).pop(false),
+                                child: const Text(
+                                  'No',
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ]),
+            body: RefreshIndicator(
+              onRefresh: _refresh,
+              child: CustomScrollView(scrollDirection: Axis.vertical, slivers: [
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      SizedBox(height: 20),
+                      Container(
+                        margin: EdgeInsets.all(5),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              FirebaseAuth.instance.currentUser.phoneNumber
+                                  .toString(),
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.montserrat(
+                                textStyle: TextStyle(
+                                  color: darkColor,
+                                  fontSize: 25,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 50),
+                    ],
+                  ),
+                ),
+                _places != null
+                    ? SliverList(
+                        delegate: SliverChildListDelegate([
+                          for (var place in _places)
+                            Container(
+                              margin: EdgeInsets.symmetric(horizontal: 10.0),
+                              // padding: EdgeInsets.all(10),
+                              child: Card(
+                                margin: EdgeInsets.all(5),
+                                elevation: 10,
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          width: size.width * 0.45,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              _places != null
-                                                  ? Container(
-                                                      width: 30,
-                                                      child: LabelButton(
-                                                        isC: false,
-                                                        reverse:
-                                                            FirebaseFirestore
-                                                                .instance
-                                                                .collection(
-                                                                    'users')
-                                                                .doc(FirebaseAuth
-                                                                    .instance
-                                                                    .currentUser
-                                                                    .uid),
-                                                        containsValue:
-                                                            Place.fromSnapshot(
-                                                                    place)
-                                                                .id,
-                                                        color1: Colors.red,
-                                                        color2:
-                                                            lightPrimaryColor,
-                                                        size: 24,
-                                                        onTap: () {
-                                                          setState(() {
-                                                            FirebaseFirestore
-                                                                .instance
-                                                                .collection(
-                                                                    'users')
-                                                                .doc(FirebaseAuth
-                                                                    .instance
-                                                                    .currentUser
-                                                                    .uid)
-                                                                .update({
-                                                              'favourites':
-                                                                  FieldValue
-                                                                      .arrayUnion([
-                                                                Place.fromSnapshot(
-                                                                        place)
-                                                                    .id
-                                                              ])
-                                                            });
-                                                          });
-                                                        },
-                                                        onTap2: () {
-                                                          setState(() {
-                                                            FirebaseFirestore
-                                                                .instance
-                                                                .collection(
-                                                                    'users')
-                                                                .doc(FirebaseAuth
-                                                                    .instance
-                                                                    .currentUser
-                                                                    .uid)
-                                                                .update({
-                                                              'favourites':
-                                                                  FieldValue
-                                                                      .arrayRemove([
-                                                                Place.fromSnapshot(
-                                                                        place)
-                                                                    .id
-                                                              ])
-                                                            });
-                                                          });
-                                                        },
-                                                      ),
-                                                    )
-                                                  : Container(),
-                                              IconButton(
-                                                icon: Icon(
-                                                  CupertinoIcons
-                                                      .map_pin_ellipse,
-                                                  color: darkPrimaryColor,
+                                              Text(
+                                                Place.fromSnapshot(place).name,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: GoogleFonts.montserrat(
+                                                  textStyle: TextStyle(
+                                                    color: darkPrimaryColor,
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
-                                                onPressed: ()  {
-                                                  setState(() {
-                                                    loading = true;
-                                                  });
-                                                  Navigator.push(
-                                                    context,
-                                                    SlideRightRoute(
-                                                      page: MapPage(
-                                                        isAppBar: true,
-                                                        isLoading: true,
-                                                        data: {
-                                                          'lat': Place
-                                                                  .fromSnapshot(
-                                                                      place)
-                                                              .lat,
-                                                          'lon': Place
-                                                                  .fromSnapshot(
-                                                                      place)
-                                                              .lon
-                                                        },
-                                                      ),
-                                                    ),
-                                                  );
-                                                  setState(() {
-                                                    loading = false;
-                                                  });
-                                                },
                                               ),
-                                              IconButton(
-                                                icon: Icon(
-                                                  CupertinoIcons.book,
-                                                  color: darkPrimaryColor,
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Text(
+                                                Place.fromSnapshot(place).by !=
+                                                        null
+                                                    ? Place.fromSnapshot(place)
+                                                        .by
+                                                    : 'No company',
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: GoogleFonts.montserrat(
+                                                  textStyle: TextStyle(
+                                                      color: darkPrimaryColor,
+                                                      fontSize: 10,
+                                                      fontWeight:
+                                                          FontWeight.w400),
                                                 ),
-                                                onPressed: () {
-                                                  setState(() {
-                                                    loading = true;
-                                                  });
-                                                  Navigator.push(
-                                                    context,
-                                                    SlideRightRoute(
-                                                      page: PlaceScreen(
-                                                        data: {
-                                                          'name': Place
-                                                                  .fromSnapshot(
-                                                                      place)
-                                                              .name, //0
-                                                          'description': Place
-                                                                  .fromSnapshot(
-                                                                      place)
-                                                              .description, //1
-                                                          'by': Place
-                                                                  .fromSnapshot(
-                                                                      place)
-                                                              .by, //2
-                                                          'lat': Place
-                                                                  .fromSnapshot(
-                                                                      place)
-                                                              .lat, //3
-                                                          'lon': Place
-                                                                  .fromSnapshot(
-                                                                      place)
-                                                              .lon, //4
-                                                          'images': Place
-                                                                  .fromSnapshot(
-                                                                      place)
-                                                              .images, //5
-                                                          'services': Place
-                                                                  .fromSnapshot(
-                                                                      place)
-                                                              .services,
-                                                          'rates': Place
-                                                                  .fromSnapshot(
-                                                                      place)
-                                                              .rates,
-                                                          'id': Place
-                                                                  .fromSnapshot(
-                                                                      place)
-                                                              .id, //7
-                                                        },
-                                                      ),
-                                                    ),
-                                                  );
-                                                  setState(() {
-                                                    loading = false;
-                                                  });
-                                                },
                                               ),
                                             ],
                                           ),
                                         ),
-                                      )
-                                    ],
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: Container(
+                                            width: size.width * 0.35,
+                                            child: Row(
+                                              children: [
+                                                _places != null
+                                                    ? Container(
+                                                        width: 30,
+                                                        child: LabelButton(
+                                                          isC: false,
+                                                          reverse: FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'users')
+                                                              .doc(FirebaseAuth
+                                                                  .instance
+                                                                  .currentUser
+                                                                  .uid),
+                                                          containsValue: Place
+                                                                  .fromSnapshot(
+                                                                      place)
+                                                              .id,
+                                                          color1: Colors.red,
+                                                          color2:
+                                                              lightPrimaryColor,
+                                                          size: 24,
+                                                          onTap: () {
+                                                            setState(() {
+                                                              FirebaseFirestore
+                                                                  .instance
+                                                                  .collection(
+                                                                      'users')
+                                                                  .doc(FirebaseAuth
+                                                                      .instance
+                                                                      .currentUser
+                                                                      .uid)
+                                                                  .update({
+                                                                'favourites':
+                                                                    FieldValue
+                                                                        .arrayUnion([
+                                                                  Place.fromSnapshot(
+                                                                          place)
+                                                                      .id
+                                                                ])
+                                                              });
+                                                            });
+                                                          },
+                                                          onTap2: () {
+                                                            setState(() {
+                                                              FirebaseFirestore
+                                                                  .instance
+                                                                  .collection(
+                                                                      'users')
+                                                                  .doc(FirebaseAuth
+                                                                      .instance
+                                                                      .currentUser
+                                                                      .uid)
+                                                                  .update({
+                                                                'favourites':
+                                                                    FieldValue
+                                                                        .arrayRemove([
+                                                                  Place.fromSnapshot(
+                                                                          place)
+                                                                      .id
+                                                                ])
+                                                              });
+                                                            });
+                                                          },
+                                                        ),
+                                                      )
+                                                    : Container(),
+                                                IconButton(
+                                                  icon: Icon(
+                                                    CupertinoIcons
+                                                        .map_pin_ellipse,
+                                                    color: darkPrimaryColor,
+                                                  ),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      loading = true;
+                                                    });
+                                                    Navigator.push(
+                                                      context,
+                                                      SlideRightRoute(
+                                                        page: MapPage(
+                                                          isAppBar: true,
+                                                          isLoading: true,
+                                                          data: {
+                                                            'lat': Place
+                                                                    .fromSnapshot(
+                                                                        place)
+                                                                .lat,
+                                                            'lon': Place
+                                                                    .fromSnapshot(
+                                                                        place)
+                                                                .lon
+                                                          },
+                                                        ),
+                                                      ),
+                                                    );
+                                                    setState(() {
+                                                      loading = false;
+                                                    });
+                                                  },
+                                                ),
+                                                IconButton(
+                                                  icon: Icon(
+                                                    CupertinoIcons.book,
+                                                    color: darkPrimaryColor,
+                                                  ),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      loading = true;
+                                                    });
+                                                    Navigator.push(
+                                                      context,
+                                                      SlideRightRoute(
+                                                        page: PlaceScreen(
+                                                          data: {
+                                                            'name': Place
+                                                                    .fromSnapshot(
+                                                                        place)
+                                                                .name, //0
+                                                            'description': Place
+                                                                    .fromSnapshot(
+                                                                        place)
+                                                                .description, //1
+                                                            'by': Place
+                                                                    .fromSnapshot(
+                                                                        place)
+                                                                .by, //2
+                                                            'lat': Place
+                                                                    .fromSnapshot(
+                                                                        place)
+                                                                .lat, //3
+                                                            'lon': Place
+                                                                    .fromSnapshot(
+                                                                        place)
+                                                                .lon, //4
+                                                            'images': Place
+                                                                    .fromSnapshot(
+                                                                        place)
+                                                                .images, //5
+                                                            'services': Place
+                                                                    .fromSnapshot(
+                                                                        place)
+                                                                .services,
+                                                            'rates': Place
+                                                                    .fromSnapshot(
+                                                                        place)
+                                                                .rates,
+                                                            'id': Place
+                                                                    .fromSnapshot(
+                                                                        place)
+                                                                .id, //7
+                                                          },
+                                                        ),
+                                                      ),
+                                                    );
+                                                    setState(() {
+                                                      loading = false;
+                                                    });
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                      ]),
-                    )
-                  : Center(
-                      child: Text(
-                        'No favourites',
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.montserrat(
-                          textStyle: TextStyle(
-                            color: darkPrimaryColor,
-                            fontSize: 25,
+                        ]),
+                      )
+                    : Center(
+                        child: Text(
+                          'No favourites',
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.montserrat(
+                            textStyle: TextStyle(
+                              color: darkPrimaryColor,
+                              fontSize: 25,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-            ]),
+              ]),
+            ),
           );
 
     // Container(

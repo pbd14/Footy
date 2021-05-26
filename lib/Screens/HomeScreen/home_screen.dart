@@ -13,6 +13,7 @@ import 'package:flutter_complete_guide/widgets/label_button.dart';
 import 'package:flutter_complete_guide/widgets/point_object.dart';
 import 'package:flutter_complete_guide/widgets/rounded_button.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
+import 'package:flutter_screen_lock/functions.dart';
 import 'package:geolocator/geolocator.dart' as geolocator;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:overlay_support/overlay_support.dart';
@@ -25,6 +26,7 @@ import 'package:flutter_complete_guide/Screens/loading_screen.dart';
 import 'package:flutter_complete_guide/constants.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Map<String, double> data = null;
 
@@ -87,6 +89,26 @@ class HomeScreenState extends State<HomeScreen> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  Future<void> prepare() async {
+    final prefs = await SharedPreferences.getInstance();
+    final value1 = prefs.getBool('local_auth') ?? false;
+    if (value1) {
+      // Navigator.push(
+      //   context,
+      //   SlideRightRoute(
+      //     page: ScreenLock(
+      //       correctString: prefs.getString('local_password'),
+      //       canCancel: false,
+      //     ),
+      //   ),
+      // );
+      screenLock(
+          context: context,
+          correctString: prefs.getString('local_password'),
+          canCancel: false);
+    }
   }
 
   @override

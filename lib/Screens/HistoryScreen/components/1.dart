@@ -663,7 +663,7 @@ class _History1State extends State<History1>
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.montserrat(
                                   textStyle: TextStyle(
-                                    color: darkPrimaryColor,
+                                    color: darkColor,
                                     fontSize: 25,
                                   ),
                                 ),

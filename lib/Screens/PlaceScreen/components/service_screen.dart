@@ -438,7 +438,10 @@ class _PlaceScreenState extends State<ServiceScreen> {
         : Scaffold(
             key: _scaffoldKey,
             appBar: AppBar(
-              backgroundColor: primaryColor,
+              backgroundColor: darkColor,
+              iconTheme: IconThemeData(
+                color: primaryColor,
+              ),
             ),
             body: CustomScrollView(
               slivers: [
@@ -458,20 +461,8 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                 widget.data['name'],
                                 style: GoogleFonts.montserrat(
                                   textStyle: TextStyle(
-                                    color: darkPrimaryColor,
+                                    color: darkColor,
                                     fontSize: 30,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Center(
-                              child: Text(
-                                'Booking',
-                                style: GoogleFonts.montserrat(
-                                  textStyle: TextStyle(
-                                    color: darkPrimaryColor,
-                                    fontSize: 25,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -487,7 +478,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                   'Date',
                                   style: GoogleFonts.montserrat(
                                     textStyle: TextStyle(
-                                      color: darkPrimaryColor,
+                                      color: darkColor,
                                       fontSize: 30,
                                     ),
                                   ),
@@ -534,8 +525,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                     : ClipRRect(
                                         borderRadius: BorderRadius.circular(29),
                                         child: Container(
-                                          padding: EdgeInsets.fromLTRB(
-                                              30, 30, 30, 30),
+                                          padding: EdgeInsets.all(10),
                                           alignment: Alignment.center,
                                           color: darkPrimaryColor,
                                           child: Column(
@@ -607,7 +597,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                   'From',
                                   style: GoogleFonts.montserrat(
                                     textStyle: TextStyle(
-                                      color: darkPrimaryColor,
+                                      color: darkColor,
                                       fontSize: 20,
                                     ),
                                   ),
@@ -649,7 +639,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                   'To',
                                   style: GoogleFonts.montserrat(
                                     textStyle: TextStyle(
-                                      color: darkPrimaryColor,
+                                      color: darkColor,
                                       fontSize: 20,
                                     ),
                                   ),
@@ -689,354 +679,377 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                 ),
                               ],
                             ),
+                            SizedBox(height: 10),
                             verifying
-                                ? CardW(
-                                    width: 0.9,
-                                    ph: 300,
+                                ? Card(
+
+                                    elevation: 10,
                                     child: loading1
                                         ? LoadingScreen()
                                         : verified
-                                            ? Center(
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: <Widget>[
-                                                    Text(
-                                                      DateFormat.yMMMd()
-                                                          .format(selectedDate)
-                                                          .toString(),
-                                                      style: GoogleFonts
-                                                          .montserrat(
-                                                        textStyle: TextStyle(
-                                                          color:
-                                                              darkPrimaryColor,
-                                                          fontSize: 20,
+                                            ? Padding(
+                                                padding: EdgeInsets.all(20),
+                                                child: Center(
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: <Widget>[
+                                                      Text(
+                                                        DateFormat.yMMMd()
+                                                            .format(
+                                                                selectedDate)
+                                                            .toString(),
+                                                        style: GoogleFonts
+                                                            .montserrat(
+                                                          textStyle: TextStyle(
+                                                            color: darkColor,
+                                                            fontSize: 20,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 5,
-                                                    ),
-                                                    Text(
-                                                      'From: ' + _time,
-                                                      style: GoogleFonts
-                                                          .montserrat(
-                                                        textStyle: TextStyle(
-                                                          color:
-                                                              darkPrimaryColor,
-                                                          fontSize: 20,
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Text(
+                                                        'From: ' + _time,
+                                                        style: GoogleFonts
+                                                            .montserrat(
+                                                          textStyle: TextStyle(
+                                                            color: darkColor,
+                                                            fontSize: 20,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 5,
-                                                    ),
-                                                    Text(
-                                                      'To: ' + _time2,
-                                                      style: GoogleFonts
-                                                          .montserrat(
-                                                        textStyle: TextStyle(
-                                                          color:
-                                                              darkPrimaryColor,
-                                                          fontSize: 20,
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Text(
+                                                        'To: ' + _time2,
+                                                        style: GoogleFonts
+                                                            .montserrat(
+                                                          textStyle: TextStyle(
+                                                            color:
+                                                                darkColor,
+                                                            fontSize: 20,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 5,
-                                                    ),
-                                                    Text(
-                                                      price.toString() +
-                                                          " So'm ",
-                                                      style: GoogleFonts
-                                                          .montserrat(
-                                                        textStyle: TextStyle(
-                                                          color:
-                                                              darkPrimaryColor,
-                                                          fontSize: 20,
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Text(
+                                                        price.toString() +
+                                                            " So'm ",
+                                                        style: GoogleFonts
+                                                            .montserrat(
+                                                          textStyle: TextStyle(
+                                                            color:
+                                                                darkColor,
+                                                            fontSize: 20,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 5,
-                                                    ),
-                                                    SizedBox(
-                                                      width: size.width * 0.1,
-                                                    ),
-                                                    Builder(
-                                                      builder: (context) =>
-                                                          RoundedButton(
-                                                        width: 0.5,
-                                                        height: 0.07,
-                                                        text: 'Book',
-                                                        press: () async {
-                                                          setState(() {
-                                                            loading = true;
-                                                          });
-                                                          await _bookButton(
-                                                            formatDate(
-                                                                DateTime(
-                                                                    2019,
-                                                                    08,
-                                                                    1,
-                                                                    selectedTime
-                                                                        .hour,
-                                                                    selectedTime
-                                                                        .minute),
-                                                                [HH, ':', nn]),
-                                                            formatDate(
-                                                                DateTime(
-                                                                    2019,
-                                                                    08,
-                                                                    1,
-                                                                    selectedTime2
-                                                                        .hour,
-                                                                    selectedTime2.minute),
-                                                                [HH, ':', nn]),
-                                                          );
-                                                          can
-                                                              ? WidgetsBinding
-                                                                  .instance
-                                                                  .addPostFrameCallback(
-                                                                      (_) {
-                                                                  _scaffoldKey
-                                                                      .currentState
-                                                                      .showSnackBar(
-                                                                          SnackBar(
-                                                                    backgroundColor:
-                                                                        darkPrimaryColor,
-                                                                    content:
-                                                                        Text(
-                                                                      'Booking was successful',
-                                                                      style: GoogleFonts
-                                                                          .montserrat(
-                                                                        textStyle:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              whiteColor,
-                                                                          fontSize:
-                                                                              30,
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      SizedBox(
+                                                        width: size.width * 0.1,
+                                                      ),
+                                                      Builder(
+                                                        builder: (context) =>
+                                                            RoundedButton(
+                                                              ph: 40,
+                                                              pw: 100,
+                                                          text: 'Book',
+                                                          press: () async {
+                                                            setState(() {
+                                                              loading = true;
+                                                            });
+                                                            await _bookButton(
+                                                              formatDate(
+                                                                  DateTime(
+                                                                      2019,
+                                                                      08,
+                                                                      1,
+                                                                      selectedTime
+                                                                          .hour,
+                                                                      selectedTime.minute),
+                                                                  [
+                                                                    HH,
+                                                                    ':',
+                                                                    nn
+                                                                  ]),
+                                                              formatDate(
+                                                                  DateTime(
+                                                                      2019,
+                                                                      08,
+                                                                      1,
+                                                                      selectedTime2
+                                                                          .hour,
+                                                                      selectedTime2.minute),
+                                                                  [
+                                                                    HH,
+                                                                    ':',
+                                                                    nn
+                                                                  ]),
+                                                            );
+                                                            can
+                                                                ? WidgetsBinding
+                                                                    .instance
+                                                                    .addPostFrameCallback(
+                                                                        (_) {
+                                                                    _scaffoldKey
+                                                                        .currentState
+                                                                        .showSnackBar(
+                                                                            SnackBar(
+                                                                      backgroundColor:
+                                                                          darkPrimaryColor,
+                                                                      content:
+                                                                          Text(
+                                                                        'Booking was successful',
+                                                                        style: GoogleFonts
+                                                                            .montserrat(
+                                                                          textStyle:
+                                                                              TextStyle(
+                                                                            color:
+                                                                                whiteColor,
+                                                                            fontSize:
+                                                                                30,
+                                                                          ),
                                                                         ),
                                                                       ),
-                                                                    ),
-                                                                  ));
-                                                                })
-                                                              : WidgetsBinding
-                                                                  .instance
-                                                                  .addPostFrameCallback(
-                                                                      (_) {
-                                                                  _scaffoldKey
-                                                                      .currentState
-                                                                      .showSnackBar(
-                                                                          SnackBar(
-                                                                    backgroundColor:
-                                                                        Colors
-                                                                            .red,
-                                                                    content:
-                                                                        Text(
-                                                                      'Failed to book',
-                                                                      style: GoogleFonts
-                                                                          .montserrat(
-                                                                        textStyle:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              whiteColor,
-                                                                          fontSize:
-                                                                              30,
+                                                                    ));
+                                                                  })
+                                                                : WidgetsBinding
+                                                                    .instance
+                                                                    .addPostFrameCallback(
+                                                                        (_) {
+                                                                    _scaffoldKey
+                                                                        .currentState
+                                                                        .showSnackBar(
+                                                                            SnackBar(
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .red,
+                                                                      content:
+                                                                          Text(
+                                                                        'Failed to book',
+                                                                        style: GoogleFonts
+                                                                            .montserrat(
+                                                                          textStyle:
+                                                                              TextStyle(
+                                                                            color:
+                                                                                whiteColor,
+                                                                            fontSize:
+                                                                                30,
+                                                                          ),
                                                                         ),
                                                                       ),
-                                                                    ),
-                                                                  ));
-                                                                });
+                                                                    ));
+                                                                  });
 
-                                                          if (can) {
-                                                            FirebaseFirestore
-                                                                .instance
-                                                                .collection(
-                                                                    'bookings')
-                                                                .doc()
-                                                                .set({
-                                                              'placeId': widget
-                                                                  .placeId,
-                                                              'serviceId': widget
-                                                                  .serviceId,
-                                                              'userId':
-                                                                  FirebaseAuth
-                                                                      .instance
-                                                                      .currentUser
-                                                                      .uid,
-                                                              'price': price
-                                                                  .roundToDouble(),
-                                                              'from': _time,
-                                                              'to': _time2,
-                                                              'date': selectedDate
-                                                                  .toString(),
-                                                              'timestamp_date':
-                                                                  selectedDate,
-                                                              'status': widget.data[
-                                                                          'type'] ==
-                                                                      'nonver'
-                                                                  ? 'unfinished'
-                                                                  : 'verification_needed',
-                                                              'seen_status':
-                                                                  'unseen',
-                                                              'isRated': false,
-                                                            });
-                                                            setState(() {
-                                                              selectedDate =
-                                                                  DateTime
-                                                                      .now();
-                                                              _time = null;
-                                                              _time2 = null;
-                                                              duration = 0;
-                                                              price = 0;
-                                                              selectedTime =
-                                                                  TimeOfDay(
-                                                                      hour: 00,
-                                                                      minute:
-                                                                          00);
-                                                              selectedTime2 =
-                                                                  TimeOfDay(
-                                                                      hour: 00,
-                                                                      minute:
-                                                                          00);
-                                                              _setDate = null;
-                                                              _dow = null;
-                                                              verified = false;
-                                                              loading1 = false;
-                                                              verifying = false;
-                                                              loading = false;
-                                                              can = true;
-                                                              selectedDate =
-                                                                  DateTime
-                                                                      .now();
-                                                            });
-                                                          } else {
-                                                            setState(() {
-                                                              selectedDate =
-                                                                  DateTime
-                                                                      .now();
-                                                              _time = null;
-                                                              _time2 = null;
-                                                              duration = 0;
-                                                              price = 0;
-                                                              selectedTime =
-                                                                  TimeOfDay(
-                                                                      hour: 00,
-                                                                      minute:
-                                                                          00);
-                                                              selectedTime2 =
-                                                                  TimeOfDay(
-                                                                      hour: 00,
-                                                                      minute:
-                                                                          00);
-                                                              _setDate = null;
-                                                              _dow = null;
-                                                              verified = false;
-                                                              loading1 = false;
-                                                              verifying = false;
-                                                              loading = false;
-                                                              can = true;
-                                                              selectedDate =
-                                                                  DateTime
-                                                                      .now();
-                                                            });
-                                                          }
-                                                        },
-                                                        color: darkPrimaryColor,
-                                                        textColor: whiteColor,
+                                                            if (can) {
+                                                              FirebaseFirestore
+                                                                  .instance
+                                                                  .collection(
+                                                                      'bookings')
+                                                                  .doc()
+                                                                  .set({
+                                                                'placeId': widget
+                                                                    .placeId,
+                                                                'serviceId': widget
+                                                                    .serviceId,
+                                                                'userId':
+                                                                    FirebaseAuth
+                                                                        .instance
+                                                                        .currentUser
+                                                                        .uid,
+                                                                'price': price
+                                                                    .roundToDouble(),
+                                                                'from': _time,
+                                                                'to': _time2,
+                                                                'date': selectedDate
+                                                                    .toString(),
+                                                                'timestamp_date':
+                                                                    selectedDate,
+                                                                'status': widget
+                                                                            .data['type'] ==
+                                                                        'nonver'
+                                                                    ? 'unfinished'
+                                                                    : 'verification_needed',
+                                                                'seen_status':
+                                                                    'unseen',
+                                                                'isRated':
+                                                                    false,
+                                                              });
+                                                              setState(() {
+                                                                selectedDate =
+                                                                    DateTime
+                                                                        .now();
+                                                                _time = null;
+                                                                _time2 = null;
+                                                                duration = 0;
+                                                                price = 0;
+                                                                selectedTime =
+                                                                    TimeOfDay(
+                                                                        hour:
+                                                                            00,
+                                                                        minute:
+                                                                            00);
+                                                                selectedTime2 =
+                                                                    TimeOfDay(
+                                                                        hour:
+                                                                            00,
+                                                                        minute:
+                                                                            00);
+                                                                _setDate = null;
+                                                                _dow = null;
+                                                                verified =
+                                                                    false;
+                                                                loading1 =
+                                                                    false;
+                                                                verifying =
+                                                                    false;
+                                                                loading = false;
+                                                                can = true;
+                                                                selectedDate =
+                                                                    DateTime
+                                                                        .now();
+                                                              });
+                                                            } else {
+                                                              setState(() {
+                                                                selectedDate =
+                                                                    DateTime
+                                                                        .now();
+                                                                _time = null;
+                                                                _time2 = null;
+                                                                duration = 0;
+                                                                price = 0;
+                                                                selectedTime =
+                                                                    TimeOfDay(
+                                                                        hour:
+                                                                            00,
+                                                                        minute:
+                                                                            00);
+                                                                selectedTime2 =
+                                                                    TimeOfDay(
+                                                                        hour:
+                                                                            00,
+                                                                        minute:
+                                                                            00);
+                                                                _setDate = null;
+                                                                _dow = null;
+                                                                verified =
+                                                                    false;
+                                                                loading1 =
+                                                                    false;
+                                                                verifying =
+                                                                    false;
+                                                                loading = false;
+                                                                can = true;
+                                                                selectedDate =
+                                                                    DateTime
+                                                                        .now();
+                                                              });
+                                                            }
+                                                          },
+                                                          color:
+                                                              darkPrimaryColor,
+                                                          textColor: whiteColor,
+                                                        ),
                                                       ),
-                                                    ),
-                                                    // Builder(
-                                                    //   builder: (context) =>
-                                                    //       RoundedButton(
-                                                    //     width: 0.5,
-                                                    //     height: 0.07,
-                                                    //     text: 'Book',
-                                                    //     press: () {
-                                                    //       setState(() {
-                                                    //         loading = true;
-                                                    //       });
-                                                    //       FirebaseFirestore
-                                                    //           .instance
-                                                    //           .collection(
-                                                    //               'bookings')
-                                                    //           .doc()
-                                                    //           .set({
-                                                    //         'placeId':
-                                                    //             widget.placeId,
-                                                    //         'serviceId': widget
-                                                    //             .serviceId,
-                                                    //         'userId':
-                                                    //             FirebaseAuth
-                                                    //                 .instance
-                                                    //                 .currentUser
-                                                    //                 .uid,
-                                                    //         'price': price
-                                                    //             .roundToDouble(),
-                                                    //         'from': _time,
-                                                    //         'to': _time2,
-                                                    //         'date': selectedDate
-                                                    //             .toString(),
-                                                    //         'timestamp_date':
-                                                    //             selectedDate,
-                                                    //         'status': widget.data[
-                                                    //                     'type'] ==
-                                                    //                 'nonver'
-                                                    //             ? 'unfinished'
-                                                    //             : 'verification_needed',
-                                                    //         'seen_status':
-                                                    //             'unseen',
-                                                    //         'isRated': false,
-                                                    //       });
-                                                    //       setState(() {
-                                                    //         selectedDate =
-                                                    //             DateTime.now();
-                                                    //         _time = null;
-                                                    //         _time2 = null;
-                                                    //         duration = 0;
-                                                    //         price = 0;
-                                                    //         selectedTime =
-                                                    //             TimeOfDay(
-                                                    //                 hour: 00,
-                                                    //                 minute: 00);
-                                                    //         selectedTime2 =
-                                                    //             TimeOfDay(
-                                                    //                 hour: 00,
-                                                    //                 minute: 00);
-                                                    //         verified = false;
-                                                    //         loading1 = false;
-                                                    //         verifying = false;
-                                                    //         loading = false;
-                                                    //         selectedDate =
-                                                    //             DateTime.now();
-                                                    //         Scaffold.of(context)
-                                                    //             .showSnackBar(
-                                                    //           SnackBar(
-                                                    //             backgroundColor:
-                                                    //                 darkPrimaryColor,
-                                                    //             content: Text(
-                                                    //               'Booking was successful',
-                                                    //               style: GoogleFonts
-                                                    //                   .montserrat(
-                                                    //                 textStyle:
-                                                    //                     TextStyle(
-                                                    //                   color:
-                                                    //                       whiteColor,
-                                                    //                   fontSize:
-                                                    //                       30,
-                                                    //                 ),
-                                                    //               ),
-                                                    //             ),
-                                                    //           ),
-                                                    //         );
-                                                    //       });
-                                                    //     },
-                                                    //     color: darkPrimaryColor,
-                                                    //     textColor: whiteColor,
-                                                    //   ),
-                                                    // ),
-                                                  ],
+                                                      // Builder(
+                                                      //   builder: (context) =>
+                                                      //       RoundedButton(
+                                                      //     width: 0.5,
+                                                      //     height: 0.07,
+                                                      //     text: 'Book',
+                                                      //     press: () {
+                                                      //       setState(() {
+                                                      //         loading = true;
+                                                      //       });
+                                                      //       FirebaseFirestore
+                                                      //           .instance
+                                                      //           .collection(
+                                                      //               'bookings')
+                                                      //           .doc()
+                                                      //           .set({
+                                                      //         'placeId':
+                                                      //             widget.placeId,
+                                                      //         'serviceId': widget
+                                                      //             .serviceId,
+                                                      //         'userId':
+                                                      //             FirebaseAuth
+                                                      //                 .instance
+                                                      //                 .currentUser
+                                                      //                 .uid,
+                                                      //         'price': price
+                                                      //             .roundToDouble(),
+                                                      //         'from': _time,
+                                                      //         'to': _time2,
+                                                      //         'date': selectedDate
+                                                      //             .toString(),
+                                                      //         'timestamp_date':
+                                                      //             selectedDate,
+                                                      //         'status': widget.data[
+                                                      //                     'type'] ==
+                                                      //                 'nonver'
+                                                      //             ? 'unfinished'
+                                                      //             : 'verification_needed',
+                                                      //         'seen_status':
+                                                      //             'unseen',
+                                                      //         'isRated': false,
+                                                      //       });
+                                                      //       setState(() {
+                                                      //         selectedDate =
+                                                      //             DateTime.now();
+                                                      //         _time = null;
+                                                      //         _time2 = null;
+                                                      //         duration = 0;
+                                                      //         price = 0;
+                                                      //         selectedTime =
+                                                      //             TimeOfDay(
+                                                      //                 hour: 00,
+                                                      //                 minute: 00);
+                                                      //         selectedTime2 =
+                                                      //             TimeOfDay(
+                                                      //                 hour: 00,
+                                                      //                 minute: 00);
+                                                      //         verified = false;
+                                                      //         loading1 = false;
+                                                      //         verifying = false;
+                                                      //         loading = false;
+                                                      //         selectedDate =
+                                                      //             DateTime.now();
+                                                      //         Scaffold.of(context)
+                                                      //             .showSnackBar(
+                                                      //           SnackBar(
+                                                      //             backgroundColor:
+                                                      //                 darkPrimaryColor,
+                                                      //             content: Text(
+                                                      //               'Booking was successful',
+                                                      //               style: GoogleFonts
+                                                      //                   .montserrat(
+                                                      //                 textStyle:
+                                                      //                     TextStyle(
+                                                      //                   color:
+                                                      //                       whiteColor,
+                                                      //                   fontSize:
+                                                      //                       30,
+                                                      //                 ),
+                                                      //               ),
+                                                      //             ),
+                                                      //           ),
+                                                      //         );
+                                                      //       });
+                                                      //     },
+                                                      //     color: darkPrimaryColor,
+                                                      //     textColor: whiteColor,
+                                                      //   ),
+                                                      // ),
+                                                    ],
+                                                  ),
                                                 ),
                                               )
                                             : Align(

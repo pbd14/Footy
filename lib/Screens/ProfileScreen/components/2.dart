@@ -157,14 +157,16 @@ class _ProfileScreen2State extends State<ProfileScreen2>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              FirebaseAuth.instance.currentUser.phoneNumber
-                                  .toString(),
-                              overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
-                                  color: darkColor,
-                                  fontSize: 25,
+                            Center(
+                              child: Text(
+                                FirebaseAuth.instance.currentUser.phoneNumber
+                                    .toString(),
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    color: darkColor,
+                                    fontSize: 25,
+                                  ),
                                 ),
                               ),
                             ),

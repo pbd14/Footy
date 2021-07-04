@@ -27,17 +27,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
               appBar: AppBar(
                 automaticallyImplyLeading: false,
                 toolbarHeight: size.width * 0.2,
-                backgroundColor: primaryColor,
+                backgroundColor: darkColor,
                 centerTitle: true,
                 title: TabBar(
-                  indicatorColor: whiteColor,
+                  indicatorColor: primaryColor,
                   tabs: [
                     Tab(
                       child: Text(
                         'Favourites',
                         style: GoogleFonts.montserrat(
                           textStyle: TextStyle(
-                              color: whiteColor,
+                              color: primaryColor,
                               fontWeight: FontWeight.bold,
                               fontSize: 20),
                         ),
@@ -48,7 +48,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         'Activity',
                         style: GoogleFonts.montserrat(
                           textStyle: TextStyle(
-                              color: whiteColor,
+                              color: primaryColor,
                               fontWeight: FontWeight.bold,
                               fontSize: 20),
                         ),

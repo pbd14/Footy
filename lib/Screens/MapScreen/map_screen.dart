@@ -22,8 +22,9 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
     super.initState();
   }
+
   @override
-  void dispose(){
+  void dispose() {
     _mapController.dispose();
     super.dispose();
   }
@@ -50,7 +51,10 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: primaryColor,
+        backgroundColor: darkColor,
+        iconTheme: IconThemeData(
+          color: primaryColor,
+        ),
       ),
       body: Stack(
         clipBehavior: Clip.hardEdge,

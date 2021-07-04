@@ -174,11 +174,11 @@ class HomeScreenState extends State<HomeScreen> {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.map_pin_ellipse),
-            label: 'Map',
+            label: '',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
-            label: 'Search',
+            label: '',
           ),
           BottomNavigationBarItem(
             icon: isNotif
@@ -210,21 +210,24 @@ class HomeScreenState extends State<HomeScreen> {
                     ],
                   )
                 : Icon(CupertinoIcons.clock),
-            label: 'History',
+            label: '',
           ),
           BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.person_alt),
-            label: 'Profile',
+            label: '',
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: darkPrimaryColor,
-        unselectedItemColor: primaryColor,
+        selectedItemColor: primaryColor,
+        unselectedItemColor: whiteColor,
         onTap: _onItemTapped,
-        backgroundColor: whiteColor,
+        backgroundColor: darkColor,
         elevation: 50,
         iconSize: 33.0,
-        selectedFontSize: 17.0,
+        selectedIconTheme: IconThemeData(
+          size: 40,
+        ),
+        selectedFontSize: 0.0,
         type: BottomNavigationBarType.fixed,
       ),
     );
@@ -604,7 +607,8 @@ class _MapPageState extends State<MapPage> {
     return Scaffold(
       appBar: widget.isAppBar
           ? AppBar(
-              backgroundColor: primaryColor,
+              backgroundColor: darkColor,
+              iconTheme: IconThemeData(color: primaryColor),
             )
           : null,
       body: _initialPosition == null

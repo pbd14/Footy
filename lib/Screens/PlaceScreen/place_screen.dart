@@ -62,7 +62,8 @@ class _PlaceScreenState extends State<PlaceScreen> {
         ? LoadingScreen()
         : Scaffold(
             appBar: AppBar(
-              backgroundColor: primaryColor,
+              backgroundColor: darkColor,
+              iconTheme: IconThemeData(color: primaryColor),
             ),
             body: CustomScrollView(
               slivers: [
@@ -72,41 +73,45 @@ class _PlaceScreenState extends State<PlaceScreen> {
                   floating: false,
                   pinned: false,
                   snap: false,
+                  automaticallyImplyLeading: false,
                   flexibleSpace: CarouselSlider(
                     options: CarouselOptions(),
                     items: imgList
                         .map((item) => Center(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(30),
-                                    child: Container(
-                                      height: 200,
-                                      width: size.width,
-                                      child: CachedNetworkImage(
-                                        fit: BoxFit.cover,
-                                        filterQuality: FilterQuality.none,
-                                        height: 100,
-                                        width: 100,
-                                        placeholder: (context, url) =>
-                                            Container(
-                                          height: 50,
-                                          width: 50,
-                                          child: Transform.scale(
-                                            scale: 0.1,
-                                            child: CircularProgressIndicator(
-                                              strokeWidth: 2.0,
-                                              backgroundColor: primaryColor,
-                                              valueColor:
-                                                  AlwaysStoppedAnimation<Color>(
-                                                      primaryColor),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(30),
+                                      child: Container(
+                                        height: 200,
+                                        width: size.width,
+                                        child: CachedNetworkImage(
+                                          fit: BoxFit.cover,
+                                          filterQuality: FilterQuality.none,
+                                          height: 100,
+                                          width: 100,
+                                          placeholder: (context, url) =>
+                                              Container(
+                                            height: 50,
+                                            width: 50,
+                                            child: Transform.scale(
+                                              scale: 0.1,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 2.0,
+                                                backgroundColor: primaryColor,
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                        Color>(primaryColor),
+                                              ),
                                             ),
                                           ),
+                                          errorWidget: (context, url, error) =>
+                                              Icon(
+                                            Icons.error,
+                                            color: primaryColor,
+                                          ),
+                                          imageUrl: item,
                                         ),
-                                        errorWidget: (context, url, error) =>
-                                            Icon(
-                                          Icons.error,
-                                          color: primaryColor,
-                                        ),
-                                        imageUrl: item,
                                       ),
                                     ),
                                   ),
@@ -147,183 +152,143 @@ class _PlaceScreenState extends State<PlaceScreen> {
                 SliverList(
                   delegate: SliverChildListDelegate([
                     Container(
-                      color: whiteColor,
-                      width: size.width * 0.85,
-                      height: size.height * 0.55,
-                      margin: EdgeInsets.fromLTRB(size.width * 0.045,
-                          size.height * 0, size.width * 0.045, size.height * 0),
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                          child: SingleChildScrollView(
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    widget.data['name'],
+                      padding: EdgeInsets.all(15),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Center(
+                              child: Text(
+                                widget.data['name'],
+                                style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    color: darkColor,
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Text(
+                              widget.data['description'],
+                              style: GoogleFonts.montserrat(
+                                textStyle: TextStyle(
+                                    color: darkColor,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w300),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 25,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  height: 50,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'By ' + widget.data['by'],
                                     style: GoogleFonts.montserrat(
                                       textStyle: TextStyle(
-                                        color: darkPrimaryColor,
-                                        fontSize: 30,
-                                        fontWeight: FontWeight.bold,
+                                        color: darkColor,
+                                        fontSize: 15,
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 15,
-                                  ),
-                                  Text(
-                                    widget.data['description'],
-                                    style: GoogleFonts.montserrat(
-                                      textStyle: TextStyle(
-                                        color: darkPrimaryColor,
-                                        fontSize: 20,
-                                      ),
+                                ),
+                                SizedBox(width: 10),
+                                Icon(
+                                  Icons.star,
+                                  color: darkPrimaryColor,
+                                ),
+                                SizedBox(
+                                  width: 7,
+                                ),
+                                Text(
+                                  rating.toStringAsFixed(1) + '/5',
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                  style: GoogleFonts.montserrat(
+                                    textStyle: TextStyle(
+                                      color: darkPrimaryColor,
+                                      fontSize: 15,
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 25,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Rating',
-                                        style: GoogleFonts.montserrat(
-                                          textStyle: TextStyle(
-                                            color: darkPrimaryColor,
-                                            fontSize: 24,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 20,
-                                      ),
-                                      Icon(
-                                        Icons.star,
-                                        color: darkPrimaryColor,
-                                      ),
-                                      SizedBox(
-                                        width: 7,
-                                      ),
-                                      Text(
-                                        rating.toStringAsFixed(1) + '/5',
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 2,
-                                        style: GoogleFonts.montserrat(
-                                          textStyle: TextStyle(
-                                            color: darkPrimaryColor,
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 15,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        height: 50,
-                                        width: size.width * 0.58,
-                                        color: lightPrimaryColor,
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          'By ' + widget.data['by'],
-                                          style: GoogleFonts.montserrat(
-                                            textStyle: TextStyle(
-                                              color: darkPrimaryColor,
-                                              fontSize: 20,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      LabelButton(
-                                        isC: false,
-                                        reverse: FirebaseFirestore.instance
-                                            .collection('users')
-                                            .doc(FirebaseAuth
-                                                .instance.currentUser.uid),
-                                        containsValue: widget.data['id'],
-                                        color1: Colors.red,
-                                        color2: lightPrimaryColor,
-                                        ph: 45,
-                                        pw: 45,
-                                        size: 40,
-                                        onTap: () {
-                                          setState(() {
-                                            FirebaseFirestore.instance
-                                                .collection('users')
-                                                .doc(FirebaseAuth
-                                                    .instance.currentUser.uid)
-                                                .update({
-                                              'favourites':
-                                                  FieldValue.arrayUnion(
-                                                      [widget.data['id']])
-                                            }).catchError((error) {
-                                              PushNotificationMessage
-                                                  notification =
-                                                  PushNotificationMessage(
-                                                title: 'Fail',
-                                                body:
-                                                    'Failed to update favourites',
-                                              );
-                                              showSimpleNotification(
-                                                Container(
-                                                    child: Text(
-                                                        notification.body)),
-                                                position:
-                                                    NotificationPosition.top,
-                                                background: Colors.red,
-                                              );
-                                            });
-                                          });
-                                        },
-                                        onTap2: () {
-                                          setState(() {
-                                            FirebaseFirestore.instance
-                                                .collection('users')
-                                                .doc(FirebaseAuth
-                                                    .instance.currentUser.uid)
-                                                .update({
-                                              'favourites':
-                                                  FieldValue.arrayRemove(
-                                                      [widget.data['id']])
-                                            }).catchError((error) {
-                                              PushNotificationMessage
-                                                  notification =
-                                                  PushNotificationMessage(
-                                                title: 'Fail',
-                                                body:
-                                                    'Failed to update favourites',
-                                              );
-                                              showSimpleNotification(
-                                                Container(
-                                                    child: Text(
-                                                        notification.body)),
-                                                position:
-                                                    NotificationPosition.top,
-                                                background: Colors.red,
-                                              );
-                                            });
-                                          });
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ]),
-                          ),
-                        ),
-                      ),
+                                ),
+                                LabelButton(
+                                  isC: false,
+                                  reverse: FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(FirebaseAuth
+                                          .instance.currentUser.uid),
+                                  containsValue: widget.data['id'],
+                                  color1: Colors.red,
+                                  color2: lightPrimaryColor,
+                                  ph: 45,
+                                  pw: 45,
+                                  size: 30,
+                                  onTap: () {
+                                    setState(() {
+                                      FirebaseFirestore.instance
+                                          .collection('users')
+                                          .doc(FirebaseAuth
+                                              .instance.currentUser.uid)
+                                          .update({
+                                        'favourites': FieldValue.arrayUnion(
+                                            [widget.data['id']])
+                                      }).catchError((error) {
+                                        PushNotificationMessage notification =
+                                            PushNotificationMessage(
+                                          title: 'Fail',
+                                          body: 'Failed to update favourites',
+                                        );
+                                        showSimpleNotification(
+                                          Container(
+                                              child: Text(notification.body)),
+                                          position: NotificationPosition.top,
+                                          background: Colors.red,
+                                        );
+                                      });
+                                    });
+                                  },
+                                  onTap2: () {
+                                    setState(() {
+                                      FirebaseFirestore.instance
+                                          .collection('users')
+                                          .doc(FirebaseAuth
+                                              .instance.currentUser.uid)
+                                          .update({
+                                        'favourites': FieldValue.arrayRemove(
+                                            [widget.data['id']])
+                                      }).catchError((error) {
+                                        PushNotificationMessage notification =
+                                            PushNotificationMessage(
+                                          title: 'Fail',
+                                          body: 'Failed to update favourites',
+                                        );
+                                        showSimpleNotification(
+                                          Container(
+                                              child: Text(notification.body)),
+                                          position: NotificationPosition.top,
+                                          background: Colors.red,
+                                        );
+                                      });
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                          ]),
                     ),
                     Center(
                       child: Text(
                         'Services',
                         style: GoogleFonts.montserrat(
                           textStyle: TextStyle(
-                            color: darkPrimaryColor,
+                            color: darkColor,
                             fontSize: 40,
                           ),
                         ),

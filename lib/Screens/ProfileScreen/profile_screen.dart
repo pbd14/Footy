@@ -37,7 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         'Favourites',
                         style: GoogleFonts.montserrat(
                           textStyle: TextStyle(
-                              color: primaryColor,
+                              color: whiteColor,
                               fontWeight: FontWeight.bold,
                               fontSize: 20),
                         ),
@@ -48,7 +48,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         'Activity',
                         style: GoogleFonts.montserrat(
                           textStyle: TextStyle(
-                              color: primaryColor,
+                              color: whiteColor,
                               fontWeight: FontWeight.bold,
                               fontSize: 20),
                         ),

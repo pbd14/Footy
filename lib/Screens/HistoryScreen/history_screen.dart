@@ -36,7 +36,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         'Schedule',
                         style: GoogleFonts.montserrat(
                           textStyle: TextStyle(
-                              color: primaryColor,
+                              color: whiteColor,
                               fontWeight: FontWeight.bold,
                               fontSize: 20),
                         ),
@@ -47,7 +47,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         'History',
                         style: GoogleFonts.montserrat(
                           textStyle: TextStyle(
-                              color: primaryColor,
+                              color: whiteColor,
                               fontWeight: FontWeight.bold,
                               fontSize: 20),
                         ),

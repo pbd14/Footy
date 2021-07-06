@@ -241,17 +241,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final PhoneCodeAutoRetrievalTimeout autoTimeout = (String verId) {
       this.verificationId = verId;
-      if (this.mounted) {
-        setState(() {
-          this.codeSent = false;
-          this.loading = false;
-          this.error = 'Code is not valid anymore';
-        });
-      } else {
+      setState(() {
         this.codeSent = false;
         this.loading = false;
         this.error = 'Code is not valid anymore';
-      }
+      });
     };
 
     await FirebaseAuth.instance.verifyPhoneNumber(

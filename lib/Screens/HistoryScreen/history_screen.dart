@@ -25,7 +25,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
               backgroundColor: whiteColor,
               appBar: AppBar(
                 automaticallyImplyLeading: false,
-                toolbarHeight: size.width * 0.2,
+                toolbarHeight: 60,
                 backgroundColor: darkColor,
                 centerTitle: true,
                 title: TabBar(
@@ -38,7 +38,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           textStyle: TextStyle(
                               color: whiteColor,
                               fontWeight: FontWeight.bold,
-                              fontSize: 20),
+                              fontSize: 17),
                         ),
                       ),
                     ),
@@ -49,7 +49,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           textStyle: TextStyle(
                               color: whiteColor,
                               fontWeight: FontWeight.bold,
-                              fontSize: 20),
+                              fontSize: 17),
                         ),
                       ),
                     )

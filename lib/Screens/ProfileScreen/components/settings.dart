@@ -136,6 +136,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                         ),
                                       ),
                                       SizedBox(height: 10),
+                                      Text(
+                                        'Language',
+                                        overflow: TextOverflow.ellipsis,
+                                        style: GoogleFonts.montserrat(
+                                          textStyle: TextStyle(
+                                            color: darkColor,
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 10),
                                       DropdownButton<String>(
                                         isExpanded: true,
                                         hint: Text(

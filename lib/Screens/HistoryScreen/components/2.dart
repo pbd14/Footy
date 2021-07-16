@@ -27,12 +27,19 @@ class _History2State extends State<History2>
   bool loading = false;
   List _bookings = [];
   Map _places = {};
+  StreamSubscription<QuerySnapshot> ordinaryPlacesSubscr;
+
+  @override
+  void dispose() {
+    ordinaryPlacesSubscr.cancel();
+    super.dispose();
+  }
 
   Future<void> loadData() async {
     setState(() {
       loading = true;
     });
-    QuerySnapshot data = await FirebaseFirestore.instance
+    ordinaryPlacesSubscr = FirebaseFirestore.instance
         .collection('bookings')
         .orderBy(
           'timestamp_date',
@@ -47,17 +54,19 @@ class _History2State extends State<History2>
           isEqualTo: FirebaseAuth.instance.currentUser.uid,
         )
         .limit(20)
-        .get();
-    _bookings = data.docs;
-    for (QueryDocumentSnapshot book in _bookings) {
-      DocumentSnapshot data1 = await FirebaseFirestore.instance
-          .collection('locations')
-          .doc(Booking.fromSnapshot(book).placeId)
-          .get();
-      _places.addAll({
-        Booking.fromSnapshot(book).id: Place.fromSnapshot(data1),
-      });
-    }
+        .snapshots()
+        .listen((bookings) async {
+      _bookings = bookings.docs;
+      for (QueryDocumentSnapshot book in _bookings) {
+        DocumentSnapshot data1 = await FirebaseFirestore.instance
+            .collection('locations')
+            .doc(Booking.fromSnapshot(book).placeId)
+            .get();
+        _places.addAll({
+          Booking.fromSnapshot(book).id: Place.fromSnapshot(data1),
+        });
+      }
+    });
     setState(() {
       loading = false;
     });

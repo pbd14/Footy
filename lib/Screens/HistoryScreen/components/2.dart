@@ -35,6 +35,24 @@ class _History2State extends State<History2>
     super.dispose();
   }
 
+  Future<void> ordinaryBookPrep(
+      List<QueryDocumentSnapshot> _unrbookings1) async {
+    DocumentSnapshot customUB;
+    if (_unrbookings1.length != 0) {
+      for (QueryDocumentSnapshot book in _bookings) {
+        DocumentSnapshot data1 = await FirebaseFirestore.instance
+            .collection('locations')
+            .doc(Booking.fromSnapshot(book).placeId)
+            .get();
+        setState(() {
+          _places.addAll({
+            Booking.fromSnapshot(book).id: Place.fromSnapshot(data1),
+          });
+        });
+      }
+    }
+  }
+
   Future<void> loadData() async {
     setState(() {
       loading = true;
@@ -56,16 +74,10 @@ class _History2State extends State<History2>
         .limit(20)
         .snapshots()
         .listen((bookings) async {
-      _bookings = bookings.docs;
-      for (QueryDocumentSnapshot book in _bookings) {
-        DocumentSnapshot data1 = await FirebaseFirestore.instance
-            .collection('locations')
-            .doc(Booking.fromSnapshot(book).placeId)
-            .get();
-        _places.addAll({
-          Booking.fromSnapshot(book).id: Place.fromSnapshot(data1),
-        });
-      }
+      setState(() {
+        _bookings = bookings.docs;
+        ordinaryBookPrep(bookings.docs);
+      });
     });
     setState(() {
       loading = false;
@@ -160,7 +172,10 @@ class _History2State extends State<History2>
                                                 height: 10,
                                               ),
                                               Text(
-                                                _places != null
+                                                _places[Booking.fromSnapshot(
+                                                                book)
+                                                            .id] !=
+                                                        null
                                                     ? _places[Booking.fromSnapshot(
                                                                         book)
                                                                     .id]
@@ -177,7 +192,13 @@ class _History2State extends State<History2>
                                                 overflow: TextOverflow.ellipsis,
                                                 style: GoogleFonts.montserrat(
                                                   textStyle: TextStyle(
-                                                      color: darkPrimaryColor,
+                                                      color:
+                                                          Booking.fromSnapshot(
+                                                                          book)
+                                                                      .status ==
+                                                                  'unfinished'
+                                                              ? darkColor
+                                                              : Colors.red,
                                                       fontSize: 15,
                                                       fontWeight:
                                                           FontWeight.w400),
@@ -213,7 +234,7 @@ class _History2State extends State<History2>
                                               // crossAxisAlignment:
                                               //     CrossAxisAlignment.end,
                                               children: [
-                                                _places != null
+                                                _places[book.id] != null
                                                     ? LabelButton(
                                                         isC: false,
                                                         reverse:
@@ -225,11 +246,8 @@ class _History2State extends State<History2>
                                                                     .instance
                                                                     .currentUser
                                                                     .uid),
-                                                        containsValue: _places[
-                                                                Booking.fromSnapshot(
-                                                                        book)
-                                                                    .id]
-                                                            .id,
+                                                        containsValue:
+                                                            _places[book.id].id,
                                                         color1: Colors.red,
                                                         color2:
                                                             lightPrimaryColor,

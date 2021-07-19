@@ -308,8 +308,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                             SlideRightRoute(
                               page: ServiceScreen(
                                 data: service,
-                                serviceId:
-                                    widget.data['services'].indexOf(service),
+                                serviceId: widget.data['services']['id'],
                                 placeId: widget.data['id'],
                               ),
                             ),

@@ -64,6 +64,18 @@ class _PlaceScreenState extends State<PlaceScreen> {
             appBar: AppBar(
               backgroundColor: darkColor,
               iconTheme: IconThemeData(color: primaryColor),
+              title: Text(
+                'Info',
+                textScaleFactor: 1,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.montserrat(
+                  textStyle: TextStyle(
+                      color: whiteColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w300),
+                ),
+              ),
+              centerTitle: true,
             ),
             body: CustomScrollView(
               slivers: [
@@ -208,7 +220,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                                   width: 7,
                                 ),
                                 Text(
-                                  rating.toStringAsFixed(1) + '/5',
+                                  rating.toStringAsFixed(1),
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 2,
                                   style: GoogleFonts.montserrat(

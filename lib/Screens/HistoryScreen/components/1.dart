@@ -678,63 +678,85 @@ class _History1State extends State<History1>
                         SizedBox(
                           height: 15,
                         ),
-                        for (var book in _bookings)
-                          Container(
-                            margin: EdgeInsets.symmetric(horizontal: 10.0),
-                            // padding: EdgeInsets.all(10),
-                            child: Card(
-                              margin: EdgeInsets.all(5),
-                              elevation: 10,
-                              child: Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Container(
-                                        width: size.width * 0.5,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              DateFormat.yMMMd()
-                                                  .format(
-                                                      Booking.fromSnapshot(book)
-                                                          .timestamp_date
-                                                          .toDate())
-                                                  .toString(),
-                                              overflow: TextOverflow.ellipsis,
-                                              style: GoogleFonts.montserrat(
-                                                textStyle: TextStyle(
-                                                  color: darkPrimaryColor,
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold,
+                        for (QueryDocumentSnapshot book in _bookings)
+                          CupertinoButton(
+                            onPressed: () {
+                              setState(() {
+                                loading = true;
+                              });
+                              Navigator.push(
+                                  context,
+                                  SlideRightRoute(
+                                    page: OnEventScreen(
+                                      booking: book,
+                                    ),
+                                  ));
+                              setState(() {
+                                loading = false;
+                              });
+                            },
+                            padding: EdgeInsets.zero,
+                            child: Container(
+                              margin: EdgeInsets.symmetric(horizontal: 10.0),
+                              // padding: EdgeInsets.all(10),
+                              child: Card(
+                                margin: EdgeInsets.all(5),
+                                elevation: 10,
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Container(
+                                          width: size.width * 0.5,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                DateFormat.yMMMd()
+                                                    .format(
+                                                        Booking.fromSnapshot(
+                                                                book)
+                                                            .timestamp_date
+                                                            .toDate())
+                                                    .toString(),
+                                                overflow: TextOverflow.ellipsis,
+                                                style: GoogleFonts.montserrat(
+                                                  textStyle: TextStyle(
+                                                    color: darkPrimaryColor,
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Text(
-                                              Booking.fromSnapshot(book).from +
-                                                  ' - ' +
-                                                  Booking.fromSnapshot(book).to,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: GoogleFonts.montserrat(
-                                                textStyle: TextStyle(
-                                                  color: darkPrimaryColor,
-                                                  fontSize: 20,
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Text(
+                                                Booking.fromSnapshot(book)
+                                                        .from +
+                                                    ' - ' +
+                                                    Booking.fromSnapshot(book)
+                                                        .to,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: GoogleFonts.montserrat(
+                                                  textStyle: TextStyle(
+                                                    color: darkPrimaryColor,
+                                                    fontSize: 20,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Text(
-                                              _places[book.id]
-                                                          .data()['services']
-                                                          .where((service) {
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Text(
+                                                _places[book.id] !=
+                                                        null
+                                                    ? _places[book.id]
+                                                        .data()['services']
+                                                        .where((service) {
                                                         if (service['id'] ==
                                                             book.data()[
                                                                 'serviceId']) {
@@ -742,356 +764,359 @@ class _History1State extends State<History1>
                                                         } else {
                                                           return false;
                                                         }
-                                                      }).first['name'] !=
-                                                      null
-                                                  ? _places[book.id]
-                                                      .data()['services']
-                                                      .where((service) {
-                                                      if (service['id'] ==
-                                                          book.data()[
-                                                              'serviceId']) {
-                                                        return true;
-                                                      } else {
-                                                        return false;
-                                                      }
-                                                    }).first['name']
-                                                  : 'Service',
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: GoogleFonts.montserrat(
-                                                textStyle: TextStyle(
-                                                    color: darkPrimaryColor,
-                                                    fontSize: 15,
-                                                    fontWeight:
-                                                        FontWeight.w400),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Text(
-                                              _places[book.id] != null
-                                                  ? _places[Booking.fromSnapshot(
-                                                                      book)
-                                                                  .id]
-                                                              .data() !=
-                                                          null
-                                                      ? _places[Booking
-                                                                  .fromSnapshot(
-                                                                      book)
-                                                              .id]
-                                                          .data()['name']
-                                                      : 'Place'
-                                                  : 'Place',
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: GoogleFonts.montserrat(
-                                                textStyle: TextStyle(
-                                                    color: darkPrimaryColor,
-                                                    fontSize: 15,
-                                                    fontWeight:
-                                                        FontWeight.w400),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Text(
-                                              Booking.fromSnapshot(book).status,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: GoogleFonts.montserrat(
-                                                textStyle: TextStyle(
-                                                  color:
-                                                      Booking.fromSnapshot(book)
-                                                                  .status ==
-                                                              'unfinished'
-                                                          ? darkPrimaryColor
-                                                          : Colors.red,
-                                                  fontSize: 15,
+                                                      }).first['name']
+                                                    : 'Service',
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: GoogleFonts.montserrat(
+                                                  textStyle: TextStyle(
+                                                      color: darkPrimaryColor,
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w400),
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.centerRight,
-                                        child: Container(
-                                          width: size.width * 0.3,
-                                          child: Column(
-                                            // crossAxisAlignment:
-                                            //     CrossAxisAlignment.end,
-                                            children: [
-                                              _places[book.id] != null
-                                                  ? LabelButton(
-                                                      isC: false,
-                                                      reverse: FirebaseFirestore
-                                                          .instance
-                                                          .collection('users')
-                                                          .doc(FirebaseAuth
-                                                              .instance
-                                                              .currentUser
-                                                              .uid),
-                                                      containsValue:
-                                                          _places[book.id].id,
-                                                      color1: Colors.red,
-                                                      color2: lightPrimaryColor,
-                                                      size: 30,
-                                                      onTap: () {
-                                                        setState(() {
-                                                          FirebaseFirestore
-                                                              .instance
-                                                              .collection(
-                                                                  'users')
-                                                              .doc(FirebaseAuth
-                                                                  .instance
-                                                                  .currentUser
-                                                                  .uid)
-                                                              .update({
-                                                            'favourites':
-                                                                FieldValue
-                                                                    .arrayUnion([
-                                                              _places[Booking.fromSnapshot(
-                                                                          book)
-                                                                      .id]
-                                                                  .id
-                                                            ])
-                                                          }).catchError(
-                                                                  (error) {
-                                                            PushNotificationMessage
-                                                                notification =
-                                                                PushNotificationMessage(
-                                                              title: 'Fail',
-                                                              body:
-                                                                  'Failed to update favourites',
-                                                            );
-                                                            showSimpleNotification(
-                                                              Container(
-                                                                  child: Text(
-                                                                      notification
-                                                                          .body)),
-                                                              position:
-                                                                  NotificationPosition
-                                                                      .top,
-                                                              background:
-                                                                  Colors.red,
-                                                            );
-                                                            if (this.mounted) {
-                                                              setState(() {
-                                                                loading = false;
-                                                              });
-                                                            } else {
-                                                              loading = false;
-                                                            }
-                                                          });
-                                                        });
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(
-                                                          SnackBar(
-                                                            duration: Duration(
-                                                                seconds: 2),
-                                                            backgroundColor:
-                                                                darkPrimaryColor,
-                                                            content: Text(
-                                                              'Saved to favourites',
-                                                              style: GoogleFonts
-                                                                  .montserrat(
-                                                                textStyle:
-                                                                    TextStyle(
-                                                                  color:
-                                                                      whiteColor,
-                                                                  fontSize: 15,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        );
-                                                      },
-                                                      onTap2: () {
-                                                        setState(() {
-                                                          FirebaseFirestore
-                                                              .instance
-                                                              .collection(
-                                                                  'users')
-                                                              .doc(FirebaseAuth
-                                                                  .instance
-                                                                  .currentUser
-                                                                  .uid)
-                                                              .update({
-                                                            'favourites':
-                                                                FieldValue
-                                                                    .arrayRemove([
-                                                              _places[Booking.fromSnapshot(
-                                                                          book)
-                                                                      .id]
-                                                                  .id
-                                                            ])
-                                                          }).catchError(
-                                                                  (error) {
-                                                            PushNotificationMessage
-                                                                notification =
-                                                                PushNotificationMessage(
-                                                              title: 'Fail',
-                                                              body:
-                                                                  'Failed to update favourites',
-                                                            );
-                                                            showSimpleNotification(
-                                                              Container(
-                                                                  child: Text(
-                                                                      notification
-                                                                          .body)),
-                                                              position:
-                                                                  NotificationPosition
-                                                                      .top,
-                                                              background:
-                                                                  Colors.red,
-                                                            );
-                                                            if (this.mounted) {
-                                                              setState(() {
-                                                                loading = false;
-                                                              });
-                                                            } else {
-                                                              loading = false;
-                                                            }
-                                                          });
-                                                        });
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(
-                                                          SnackBar(
-                                                            duration: Duration(
-                                                                seconds: 2),
-                                                            backgroundColor:
-                                                                Colors.red,
-                                                            content: Text(
-                                                              'Removed from favourites',
-                                                              style: GoogleFonts
-                                                                  .montserrat(
-                                                                textStyle:
-                                                                    TextStyle(
-                                                                  color:
-                                                                      whiteColor,
-                                                                  fontSize: 15,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        );
-                                                      },
-                                                    )
-                                                  : Container(),
-                                              SizedBox(height: 10),
-                                              IconButton(
-                                                iconSize: 30,
-                                                icon: Icon(
-                                                  CupertinoIcons
-                                                      .map_pin_ellipse,
-                                                  color: darkPrimaryColor,
-                                                ),
-                                                onPressed: () {
-                                                  setState(() {
-                                                    loading = true;
-                                                  });
-                                                  Navigator.push(
-                                                    context,
-                                                    SlideRightRoute(
-                                                      page: MapPage(
-                                                        isAppBar: true,
-                                                        isLoading: true,
-                                                        data: {
-                                                          'lat': _places[Booking
-                                                                      .fromSnapshot(
-                                                                          book)
-                                                                  .id]
-                                                              .data()['lat'],
-                                                          'lon': _places[Booking
-                                                                      .fromSnapshot(
-                                                                          book)
-                                                                  .id]
-                                                              .data()['lon']
-                                                        },
-                                                      ),
-                                                    ),
-                                                  );
-                                                  setState(() {
-                                                    loading = false;
-                                                  });
-                                                },
+                                              SizedBox(
+                                                height: 10,
                                               ),
-                                              // IconButton(
-                                              //   icon: Icon(
-                                              //     CupertinoIcons.book,
-                                              //     color: darkPrimaryColor,
-                                              //   ),
-                                              //   onPressed: ()  {
-                                              //     setState(() {
-                                              //       loading = true;
-                                              //     });
-                                              //     Navigator.push(
-                                              //       context,
-                                              //       SlideRightRoute(
-                                              //         page: PlaceScreen(
-                                              //           data: {
-                                              //             'name':
-                                              //                 Place.fromSnapshot(
-                                              //                         _results[
-                                              //                             index])
-                                              //                     .name, //0
-                                              //             'description': Place
-                                              //                     .fromSnapshot(
-                                              //                         _results[
-                                              //                             index])
-                                              //                 .description, //1
-                                              //             'by':
-                                              //                 Place.fromSnapshot(
-                                              //                         _results[
-                                              //                             index])
-                                              //                     .by, //2
-                                              //             'lat':
-                                              //                 Place.fromSnapshot(
-                                              //                         _results[
-                                              //                             index])
-                                              //                     .lat, //3
-                                              //             'lon':
-                                              //                 Place.fromSnapshot(
-                                              //                         _results[
-                                              //                             index])
-                                              //                     .lon, //4
-                                              //             'images':
-                                              //                 Place.fromSnapshot(
-                                              //                         _results[
-                                              //                             index])
-                                              //                     .images, //5
-                                              //             'services':
-                                              //                 Place.fromSnapshot(
-                                              //                         _results[
-                                              //                             index])
-                                              //                     .services,
-                                              //             'rates':
-                                              //                 Place.fromSnapshot(
-                                              //                         _results[
-                                              //                             index])
-                                              //                     .rates,
-                                              //             'id':
-                                              //                 Place.fromSnapshot(
-                                              //                         _results[
-                                              //                             index])
-                                              //                     .id, //7
-                                              //           },
-                                              //         ),
-                                              //       ),
-                                              //     );
-                                              //     setState(() {
-                                              //       loading = false;
-                                              //     });
-                                              //   },
-                                              // ),
+                                              Text(
+                                                _places[book.id] != null
+                                                    ? _places[Booking.fromSnapshot(
+                                                                        book)
+                                                                    .id]
+                                                                .data() !=
+                                                            null
+                                                        ? _places[Booking
+                                                                    .fromSnapshot(
+                                                                        book)
+                                                                .id]
+                                                            .data()['name']
+                                                        : 'Place'
+                                                    : 'Place',
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: GoogleFonts.montserrat(
+                                                  textStyle: TextStyle(
+                                                      color: darkPrimaryColor,
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w400),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Text(
+                                                Booking.fromSnapshot(book)
+                                                    .status,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: GoogleFonts.montserrat(
+                                                  textStyle: TextStyle(
+                                                    color: Booking.fromSnapshot(
+                                                                    book)
+                                                                .status ==
+                                                            'unfinished'
+                                                        ? darkPrimaryColor
+                                                        : Colors.red,
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                              ),
                                             ],
                                           ),
                                         ),
-                                      )
-                                    ],
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: Container(
+                                            width: size.width * 0.3,
+                                            child: Column(
+                                              // crossAxisAlignment:
+                                              //     CrossAxisAlignment.end,
+                                              children: [
+                                                _places[book.id] != null
+                                                    ? LabelButton(
+                                                        isC: false,
+                                                        reverse:
+                                                            FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    'users')
+                                                                .doc(FirebaseAuth
+                                                                    .instance
+                                                                    .currentUser
+                                                                    .uid),
+                                                        containsValue:
+                                                            _places[book.id].id,
+                                                        color1: Colors.red,
+                                                        color2:
+                                                            lightPrimaryColor,
+                                                        size: 30,
+                                                        onTap: () {
+                                                          setState(() {
+                                                            FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    'users')
+                                                                .doc(FirebaseAuth
+                                                                    .instance
+                                                                    .currentUser
+                                                                    .uid)
+                                                                .update({
+                                                              'favourites':
+                                                                  FieldValue
+                                                                      .arrayUnion([
+                                                                _places[Booking.fromSnapshot(
+                                                                            book)
+                                                                        .id]
+                                                                    .id
+                                                              ])
+                                                            }).catchError(
+                                                                    (error) {
+                                                              PushNotificationMessage
+                                                                  notification =
+                                                                  PushNotificationMessage(
+                                                                title: 'Fail',
+                                                                body:
+                                                                    'Failed to update favourites',
+                                                              );
+                                                              showSimpleNotification(
+                                                                Container(
+                                                                    child: Text(
+                                                                        notification
+                                                                            .body)),
+                                                                position:
+                                                                    NotificationPosition
+                                                                        .top,
+                                                                background:
+                                                                    Colors.red,
+                                                              );
+                                                              if (this
+                                                                  .mounted) {
+                                                                setState(() {
+                                                                  loading =
+                                                                      false;
+                                                                });
+                                                              } else {
+                                                                loading = false;
+                                                              }
+                                                            });
+                                                          });
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                            SnackBar(
+                                                              duration:
+                                                                  Duration(
+                                                                      seconds:
+                                                                          2),
+                                                              backgroundColor:
+                                                                  darkPrimaryColor,
+                                                              content: Text(
+                                                                'Saved to favourites',
+                                                                style: GoogleFonts
+                                                                    .montserrat(
+                                                                  textStyle:
+                                                                      TextStyle(
+                                                                    color:
+                                                                        whiteColor,
+                                                                    fontSize:
+                                                                        15,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                        onTap2: () {
+                                                          setState(() {
+                                                            FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    'users')
+                                                                .doc(FirebaseAuth
+                                                                    .instance
+                                                                    .currentUser
+                                                                    .uid)
+                                                                .update({
+                                                              'favourites':
+                                                                  FieldValue
+                                                                      .arrayRemove([
+                                                                _places[Booking.fromSnapshot(
+                                                                            book)
+                                                                        .id]
+                                                                    .id
+                                                              ])
+                                                            }).catchError(
+                                                                    (error) {
+                                                              PushNotificationMessage
+                                                                  notification =
+                                                                  PushNotificationMessage(
+                                                                title: 'Fail',
+                                                                body:
+                                                                    'Failed to update favourites',
+                                                              );
+                                                              showSimpleNotification(
+                                                                Container(
+                                                                    child: Text(
+                                                                        notification
+                                                                            .body)),
+                                                                position:
+                                                                    NotificationPosition
+                                                                        .top,
+                                                                background:
+                                                                    Colors.red,
+                                                              );
+                                                              if (this
+                                                                  .mounted) {
+                                                                setState(() {
+                                                                  loading =
+                                                                      false;
+                                                                });
+                                                              } else {
+                                                                loading = false;
+                                                              }
+                                                            });
+                                                          });
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                            SnackBar(
+                                                              duration:
+                                                                  Duration(
+                                                                      seconds:
+                                                                          2),
+                                                              backgroundColor:
+                                                                  Colors.red,
+                                                              content: Text(
+                                                                'Removed from favourites',
+                                                                style: GoogleFonts
+                                                                    .montserrat(
+                                                                  textStyle:
+                                                                      TextStyle(
+                                                                    color:
+                                                                        whiteColor,
+                                                                    fontSize:
+                                                                        15,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                      )
+                                                    : Container(),
+                                                SizedBox(height: 10),
+                                                IconButton(
+                                                  iconSize: 30,
+                                                  icon: Icon(
+                                                    CupertinoIcons
+                                                        .map_pin_ellipse,
+                                                    color: darkPrimaryColor,
+                                                  ),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      loading = true;
+                                                    });
+                                                    Navigator.push(
+                                                      context,
+                                                      SlideRightRoute(
+                                                        page: MapPage(
+                                                          isAppBar: true,
+                                                          isLoading: true,
+                                                          data: {
+                                                            'lat': _places[Booking
+                                                                        .fromSnapshot(
+                                                                            book)
+                                                                    .id]
+                                                                .data()['lat'],
+                                                            'lon': _places[Booking
+                                                                        .fromSnapshot(
+                                                                            book)
+                                                                    .id]
+                                                                .data()['lon']
+                                                          },
+                                                        ),
+                                                      ),
+                                                    );
+                                                    setState(() {
+                                                      loading = false;
+                                                    });
+                                                  },
+                                                ),
+                                                // IconButton(
+                                                //   icon: Icon(
+                                                //     CupertinoIcons.book,
+                                                //     color: darkPrimaryColor,
+                                                //   ),
+                                                //   onPressed: ()  {
+                                                //     setState(() {
+                                                //       loading = true;
+                                                //     });
+                                                //     Navigator.push(
+                                                //       context,
+                                                //       SlideRightRoute(
+                                                //         page: PlaceScreen(
+                                                //           data: {
+                                                //             'name':
+                                                //                 Place.fromSnapshot(
+                                                //                         _results[
+                                                //                             index])
+                                                //                     .name, //0
+                                                //             'description': Place
+                                                //                     .fromSnapshot(
+                                                //                         _results[
+                                                //                             index])
+                                                //                 .description, //1
+                                                //             'by':
+                                                //                 Place.fromSnapshot(
+                                                //                         _results[
+                                                //                             index])
+                                                //                     .by, //2
+                                                //             'lat':
+                                                //                 Place.fromSnapshot(
+                                                //                         _results[
+                                                //                             index])
+                                                //                     .lat, //3
+                                                //             'lon':
+                                                //                 Place.fromSnapshot(
+                                                //                         _results[
+                                                //                             index])
+                                                //                     .lon, //4
+                                                //             'images':
+                                                //                 Place.fromSnapshot(
+                                                //                         _results[
+                                                //                             index])
+                                                //                     .images, //5
+                                                //             'services':
+                                                //                 Place.fromSnapshot(
+                                                //                         _results[
+                                                //                             index])
+                                                //                     .services,
+                                                //             'rates':
+                                                //                 Place.fromSnapshot(
+                                                //                         _results[
+                                                //                             index])
+                                                //                     .rates,
+                                                //             'id':
+                                                //                 Place.fromSnapshot(
+                                                //                         _results[
+                                                //                             index])
+                                                //                     .id, //7
+                                                //           },
+                                                //         ),
+                                                //       ),
+                                                //     );
+                                                //     setState(() {
+                                                //       loading = false;
+                                                //     });
+                                                //   },
+                                                // ),
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),

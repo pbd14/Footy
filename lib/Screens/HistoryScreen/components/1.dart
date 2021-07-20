@@ -34,7 +34,7 @@ class _History1State extends State<History1>
   Map<QueryDocumentSnapshot, DocumentSnapshot> unrplacesSlivers = {};
   List _bookings1 = [];
   List _unrbookings1 = [];
-  List slivers = [];
+  List<QueryDocumentSnapshot> slivers = [];
   List unratedBooks = [];
   List<Widget> sliversList = [];
 
@@ -431,7 +431,7 @@ class _History1State extends State<History1>
                             SizedBox(
                               height: 15,
                             ),
-                            for (var book in slivers)
+                            for (QueryDocumentSnapshot book in slivers)
                               TextButton(
                                 onPressed: () {
                                   setState(() {
@@ -506,6 +506,49 @@ class _History1State extends State<History1>
                                                         color: whiteColor,
                                                         fontSize: 20,
                                                       ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Text(
+                                                    placesSlivers[book]
+                                                                .data()[
+                                                                    'services']
+                                                                .where(
+                                                                    (service) {
+                                                              if (service[
+                                                                      'id'] ==
+                                                                  book.data()[
+                                                                      'serviceId']) {
+                                                                return true;
+                                                              } else {
+                                                                return false;
+                                                              }
+                                                            }).first['name'] !=
+                                                            null
+                                                        ? placesSlivers[book]
+                                                            .data()['services']
+                                                            .where((service) {
+                                                            if (service['id'] ==
+                                                                book.data()[
+                                                                    'serviceId']) {
+                                                              return true;
+                                                            } else {
+                                                              return false;
+                                                            }
+                                                          }).first['name']
+                                                        : 'Service',
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style:
+                                                        GoogleFonts.montserrat(
+                                                      textStyle: TextStyle(
+                                                          color: whiteColor,
+                                                          fontSize: 15,
+                                                          fontWeight:
+                                                              FontWeight.w400),
                                                     ),
                                                   ),
                                                   SizedBox(
@@ -689,9 +732,45 @@ class _History1State extends State<History1>
                                               height: 10,
                                             ),
                                             Text(
-                                              _places[Booking.fromSnapshot(book)
-                                                          .id] !=
+                                              _places[book.id]
+                                                          .data()['services']
+                                                          .where((service) {
+                                                        if (service['id'] ==
+                                                            book.data()[
+                                                                'serviceId']) {
+                                                          return true;
+                                                        } else {
+                                                          return false;
+                                                        }
+                                                      }).first['name'] !=
                                                       null
+                                                  ? _places[book.id]
+                                                      .data()['services']
+                                                      .where((service) {
+                                                      if (service['id'] ==
+                                                          book.data()[
+                                                              'serviceId']) {
+                                                        return true;
+                                                      } else {
+                                                        return false;
+                                                      }
+                                                    }).first['name']
+                                                  : 'Service',
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: GoogleFonts.montserrat(
+                                                textStyle: TextStyle(
+                                                    color: darkPrimaryColor,
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              _places[book.id] != null
                                                   ? _places[Booking.fromSnapshot(
                                                                       book)
                                                                   .id]

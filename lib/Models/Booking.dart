@@ -4,7 +4,7 @@ class Booking {
   // ignore: non_constant_identifier_names
   final String placeId, userId, status, type, info, seen_status, id;
   final double price;
-  final int serviceId;
+  final String serviceId;
   final String from, to, date;
   // ignore: non_constant_identifier_names
   final Timestamp timestamp_date;

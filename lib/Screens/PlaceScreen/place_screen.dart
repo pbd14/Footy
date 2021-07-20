@@ -297,7 +297,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                     SizedBox(
                       height: 20,
                     ),
-                    for (var service in widget.data['services'])
+                    for (Map service in widget.data['services'])
                       TextButton(
                         onPressed: () {
                           setState(() {
@@ -308,7 +308,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                             SlideRightRoute(
                               page: ServiceScreen(
                                 data: service,
-                                serviceId: widget.data['services']['id'],
+                                serviceId: service['id'],
                                 placeId: widget.data['id'],
                               ),
                             ),

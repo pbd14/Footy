@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_format/date_format.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Models/Booking.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
@@ -12,7 +13,7 @@ import '../../../constants.dart';
 // ignore: must_be_immutable
 class ServiceScreen extends StatefulWidget {
   Map data;
-  int serviceId;
+  String serviceId;
   String placeId;
   ServiceScreen({Key key, this.data, this.serviceId, this.placeId})
       : super(key: key);
@@ -226,20 +227,16 @@ class _PlaceScreenState extends State<ServiceScreen> {
       });
       return;
     } else {
-      if (bPlaceData.data()['services'][widget.serviceId]['days'][_dow]
-              ['status'] ==
-          'closed') {
+      if (widget.data['days'][_dow]['status'] == 'closed') {
         setState(() {
           can = false;
         });
         return;
       } else {
-        TimeOfDay placeTo = TimeOfDay.fromDateTime(DateFormat.Hm().parse(
-            bPlaceData.data()['services'][widget.serviceId]['days'][_dow]
-                ['to']));
-        TimeOfDay placeFrom = TimeOfDay.fromDateTime(DateFormat.Hm().parse(
-            bPlaceData.data()['services'][widget.serviceId]['days'][_dow]
-                ['from']));
+        TimeOfDay placeTo = TimeOfDay.fromDateTime(
+            DateFormat.Hm().parse(widget.data['days'][_dow]['to']));
+        TimeOfDay placeFrom = TimeOfDay.fromDateTime(
+            DateFormat.Hm().parse(widget.data['days'][_dow]['from']));
         double dplaceTo = placeTo.minute + placeTo.hour * 60.0;
         double dplaceFrom = placeFrom.minute + placeFrom.hour * 60.0;
         if (dtime1 < dplaceFrom || dtime2 < dplaceFrom) {
@@ -468,6 +465,18 @@ class _PlaceScreenState extends State<ServiceScreen> {
               iconTheme: IconThemeData(
                 color: primaryColor,
               ),
+              title: Text(
+                'Booking',
+                textScaleFactor: 1,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.montserrat(
+                  textStyle: TextStyle(
+                      color: whiteColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w300),
+                ),
+              ),
+              centerTitle: true,
             ),
             body: CustomScrollView(
               slivers: [
@@ -493,6 +502,328 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                   ),
                                 ),
                               ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  height: 40,
+                                  width: 40,
+                                  child: Center(
+                                    child: Text(
+                                      'Mon',
+                                      style: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          color: whiteColor,
+                                          fontSize: 10,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: darkPrimaryColor,
+                                  ),
+                                ),
+                                SizedBox(width: 15),
+                                Text(
+                                  widget.data['days']['Mon']['status'] ==
+                                          'closed'
+                                      ? 'Closed'
+                                      : widget.data['days']['Mon']['from'] +
+                                          ' - ' +
+                                          widget.data['days']['Mon']['to'],
+                                  style: GoogleFonts.montserrat(
+                                    textStyle: TextStyle(
+                                      color: widget.data['days']['Mon']
+                                                  ['status'] ==
+                                              'closed'
+                                          ? Colors.red
+                                          : darkColor,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 3,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  height: 40,
+                                  width: 40,
+                                  child: Center(
+                                    child: Text(
+                                      'Tue',
+                                      style: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          color: whiteColor,
+                                          fontSize: 10,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: darkPrimaryColor,
+                                  ),
+                                ),
+                                SizedBox(width: 15),
+                                Text(
+                                  widget.data['days']['Tue']['status'] ==
+                                          'closed'
+                                      ? 'Closed'
+                                      : widget.data['days']['Tue']['from'] +
+                                          ' - ' +
+                                          widget.data['days']['Tue']['to'],
+                                  style: GoogleFonts.montserrat(
+                                    textStyle: TextStyle(
+                                      color: widget.data['days']['Tue']
+                                                  ['status'] ==
+                                              'closed'
+                                          ? Colors.red
+                                          : darkColor,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 3,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  height: 40,
+                                  width: 40,
+                                  child: Center(
+                                    child: Text(
+                                      'Wed',
+                                      style: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          color: whiteColor,
+                                          fontSize: 10,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: darkPrimaryColor,
+                                  ),
+                                ),
+                                SizedBox(width: 15),
+                                Text(
+                                  widget.data['days']['Wed']['status'] ==
+                                          'closed'
+                                      ? 'Closed'
+                                      : widget.data['days']['Wed']['from'] +
+                                          ' - ' +
+                                          widget.data['days']['Wed']['to'],
+                                  style: GoogleFonts.montserrat(
+                                    textStyle: TextStyle(
+                                      color: widget.data['days']['Wed']
+                                                  ['status'] ==
+                                              'closed'
+                                          ? Colors.red
+                                          : darkColor,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 3,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  height: 40,
+                                  width: 40,
+                                  child: Center(
+                                    child: Text(
+                                      'Thu',
+                                      style: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          color: whiteColor,
+                                          fontSize: 10,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: darkPrimaryColor,
+                                  ),
+                                ),
+                                SizedBox(width: 15),
+                                Text(
+                                  widget.data['days']['Thu']['status'] ==
+                                          'closed'
+                                      ? 'Closed'
+                                      : widget.data['days']['Thu']['from'] +
+                                          ' - ' +
+                                          widget.data['days']['Thu']['to'],
+                                  style: GoogleFonts.montserrat(
+                                    textStyle: TextStyle(
+                                      color: widget.data['days']['Thu']
+                                                  ['status'] ==
+                                              'closed'
+                                          ? Colors.red
+                                          : darkColor,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 3,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  height: 40,
+                                  width: 40,
+                                  child: Center(
+                                    child: Text(
+                                      'Fri',
+                                      style: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          color: whiteColor,
+                                          fontSize: 10,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: darkPrimaryColor,
+                                  ),
+                                ),
+                                SizedBox(width: 15),
+                                Text(
+                                  widget.data['days']['Fri']['status'] ==
+                                          'closed'
+                                      ? 'Closed'
+                                      : widget.data['days']['Fri']['from'] +
+                                          ' - ' +
+                                          widget.data['days']['Fri']['to'],
+                                  style: GoogleFonts.montserrat(
+                                    textStyle: TextStyle(
+                                      color: widget.data['days']['Fri']
+                                                  ['status'] ==
+                                              'closed'
+                                          ? Colors.red
+                                          : darkColor,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 3,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  height: 40,
+                                  width: 40,
+                                  child: Center(
+                                    child: Text(
+                                      'Sat',
+                                      style: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          color: whiteColor,
+                                          fontSize: 10,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: darkPrimaryColor,
+                                  ),
+                                ),
+                                SizedBox(width: 15),
+                                Text(
+                                  widget.data['days']['Sat']['status'] ==
+                                          'closed'
+                                      ? 'Closed'
+                                      : widget.data['days']['Sat']['from'] +
+                                          ' - ' +
+                                          widget.data['days']['Sat']['to'],
+                                  style: GoogleFonts.montserrat(
+                                    textStyle: TextStyle(
+                                      color: widget.data['days']['Sat']
+                                                  ['status'] ==
+                                              'closed'
+                                          ? Colors.red
+                                          : darkColor,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 3,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  height: 40,
+                                  width: 40,
+                                  child: Center(
+                                    child: Text(
+                                      'Sun',
+                                      style: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          color: whiteColor,
+                                          fontSize: 10,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: darkPrimaryColor,
+                                  ),
+                                ),
+                                SizedBox(width: 15),
+                                Text(
+                                  widget.data['days']['Sun']['status'] ==
+                                          'closed'
+                                      ? 'Closed'
+                                      : widget.data['days']['Sun']['from'] +
+                                          ' - ' +
+                                          widget.data['days']['Sun']['to'],
+                                  style: GoogleFonts.montserrat(
+                                    textStyle: TextStyle(
+                                      color: widget.data['days']['Sun']
+                                                  ['status'] ==
+                                              'closed'
+                                          ? Colors.red
+                                          : darkColor,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                             SizedBox(
                               height: 25,
@@ -553,25 +884,9 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                         child: Container(
                                           padding: EdgeInsets.all(10),
                                           alignment: Alignment.center,
-                                          color: darkPrimaryColor,
+                                          color: whiteColor,
                                           child: Column(
                                             children: [
-                                              Center(
-                                                child: Text(
-                                                  'Working from ' +
-                                                      widget.data['days'][_dow]
-                                                          ['from'] +
-                                                      ' - ' +
-                                                      widget.data['days'][_dow]
-                                                          ['to'],
-                                                  style: GoogleFonts.montserrat(
-                                                    textStyle: TextStyle(
-                                                      color: whiteColor,
-                                                      fontSize: 20,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
                                               SizedBox(
                                                 height: 10,
                                               ),
@@ -582,7 +897,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                         style: GoogleFonts
                                                             .montserrat(
                                                           textStyle: TextStyle(
-                                                            color: whiteColor,
+                                                            color: darkColor,
                                                             fontSize: 20,
                                                           ),
                                                         ),
@@ -606,7 +921,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                     style:
                                                         GoogleFonts.montserrat(
                                                       textStyle: TextStyle(
-                                                        color: whiteColor,
+                                                        color: darkColor,
                                                         fontSize: 20,
                                                       ),
                                                     ),

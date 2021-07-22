@@ -87,8 +87,6 @@ class _PlaceScreenState extends State<ServiceScreen> {
       }
     }
 
-    print('NUMMMS');
-    print(place.data()['type']);
     if (place.data()['type'] == 'verification_needed') {
       if (selectedDate.day == DateTime.now().day) {
         if ((selectedTime.minute + selectedTime.hour * 60) -

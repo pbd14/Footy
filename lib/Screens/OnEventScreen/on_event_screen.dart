@@ -1,10 +1,10 @@
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Models/Booking.dart';
 import 'package:flutter_complete_guide/Models/Place.dart';
 import 'package:flutter_complete_guide/Screens/MapScreen/map_screen.dart';
-import 'package:flutter_complete_guide/widgets/card.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
@@ -13,33 +13,55 @@ import 'package:flutter_complete_guide/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class OnEventScreen extends StatefulWidget {
-  final QueryDocumentSnapshot booking;
-  OnEventScreen({Key key, this.booking}) : super(key: key);
+  final String bookingId;
+  OnEventScreen({Key key, this.bookingId}) : super(key: key);
   @override
   _OnEventScreenState createState() => _OnEventScreenState();
 }
 
 class _OnEventScreenState extends State<OnEventScreen> {
-  bool loading = false;
+  bool loading = true;
   double initRat = 3;
+  DocumentSnapshot booking;
   var place;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  StreamSubscription<DocumentSnapshot> bookingSubscr;
+
+  @override
+  void dispose() {
+    bookingSubscr.cancel();
+    super.dispose();
+  }
 
   Future<void> prepare() async {
-    place = await FirebaseFirestore.instance
-        .collection('locations')
-        .doc(Booking.fromSnapshot(widget.booking).placeId)
-        .get();
-    setState(() {
-      if (Place.fromSnapshot(place).rates != null) {
-        if (Place.fromSnapshot(place)
-            .rates
-            .containsKey(Booking.fromSnapshot(widget.booking).id)) {
-          initRat = Place.fromSnapshot(place)
-              .rates[Booking.fromSnapshot(widget.booking).id];
+    bookingSubscr = FirebaseFirestore.instance
+        .collection('bookings')
+        .doc(widget.bookingId)
+        .snapshots()
+        .listen((thisBooking) async {
+      place = await FirebaseFirestore.instance
+          .collection('locations')
+          .doc(thisBooking.data()['placeId'])
+          .get();
+      if (this.mounted) {
+        setState(() {
+          booking = thisBooking;
+          if (place.data()['rates'] != null) {
+            if (place.data()['rates'].containsKey(thisBooking.id)) {
+              initRat = place.data()['rates'][thisBooking.id];
+            }
+          }
+          loading = false;
+        });
+      } else {
+        booking = thisBooking;
+        if (place.data()['rates'] != null) {
+          if (place.data()['rates'].containsKey(thisBooking.id)) {
+            initRat = place.data()['rates'][thisBooking.id];
+          }
         }
+        loading = false;
       }
-      loading = false;
     });
   }
 
@@ -93,7 +115,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                     .services
                                     .where((service) {
                                     if (service['id'] ==
-                                        widget.booking.data()['serviceId']) {
+                                        booking.data()['serviceId']) {
                                       return true;
                                     } else {
                                       return false;
@@ -238,7 +260,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                             children: [
                               Text(
                                 DateFormat.yMMMd()
-                                    .format(Booking.fromSnapshot(widget.booking)
+                                    .format(Booking.fromSnapshot(booking)
                                         .timestamp_date
                                         .toDate())
                                     .toString(),
@@ -255,9 +277,9 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                 height: 5,
                               ),
                               Text(
-                                Booking.fromSnapshot(widget.booking).from +
+                                Booking.fromSnapshot(booking).from +
                                     ' - ' +
-                                    Booking.fromSnapshot(widget.booking).to,
+                                    Booking.fromSnapshot(booking).to,
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.montserrat(
                                   textStyle: TextStyle(
@@ -270,9 +292,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                 height: 5,
                               ),
                               Text(
-                                Booking.fromSnapshot(widget.booking)
-                                        .price
-                                        .toString() +
+                                Booking.fromSnapshot(booking).price.toString() +
                                     " So'm",
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.montserrat(
@@ -286,15 +306,15 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                 height: 5,
                               ),
                               Text(
-                                Booking.fromSnapshot(widget.booking).status,
+                                Booking.fromSnapshot(booking).status,
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.montserrat(
                                   textStyle: TextStyle(
-                                    color: Booking.fromSnapshot(widget.booking)
-                                                .status ==
-                                            'unfinished'
-                                        ? darkColor
-                                        : Colors.red,
+                                    color:
+                                        Booking.fromSnapshot(booking).status ==
+                                                'unfinished'
+                                            ? darkColor
+                                            : Colors.red,
                                     fontSize: 15,
                                   ),
                                 ),
@@ -307,9 +327,8 @@ class _OnEventScreenState extends State<OnEventScreen> {
                     SizedBox(
                       height: 50,
                     ),
-                    widget.booking.data()['status'] == 'unfinished' ||
-                            widget.booking.data()['status'] ==
-                                'verification_needed'
+                    booking.data()['status'] == 'unfinished' ||
+                            booking.data()['status'] == 'verification_needed'
                         ? Center(
                             child: Container(
                               width: size.width * 0.9,
@@ -327,7 +346,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                             ),
                           )
                         : Container(),
-                    widget.booking.data()['status'] == 'in process'
+                    booking.data()['status'] == 'in process'
                         ? Center(
                             child: Container(
                               width: size.width * 0.9,
@@ -345,54 +364,78 @@ class _OnEventScreenState extends State<OnEventScreen> {
                             ),
                           )
                         : Container(),
+                    booking.data()['status'] == 'unpaid'
+                        ? Center(
+                            child: Container(
+                              width: size.width * 0.9,
+                              child: Text(
+                                'Please make your payment and check if owner has accepted it',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 10,
+                                style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 30,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        : Container(),
                     SizedBox(
                       height: 70,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          child: RatingBar.builder(
-                            initialRating: initRat,
-                            minRating: 1,
-                            direction: Axis.horizontal,
-                            allowHalfRating: true,
-                            itemCount: 5,
-                            itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                            itemBuilder: (context, _) => Icon(
-                              CupertinoIcons.star_fill,
-                              color: Colors.yellow,
-                            ),
-                            onRatingUpdate: (rating) {
-                              var dataBooking =
-                                  Booking.fromSnapshot(widget.booking).id;
-                              FirebaseFirestore.instance
-                                  .collection('locations')
-                                  .doc(Place.fromSnapshot(place).id)
-                                  .update({
-                                'rates.$dataBooking': rating,
-                              });
-                              FirebaseFirestore.instance
-                                  .collection('bookings')
-                                  .doc(Booking.fromSnapshot(widget.booking).id)
-                                  .update({'isRated': true});
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                _scaffoldKey.currentState.showSnackBar(SnackBar(
-                                  backgroundColor: darkPrimaryColor,
-                                  content: Text(
-                                    'Rating was saved',
-                                    style: GoogleFonts.montserrat(
-                                      textStyle: TextStyle(
-                                        color: whiteColor,
-                                        fontSize: 20,
-                                      ),
-                                    ),
+                        DateTime.now().isAfter(
+                                DateTime.fromMillisecondsSinceEpoch(
+                                    booking.data()['deadline'].seconds * 1000))
+                            ? Container(
+                                child: RatingBar.builder(
+                                  initialRating: initRat,
+                                  minRating: 1,
+                                  direction: Axis.horizontal,
+                                  allowHalfRating: true,
+                                  itemCount: 5,
+                                  itemPadding:
+                                      EdgeInsets.symmetric(horizontal: 4.0),
+                                  itemBuilder: (context, _) => Icon(
+                                    CupertinoIcons.star_fill,
+                                    color: Colors.yellow,
                                   ),
-                                ));
-                              });
-                            },
-                          ),
-                        ),
+                                  onRatingUpdate: (rating) {
+                                    var dataBooking = booking.id;
+                                    FirebaseFirestore.instance
+                                        .collection('locations')
+                                        .doc(Place.fromSnapshot(place).id)
+                                        .update({
+                                      'rates.$dataBooking': rating,
+                                    });
+                                    FirebaseFirestore.instance
+                                        .collection('bookings')
+                                        .doc(booking.id)
+                                        .update({'isRated': true});
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((_) {
+                                      _scaffoldKey.currentState
+                                          .showSnackBar(SnackBar(
+                                        backgroundColor: darkPrimaryColor,
+                                        content: Text(
+                                          'Rating was saved',
+                                          style: GoogleFonts.montserrat(
+                                            textStyle: TextStyle(
+                                              color: whiteColor,
+                                              fontSize: 20,
+                                            ),
+                                          ),
+                                        ),
+                                      ));
+                                    });
+                                  },
+                                ),
+                              )
+                            : Container(),
                         IconButton(
                           iconSize: 30,
                           icon: Icon(

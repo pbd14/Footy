@@ -40,7 +40,7 @@ class _FootyScreenState extends State<FootyScreen> {
                                     context,
                                     SlideRightRoute(
                                       page: OnEventScreen(
-                                        booking: book,
+                                        bookingId: book.id,
                                       ),
                                     ));
                                 setState(() {

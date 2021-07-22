@@ -32,21 +32,26 @@ class _History1State extends State<History1>
   Map<String, DocumentSnapshot> _places = {};
   Map<QueryDocumentSnapshot, DocumentSnapshot> placesSlivers = {};
   Map<QueryDocumentSnapshot, DocumentSnapshot> unrplacesSlivers = {};
+  Map<QueryDocumentSnapshot, DocumentSnapshot> unpaidPlacesSlivers = {};
   List _bookings1 = [];
   List _unrbookings1 = [];
   List<QueryDocumentSnapshot> slivers = [];
   List unratedBooks = [];
+  List unpaidBookings = [];
+  List unpaidBookingsSlivers = [];
   List<Widget> sliversList = [];
 
   StreamSubscription<QuerySnapshot> ordinaryBookSubscr;
   StreamSubscription<QuerySnapshot> inprocessBookSubscr;
   StreamSubscription<QuerySnapshot> unratedBookSubscr;
+  StreamSubscription<QuerySnapshot> unpaidBookSubscr;
 
   @override
   void dispose() {
     ordinaryBookSubscr.cancel();
     inprocessBookSubscr.cancel();
     unratedBookSubscr.cancel();
+    unpaidBookSubscr.cancel();
     super.dispose();
   }
 
@@ -149,6 +154,34 @@ class _History1State extends State<History1>
     }
   }
 
+  Future<void> unpaidBookPrep(
+      List<QueryDocumentSnapshot> unpaidBookings) async {
+    DocumentSnapshot customOB;
+    for (QueryDocumentSnapshot book in unpaidBookings) {
+      customOB = await FirebaseFirestore.instance
+          .collection('locations')
+          .doc(Booking.fromSnapshot(book).placeId)
+          .get()
+          .catchError((error) {
+        PushNotificationMessage notification = PushNotificationMessage(
+          title: 'Fail',
+          body: 'Failed to get data',
+        );
+        showSimpleNotification(
+          Container(child: Text(notification.body)),
+          position: NotificationPosition.top,
+          background: Colors.red,
+        );
+      });
+      setState(() {
+        unpaidBookingsSlivers.add(book);
+        unpaidPlacesSlivers.addAll({
+          book: customOB,
+        });
+      });
+    }
+  }
+
   Future<void> unratedBookPrep(
       List<QueryDocumentSnapshot> _unrbookings1) async {
     DocumentSnapshot customUB;
@@ -168,15 +201,6 @@ class _History1State extends State<History1>
             position: NotificationPosition.top,
             background: Colors.red,
           );
-          if (this.mounted) {
-            setState(() {
-              error = true;
-              loading = false;
-            });
-          } else {
-            error = true;
-            loading = false;
-          }
         });
         setState(() {
           unratedBooks.add(book);
@@ -265,6 +289,27 @@ class _History1State extends State<History1>
             unratedBookPrep(bookings.docs);
           });
         });
+    unpaidBookSubscr = FirebaseFirestore.instance
+        .collection('bookings')
+        .orderBy(
+          'timestamp_date',
+          descending: true,
+        )
+        .where(
+          'status',
+          isEqualTo: 'unpaid',
+        )
+        .where(
+          'userId',
+          isEqualTo: FirebaseAuth.instance.currentUser.uid,
+        )
+        .snapshots()
+        .listen((bookings) {
+      setState(() {
+        unpaidBookings = bookings.docs;
+        unpaidBookPrep(bookings.docs);
+      });
+    });
 
     if (this.mounted) {
       setState(() {
@@ -325,9 +370,13 @@ class _History1State extends State<History1>
     slivers = [];
     unratedBooks = [];
     sliversList = [];
+    unpaidPlacesSlivers = {};
+    unpaidBookings = [];
+    unpaidBookingsSlivers = [];
     ordinaryBookSubscr.cancel();
     inprocessBookSubscr.cancel();
     unratedBookSubscr.cancel();
+    unpaidBookSubscr.cancel();
     loadData();
 
     Completer<Null> completer = new Completer<Null>();
@@ -409,6 +458,256 @@ class _History1State extends State<History1>
                       ],
                     ),
                   ),
+                  // Unpaid
+                  unpaidBookingsSlivers.length != 0
+                      ? SliverList(
+                          delegate: SliverChildListDelegate([
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Center(
+                              child: Text(
+                                'Unpaid',
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 25,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            for (QueryDocumentSnapshot book
+                                in unpaidBookingsSlivers)
+                              TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    loading = true;
+                                  });
+                                  Navigator.push(
+                                      context,
+                                      SlideRightRoute(
+                                        page: OnEventScreen(
+                                          bookingId: book.id,
+                                        ),
+                                      ));
+                                  setState(() {
+                                    loading = false;
+                                  });
+                                },
+                                child: Container(
+                                  margin:
+                                      EdgeInsets.symmetric(horizontal: 10.0),
+                                  child: Card(
+                                    color: Colors.red,
+                                    margin: EdgeInsets.all(5),
+                                    elevation: 10,
+                                    child: Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            Container(
+                                              width: size.width * 0.5,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    DateFormat.yMMMd()
+                                                        .format(Booking
+                                                                .fromSnapshot(
+                                                                    book)
+                                                            .timestamp_date
+                                                            .toDate())
+                                                        .toString(),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style:
+                                                        GoogleFonts.montserrat(
+                                                      textStyle: TextStyle(
+                                                        color: whiteColor,
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Text(
+                                                    Booking.fromSnapshot(book)
+                                                            .from +
+                                                        ' - ' +
+                                                        Booking.fromSnapshot(
+                                                                book)
+                                                            .to,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style:
+                                                        GoogleFonts.montserrat(
+                                                      textStyle: TextStyle(
+                                                        color: whiteColor,
+                                                        fontSize: 20,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Text(
+                                                    unpaidPlacesSlivers[book]
+                                                                .data()[
+                                                                    'services']
+                                                                .where(
+                                                                    (service) {
+                                                              if (service[
+                                                                      'id'] ==
+                                                                  book.data()[
+                                                                      'serviceId']) {
+                                                                return true;
+                                                              } else {
+                                                                return false;
+                                                              }
+                                                            }).first['name'] !=
+                                                            null
+                                                        ? unpaidPlacesSlivers[
+                                                                book]
+                                                            .data()['services']
+                                                            .where((service) {
+                                                            if (service['id'] ==
+                                                                book.data()[
+                                                                    'serviceId']) {
+                                                              return true;
+                                                            } else {
+                                                              return false;
+                                                            }
+                                                          }).first['name']
+                                                        : 'Service',
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style:
+                                                        GoogleFonts.montserrat(
+                                                      textStyle: TextStyle(
+                                                          color: whiteColor,
+                                                          fontSize: 15,
+                                                          fontWeight:
+                                                              FontWeight.w400),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Text(
+                                                    unpaidPlacesSlivers[book] !=
+                                                            null
+                                                        ? Place.fromSnapshot(
+                                                                unpaidPlacesSlivers[
+                                                                    book])
+                                                            .name
+                                                        : 'Place',
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style:
+                                                        GoogleFonts.montserrat(
+                                                      textStyle: TextStyle(
+                                                          color: whiteColor,
+                                                          fontSize: 15,
+                                                          fontWeight:
+                                                              FontWeight.w400),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Text(
+                                                    Booking.fromSnapshot(book)
+                                                        .status,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style:
+                                                        GoogleFonts.montserrat(
+                                                      textStyle: TextStyle(
+                                                        color: Booking.fromSnapshot(
+                                                                        book)
+                                                                    .status ==
+                                                                'unfinished'
+                                                            ? whiteColor
+                                                            : Colors.red,
+                                                        fontSize: 15,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Container(
+                                                width: size.width * 0.3,
+                                                child: Column(
+                                                  children: [
+                                                    IconButton(
+                                                      iconSize: 30,
+                                                      icon: Icon(
+                                                        CupertinoIcons
+                                                            .map_pin_ellipse,
+                                                        color: whiteColor,
+                                                      ),
+                                                      onPressed: () {
+                                                        setState(() {
+                                                          loading = true;
+                                                        });
+                                                        Navigator.push(
+                                                          context,
+                                                          SlideRightRoute(
+                                                            page: MapPage(
+                                                              isLoading: true,
+                                                              isAppBar: true,
+                                                              data: {
+                                                                'lat': Place.fromSnapshot(
+                                                                        placesSlivers[
+                                                                            book])
+                                                                    .lat,
+                                                                'lon': Place.fromSnapshot(
+                                                                        placesSlivers[
+                                                                            book])
+                                                                    .lon
+                                                              },
+                                                            ),
+                                                          ),
+                                                        );
+                                                        setState(() {
+                                                          loading = false;
+                                                        });
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ]),
+                        )
+                      : SliverList(
+                          delegate: SliverChildListDelegate([
+                            Container(),
+                          ]),
+                        ),
                   // Ongoing
                   slivers.length != 0
                       ? SliverList(
@@ -418,7 +717,7 @@ class _History1State extends State<History1>
                             ),
                             Center(
                               child: Text(
-                                'Ongoing',
+                                'In process',
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.montserrat(
                                   textStyle: TextStyle(
@@ -441,7 +740,7 @@ class _History1State extends State<History1>
                                       context,
                                       SlideRightRoute(
                                         page: OnEventScreen(
-                                          booking: book,
+                                          bookingId: book.id,
                                         ),
                                       ));
                                   setState(() {
@@ -688,7 +987,7 @@ class _History1State extends State<History1>
                                   context,
                                   SlideRightRoute(
                                     page: OnEventScreen(
-                                      booking: book,
+                                      bookingId: book.id,
                                     ),
                                   ));
                               setState(() {
@@ -752,8 +1051,7 @@ class _History1State extends State<History1>
                                                 height: 10,
                                               ),
                                               Text(
-                                                _places[book.id] !=
-                                                        null
+                                                _places[book.id] != null
                                                     ? _places[book.id]
                                                         .data()['services']
                                                         .where((service) {
@@ -1157,7 +1455,7 @@ class _History1State extends State<History1>
                                       context,
                                       SlideRightRoute(
                                         page: OnEventScreen(
-                                          booking: book,
+                                          bookingId: book.id,
                                         ),
                                       ));
                                   setState(() {

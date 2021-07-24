@@ -154,8 +154,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                     style:
                                                         GoogleFonts.montserrat(
                                                       textStyle: TextStyle(
-                                                          color:
-                                                              darkColor,
+                                                          color: darkColor,
                                                           fontSize: 10,
                                                           fontWeight:
                                                               FontWeight.w400),
@@ -220,44 +219,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                                           context,
                                                           SlideRightRoute(
                                                             page: PlaceScreen(
-                                                              data: {
-                                                                'name': Place.fromSnapshot(
-                                                                        _results[
-                                                                            index])
-                                                                    .name, //0
-                                                                'description': Place
-                                                                        .fromSnapshot(
-                                                                            _results[index])
-                                                                    .description, //1
-                                                                'by': Place.fromSnapshot(
-                                                                        _results[
-                                                                            index])
-                                                                    .by, //2
-                                                                'lat': Place.fromSnapshot(
-                                                                        _results[
-                                                                            index])
-                                                                    .lat, //3
-                                                                'lon': Place.fromSnapshot(
-                                                                        _results[
-                                                                            index])
-                                                                    .lon, //4
-                                                                'images': Place.fromSnapshot(
-                                                                        _results[
-                                                                            index])
-                                                                    .images, //5
-                                                                'services': Place
-                                                                        .fromSnapshot(
-                                                                            _results[index])
-                                                                    .services,
-                                                                'rates': Place.fromSnapshot(
-                                                                        _results[
-                                                                            index])
-                                                                    .rates,
-                                                                'id': Place.fromSnapshot(
-                                                                        _results[
-                                                                            index])
-                                                                    .id, //7
-                                                              },
+                                                              placeId: _results[
+                                                                      index]
+                                                                  .id,
                                                             ),
                                                           ),
                                                         );

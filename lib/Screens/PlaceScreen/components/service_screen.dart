@@ -38,6 +38,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
   String _hour, _minute, _time, _dow;
   String _hour2, _minute2, _time2;
   String dateTime;
+  String payment_way = '';
 
   List imgList = [];
   List alreadyBookings = [];
@@ -1021,12 +1022,11 @@ class _PlaceScreenState extends State<ServiceScreen> {
                             SizedBox(height: 10),
                             verifying
                                 ? Container(
-                                    height: 250,
                                     width: size.width * 0.8,
                                     child: Card(
                                       elevation: 10,
                                       child: loading1
-                                          ? LoadingScreen()
+                                          ? Container()
                                           : verified
                                               ? Padding(
                                                   padding: EdgeInsets.all(20),
@@ -1093,230 +1093,433 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                             ),
                                                           ),
                                                         ),
-                                                        SizedBox(
-                                                          height: 5,
-                                                        ),
-                                                        SizedBox(
-                                                          width:
-                                                              size.width * 0.1,
-                                                        ),
-                                                        Builder(
-                                                          builder: (context) =>
-                                                              RoundedButton(
-                                                            ph: 40,
-                                                            pw: 100,
-                                                            text: 'Book',
-                                                            press: () async {
-                                                              setState(() {
-                                                                loading = true;
-                                                              });
-                                                              await _bookButton(
-                                                                formatDate(
-                                                                    DateTime(
-                                                                        2019,
-                                                                        08,
-                                                                        1,
-                                                                        selectedTime
-                                                                            .hour,
-                                                                        selectedTime.minute),
-                                                                    [
-                                                                      HH,
-                                                                      ':',
-                                                                      nn
-                                                                    ]),
-                                                                formatDate(
-                                                                    DateTime(
-                                                                        2019,
-                                                                        08,
-                                                                        1,
-                                                                        selectedTime2
-                                                                            .hour,
-                                                                        selectedTime2.minute),
-                                                                    [
-                                                                      HH,
-                                                                      ':',
-                                                                      nn
-                                                                    ]),
-                                                              );
-                                                              can
-                                                                  ? WidgetsBinding
-                                                                      .instance
-                                                                      .addPostFrameCallback(
-                                                                          (_) {
-                                                                      _scaffoldKey
-                                                                          .currentState
-                                                                          .showSnackBar(
-                                                                              SnackBar(
-                                                                        backgroundColor:
-                                                                            darkPrimaryColor,
-                                                                        content:
-                                                                            Text(
-                                                                          'Booking was successful',
-                                                                          style:
-                                                                              GoogleFonts.montserrat(
-                                                                            textStyle:
-                                                                                TextStyle(
-                                                                              color: whiteColor,
-                                                                              fontSize: 30,
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ));
-                                                                    })
-                                                                  : WidgetsBinding
-                                                                      .instance
-                                                                      .addPostFrameCallback(
-                                                                          (_) {
-                                                                      _scaffoldKey
-                                                                          .currentState
-                                                                          .showSnackBar(
-                                                                              SnackBar(
-                                                                        backgroundColor:
-                                                                            Colors.red,
-                                                                        content:
-                                                                            Text(
-                                                                          'Failed to book',
-                                                                          style:
-                                                                              GoogleFonts.montserrat(
-                                                                            textStyle:
-                                                                                TextStyle(
-                                                                              color: whiteColor,
-                                                                              fontSize: 30,
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ));
-                                                                    });
-
-                                                              if (can) {
-                                                                FirebaseFirestore
-                                                                    .instance
-                                                                    .collection(
-                                                                        'bookings')
-                                                                    .doc()
-                                                                    .set({
-                                                                  'placeId': widget
-                                                                      .placeId,
-                                                                  'serviceId':
-                                                                      widget
-                                                                          .serviceId,
-                                                                  'userId': FirebaseAuth
-                                                                      .instance
-                                                                      .currentUser
-                                                                      .uid,
-                                                                  'price': price
-                                                                      .roundToDouble(),
-                                                                  'from': _time,
-                                                                  'to': _time2,
-                                                                  'date': selectedDate
-                                                                      .toString(),
-                                                                  'timestamp_date':
-                                                                      selectedDate,
-                                                                  'status': widget
-                                                                              .data['type'] ==
-                                                                          'nonver'
-                                                                      ? 'unfinished'
-                                                                      : 'verification_needed',
-                                                                  'deadline':
-                                                                      DateTime(
-                                                                    selectedDate
-                                                                        .year,
-                                                                    selectedDate
-                                                                        .month,
-                                                                    selectedDate
-                                                                        .day,
-                                                                    int.parse(
-                                                                            _hour) -
-                                                                        3,
-                                                                    int.parse(
-                                                                        _minute),
-                                                                  ),
-                                                                  'seen_status':
-                                                                      'unseen',
-                                                                  'isRated':
-                                                                      false,
-                                                                });
-                                                                setState(() {
-                                                                  selectedDate =
-                                                                      DateTime
-                                                                          .now();
-                                                                  _time = null;
-                                                                  _time2 = null;
-                                                                  duration = 0;
-                                                                  price = 0;
-                                                                  selectedTime =
-                                                                      TimeOfDay(
-                                                                          hour:
-                                                                              00,
-                                                                          minute:
-                                                                              00);
-                                                                  selectedTime2 =
-                                                                      TimeOfDay(
-                                                                          hour:
-                                                                              00,
-                                                                          minute:
-                                                                              00);
-                                                                  _setDate =
-                                                                      null;
-                                                                  _dow = null;
-                                                                  verified =
-                                                                      false;
-                                                                  loading1 =
-                                                                      false;
-                                                                  verifying =
-                                                                      false;
-                                                                  loading =
-                                                                      false;
-                                                                  can = true;
-                                                                  selectedDate =
-                                                                      DateTime
-                                                                          .now();
-                                                                });
-                                                              } else {
-                                                                setState(() {
-                                                                  selectedDate =
-                                                                      DateTime
-                                                                          .now();
-                                                                  _time = null;
-                                                                  _time2 = null;
-                                                                  duration = 0;
-                                                                  price = 0;
-                                                                  selectedTime =
-                                                                      TimeOfDay(
-                                                                          hour:
-                                                                              00,
-                                                                          minute:
-                                                                              00);
-                                                                  selectedTime2 =
-                                                                      TimeOfDay(
-                                                                          hour:
-                                                                              00,
-                                                                          minute:
-                                                                              00);
-                                                                  _setDate =
-                                                                      null;
-                                                                  _dow = null;
-                                                                  verified =
-                                                                      false;
-                                                                  loading1 =
-                                                                      false;
-                                                                  verifying =
-                                                                      false;
-                                                                  loading =
-                                                                      false;
-                                                                  can = true;
-                                                                  selectedDate =
-                                                                      DateTime
-                                                                          .now();
-                                                                });
-                                                              }
-                                                            },
-                                                            color:
-                                                                darkPrimaryColor,
-                                                            textColor:
-                                                                whiteColor,
+                                                        SizedBox(height: 30),
+                                                        Text(
+                                                          'Choose payment method',
+                                                          maxLines: 2,
+                                                          style: GoogleFonts
+                                                              .montserrat(
+                                                            textStyle:
+                                                                TextStyle(
+                                                              color:
+                                                                  darkPrimaryColor,
+                                                              fontSize: 20,
+                                                            ),
                                                           ),
                                                         ),
+                                                        SizedBox(height: 20),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            widget.data['payment_methods']
+                                                                    .contains(
+                                                                        'cash')
+                                                                ? CupertinoButton(
+                                                                    padding:
+                                                                        EdgeInsets
+                                                                            .zero,
+                                                                    onPressed:
+                                                                        () {
+                                                                      if (payment_way ==
+                                                                          'cash') {
+                                                                        setState(
+                                                                            () {
+                                                                          payment_way =
+                                                                              '';
+                                                                        });
+                                                                      } else {
+                                                                        setState(
+                                                                            () {
+                                                                          payment_way =
+                                                                              'cash';
+                                                                        });
+                                                                      }
+                                                                    },
+                                                                    child:
+                                                                        Container(
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        color: payment_way ==
+                                                                                'cash'
+                                                                            ? primaryColor
+                                                                            : whiteColor,
+                                                                        boxShadow: [
+                                                                          BoxShadow(
+                                                                            color: payment_way == 'cash'
+                                                                                ? primaryColor.withOpacity(0.5)
+                                                                                : darkColor.withOpacity(0.5),
+                                                                            spreadRadius:
+                                                                                5,
+                                                                            blurRadius:
+                                                                                7,
+                                                                            offset:
+                                                                                Offset(0, 3), // changes position of shadow
+                                                                          ),
+                                                                        ],
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10),
+                                                                        shape: BoxShape
+                                                                            .rectangle,
+                                                                      ),
+                                                                      width: size
+                                                                              .width *
+                                                                          0.3,
+                                                                      height:
+                                                                          100,
+                                                                      child:
+                                                                          Column(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.center,
+                                                                        children: [
+                                                                          Icon(
+                                                                            CupertinoIcons.money_dollar,
+                                                                            size:
+                                                                                40,
+                                                                            color: payment_way == 'cash'
+                                                                                ? whiteColor
+                                                                                : darkPrimaryColor,
+                                                                          ),
+                                                                          SizedBox(
+                                                                            height:
+                                                                                5,
+                                                                          ),
+                                                                          Text(
+                                                                            payment_way == 'cash'
+                                                                                ? 'Done'
+                                                                                : 'Cash',
+                                                                            maxLines:
+                                                                                3,
+                                                                            style:
+                                                                                GoogleFonts.montserrat(
+                                                                              textStyle: TextStyle(
+                                                                                color: payment_way == 'cash' ? whiteColor : darkPrimaryColor,
+                                                                                fontSize: 15,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  )
+                                                                : Container(),
+                                                            SizedBox(
+                                                              width: 20,
+                                                            ),
+                                                            widget.data['payment_methods']
+                                                                    .contains(
+                                                                        'octo')
+                                                                ? CupertinoButton(
+                                                                    padding:
+                                                                        EdgeInsets
+                                                                            .zero,
+                                                                    onPressed:
+                                                                        () {
+                                                                      if (payment_way ==
+                                                                          'octo') {
+                                                                        setState(
+                                                                            () {
+                                                                          payment_way =
+                                                                              '';
+                                                                        });
+                                                                      } else {
+                                                                        setState(
+                                                                            () {
+                                                                          payment_way =
+                                                                              'octo';
+                                                                        });
+                                                                      }
+                                                                    },
+                                                                    child:
+                                                                        Container(
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        color: payment_way ==
+                                                                                'octo'
+                                                                            ? primaryColor
+                                                                            : whiteColor,
+                                                                        boxShadow: [
+                                                                          BoxShadow(
+                                                                            color: payment_way == 'octo'
+                                                                                ? primaryColor.withOpacity(0.5)
+                                                                                : darkColor.withOpacity(0.5),
+                                                                            spreadRadius:
+                                                                                5,
+                                                                            blurRadius:
+                                                                                7,
+                                                                            offset:
+                                                                                Offset(0, 3), // changes position of shadow
+                                                                          ),
+                                                                        ],
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10),
+                                                                        shape: BoxShape
+                                                                            .rectangle,
+                                                                      ),
+                                                                      width: size
+                                                                              .width *
+                                                                          0.3,
+                                                                      height:
+                                                                          100,
+                                                                      child:
+                                                                          Column(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.center,
+                                                                        children: [
+                                                                          Icon(
+                                                                            CupertinoIcons.creditcard,
+                                                                            size:
+                                                                                40,
+                                                                            color: payment_way == 'octo'
+                                                                                ? whiteColor
+                                                                                : darkPrimaryColor,
+                                                                          ),
+                                                                          SizedBox(
+                                                                            height:
+                                                                                5,
+                                                                          ),
+                                                                          Text(
+                                                                            payment_way == 'octo'
+                                                                                ? 'Done'
+                                                                                : 'Credit card',
+                                                                            maxLines:
+                                                                                3,
+                                                                            style:
+                                                                                GoogleFonts.montserrat(
+                                                                              textStyle: TextStyle(
+                                                                                color: payment_way == 'octo' ? whiteColor : darkPrimaryColor,
+                                                                                fontSize: 15,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  )
+                                                                : Container(),
+                                                          ],
+                                                        ),
+                                                        SizedBox(
+                                                          height: 35,
+                                                        ),
+                                                        payment_way.isNotEmpty
+                                                            ? Builder(
+                                                                builder:
+                                                                    (context) =>
+                                                                        RoundedButton(
+                                                                  ph: 40,
+                                                                  pw: 100,
+                                                                  text: 'Book',
+                                                                  press:
+                                                                      () async {
+                                                                    setState(
+                                                                        () {
+                                                                      loading =
+                                                                          true;
+                                                                    });
+                                                                    await _bookButton(
+                                                                      formatDate(
+                                                                          DateTime(
+                                                                              2019,
+                                                                              08,
+                                                                              1,
+                                                                              selectedTime.hour,
+                                                                              selectedTime.minute),
+                                                                          [
+                                                                            HH,
+                                                                            ':',
+                                                                            nn
+                                                                          ]),
+                                                                      formatDate(
+                                                                          DateTime(
+                                                                              2019,
+                                                                              08,
+                                                                              1,
+                                                                              selectedTime2.hour,
+                                                                              selectedTime2.minute),
+                                                                          [
+                                                                            HH,
+                                                                            ':',
+                                                                            nn
+                                                                          ]),
+                                                                    );
+                                                                    can
+                                                                        ? WidgetsBinding
+                                                                            .instance
+                                                                            .addPostFrameCallback(
+                                                                                (_) {
+                                                                            _scaffoldKey.currentState.showSnackBar(SnackBar(
+                                                                              backgroundColor: darkPrimaryColor,
+                                                                              content: Text(
+                                                                                'Booking was successful',
+                                                                                style: GoogleFonts.montserrat(
+                                                                                  textStyle: TextStyle(
+                                                                                    color: whiteColor,
+                                                                                    fontSize: 30,
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ));
+                                                                          })
+                                                                        : WidgetsBinding
+                                                                            .instance
+                                                                            .addPostFrameCallback((_) {
+                                                                            _scaffoldKey.currentState.showSnackBar(SnackBar(
+                                                                              backgroundColor: Colors.red,
+                                                                              content: Text(
+                                                                                'Failed to book',
+                                                                                style: GoogleFonts.montserrat(
+                                                                                  textStyle: TextStyle(
+                                                                                    color: whiteColor,
+                                                                                    fontSize: 30,
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ));
+                                                                          });
+
+                                                                    if (can) {
+                                                                      FirebaseFirestore
+                                                                          .instance
+                                                                          .collection(
+                                                                              'bookings')
+                                                                          .doc()
+                                                                          .set({
+                                                                        'placeId':
+                                                                            widget.placeId,
+                                                                        'serviceId':
+                                                                            widget.serviceId,
+                                                                        'userId': FirebaseAuth
+                                                                            .instance
+                                                                            .currentUser
+                                                                            .uid,
+                                                                        'price':
+                                                                            price.roundToDouble(),
+                                                                        'from':
+                                                                            _time,
+                                                                        'to':
+                                                                            _time2,
+                                                                        'date':
+                                                                            selectedDate.toString(),
+                                                                        'timestamp_date':
+                                                                            selectedDate,
+                                                                        'status': widget.data['type'] ==
+                                                                                'nonver'
+                                                                            ? 'unfinished'
+                                                                            : 'verification_needed',
+                                                                        'deadline':
+                                                                            DateTime(
+                                                                          selectedDate
+                                                                              .year,
+                                                                          selectedDate
+                                                                              .month,
+                                                                          selectedDate
+                                                                              .day,
+                                                                          int.parse(_hour) -
+                                                                              3,
+                                                                          int.parse(
+                                                                              _minute),
+                                                                        ),
+                                                                        'seen_status':
+                                                                            'unseen',
+                                                                        'isRated':
+                                                                            false,
+                                                                        'payment_method':
+                                                                            payment_way,
+                                                                      });
+                                                                      setState(
+                                                                          () {
+                                                                        selectedDate =
+                                                                            DateTime.now();
+                                                                        _time =
+                                                                            null;
+                                                                        _time2 =
+                                                                            null;
+                                                                        duration =
+                                                                            0;
+                                                                        price =
+                                                                            0;
+                                                                        selectedTime = TimeOfDay(
+                                                                            hour:
+                                                                                00,
+                                                                            minute:
+                                                                                00);
+                                                                        selectedTime2 = TimeOfDay(
+                                                                            hour:
+                                                                                00,
+                                                                            minute:
+                                                                                00);
+                                                                        _setDate =
+                                                                            null;
+                                                                        _dow =
+                                                                            null;
+                                                                        verified =
+                                                                            false;
+                                                                        loading1 =
+                                                                            false;
+                                                                        verifying =
+                                                                            false;
+                                                                        loading =
+                                                                            false;
+                                                                        can =
+                                                                            true;
+                                                                        selectedDate =
+                                                                            DateTime.now();
+                                                                        payment_way =
+                                                                            '';
+                                                                      });
+                                                                    } else {
+                                                                      setState(
+                                                                          () {
+                                                                        selectedDate =
+                                                                            DateTime.now();
+                                                                        _time =
+                                                                            null;
+                                                                        _time2 =
+                                                                            null;
+                                                                        duration =
+                                                                            0;
+                                                                        price =
+                                                                            0;
+                                                                        selectedTime = TimeOfDay(
+                                                                            hour:
+                                                                                00,
+                                                                            minute:
+                                                                                00);
+                                                                        selectedTime2 = TimeOfDay(
+                                                                            hour:
+                                                                                00,
+                                                                            minute:
+                                                                                00);
+                                                                        _setDate =
+                                                                            null;
+                                                                        _dow =
+                                                                            null;
+                                                                        verified =
+                                                                            false;
+                                                                        loading1 =
+                                                                            false;
+                                                                        verifying =
+                                                                            false;
+                                                                        loading =
+                                                                            false;
+                                                                        can =
+                                                                            true;
+                                                                        selectedDate =
+                                                                            DateTime.now();
+                                                                        payment_way =
+                                                                            '';
+                                                                      });
+                                                                    }
+                                                                  },
+                                                                  color:
+                                                                      darkPrimaryColor,
+                                                                  textColor:
+                                                                      whiteColor,
+                                                                ),
+                                                              )
+                                                            : Container()
                                                         // Builder(
                                                         //   builder: (context) =>
                                                         //       RoundedButton(

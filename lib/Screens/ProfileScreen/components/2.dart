@@ -352,44 +352,7 @@ class _ProfileScreen2State extends State<ProfileScreen2>
                                                       context,
                                                       SlideRightRoute(
                                                         page: PlaceScreen(
-                                                          data: {
-                                                            'name': Place
-                                                                    .fromSnapshot(
-                                                                        place)
-                                                                .name, //0
-                                                            'description': Place
-                                                                    .fromSnapshot(
-                                                                        place)
-                                                                .description, //1
-                                                            'by': Place
-                                                                    .fromSnapshot(
-                                                                        place)
-                                                                .by, //2
-                                                            'lat': Place
-                                                                    .fromSnapshot(
-                                                                        place)
-                                                                .lat, //3
-                                                            'lon': Place
-                                                                    .fromSnapshot(
-                                                                        place)
-                                                                .lon, //4
-                                                            'images': Place
-                                                                    .fromSnapshot(
-                                                                        place)
-                                                                .images, //5
-                                                            'services': Place
-                                                                    .fromSnapshot(
-                                                                        place)
-                                                                .services,
-                                                            'rates': Place
-                                                                    .fromSnapshot(
-                                                                        place)
-                                                                .rates,
-                                                            'id': Place
-                                                                    .fromSnapshot(
-                                                                        place)
-                                                                .id, //7
-                                                          },
+                                                          placeId: place.id,
                                                         ),
                                                       ),
                                                     );

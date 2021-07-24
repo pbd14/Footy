@@ -14,8 +14,8 @@ import '../../constants.dart';
 
 // ignore: must_be_immutable
 class PlaceScreen extends StatefulWidget {
-  Map data;
-  PlaceScreen({Key key, this.data}) : super(key: key);
+  String placeId;
+  PlaceScreen({Key key, this.placeId}) : super(key: key);
   @override
   _PlaceScreenState createState() => _PlaceScreenState();
 }
@@ -25,7 +25,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
   double _height;
   // ignore: unused_field
   double _width;
-  bool loading = false;
+  bool loading = true;
   double duration = 0;
   double price = 0;
   double rating = 0;
@@ -36,21 +36,37 @@ class _PlaceScreenState extends State<PlaceScreen> {
   bool verifying = false;
 
   List imgList = [];
+  DocumentSnapshot place;
+
+  Future<void> prepare() async {
+    place = await FirebaseFirestore.instance
+        .collection('locations')
+        .doc(widget.placeId)
+        .get();
+    for (String img in place.data()['images']) {
+      imgList.add(img);
+    }
+    if (place.data()['rates'] != null) {
+      if (place.data()['rates'].length != 0) {
+        for (var rate in place.data()['rates'].values) {
+          ratingSum += rate;
+        }
+        rating = ratingSum / place.data()['rates'].length;
+      }
+    }
+    if (this.mounted) {
+      setState(() {
+        loading = false;
+      });
+    } else {
+      loading = false;
+    }
+  }
 
   @override
   void initState() {
+    prepare();
     super.initState();
-    for (String img in widget.data['images']) {
-      imgList.add(img);
-    }
-    if (widget.data['rates'] != null) {
-      if (widget.data['rates'].length != 0) {
-        for (var rate in widget.data['rates'].values) {
-          ratingSum += rate;
-        }
-        rating = ratingSum / widget.data['rates'].length;
-      }
-    }
   }
 
   @override
@@ -170,7 +186,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                           children: <Widget>[
                             Center(
                               child: Text(
-                                widget.data['name'],
+                                place.data()['name'],
                                 style: GoogleFonts.montserrat(
                                   textStyle: TextStyle(
                                     color: darkColor,
@@ -184,7 +200,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                               height: 15,
                             ),
                             Text(
-                              widget.data['description'],
+                              place.data()['description'],
                               style: GoogleFonts.montserrat(
                                 textStyle: TextStyle(
                                     color: darkColor,
@@ -202,7 +218,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                                   height: 50,
                                   alignment: Alignment.center,
                                   child: Text(
-                                    'By ' + widget.data['by'],
+                                    'By ' + place.data()['by'],
                                     style: GoogleFonts.montserrat(
                                       textStyle: TextStyle(
                                         color: darkColor,
@@ -236,7 +252,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                                       .collection('users')
                                       .doc(FirebaseAuth
                                           .instance.currentUser.uid),
-                                  containsValue: widget.data['id'],
+                                  containsValue: place.data()['id'],
                                   color1: Colors.red,
                                   color2: lightPrimaryColor,
                                   ph: 45,
@@ -250,7 +266,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                                               .instance.currentUser.uid)
                                           .update({
                                         'favourites': FieldValue.arrayUnion(
-                                            [widget.data['id']])
+                                            [place.data()['id']])
                                       }).catchError((error) {
                                         PushNotificationMessage notification =
                                             PushNotificationMessage(
@@ -274,7 +290,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                                               .instance.currentUser.uid)
                                           .update({
                                         'favourites': FieldValue.arrayRemove(
-                                            [widget.data['id']])
+                                            [place.data()['id']])
                                       }).catchError((error) {
                                         PushNotificationMessage notification =
                                             PushNotificationMessage(
@@ -309,7 +325,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                     SizedBox(
                       height: 20,
                     ),
-                    for (Map service in widget.data['services'])
+                    for (Map service in place.data()['services'])
                       TextButton(
                         onPressed: () {
                           setState(() {
@@ -321,7 +337,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                               page: ServiceScreen(
                                 data: service,
                                 serviceId: service['id'],
-                                placeId: widget.data['id'],
+                                placeId: place.data()['id'],
                               ),
                             ),
                           );

@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Models/Booking.dart';
 import 'package:flutter_complete_guide/Models/Place.dart';
+import 'package:flutter_complete_guide/Models/PushNotificationMessage.dart';
 import 'package:flutter_complete_guide/Screens/MapScreen/map_screen.dart';
 import 'package:flutter_complete_guide/widgets/rounded_button.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
@@ -12,6 +15,9 @@ import 'package:intl/intl.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
 import 'package:flutter_complete_guide/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
+import 'package:overlay_support/overlay_support.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OnEventScreen extends StatefulWidget {
   final String bookingId;
@@ -24,7 +30,8 @@ class _OnEventScreenState extends State<OnEventScreen> {
   bool loading = true;
   double initRat = 3;
   DocumentSnapshot booking;
-  var place;
+  DocumentSnapshot place;
+  bool paymentCreated = false;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   StreamSubscription<DocumentSnapshot> bookingSubscr;
 
@@ -64,6 +71,16 @@ class _OnEventScreenState extends State<OnEventScreen> {
         loading = false;
       }
     });
+  }
+
+  Future<http.Response> makePayment(Map data) {
+    return http.post(
+      Uri.parse('https://secure.octo.uz/prepare_payment'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(data),
+    );
   }
 
   @override
@@ -526,9 +543,9 @@ class _OnEventScreenState extends State<OnEventScreen> {
                             child: Container(
                               width: size.width * 0.9,
                               child: Text(
-                                'Please make your payment with credit card and check if owner has accepted it',
+                                'Please make your payment with credit card and click VERIFY button after',
                                 overflow: TextOverflow.ellipsis,
-                                maxLines: 10,
+                                maxLines: 8,
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.montserrat(
                                   textStyle: TextStyle(
@@ -554,9 +571,64 @@ class _OnEventScreenState extends State<OnEventScreen> {
                               child: RoundedButton(
                                 pw: 50,
                                 ph: 45,
-                                text: 'PAY',
-                                press: () async {},
-                                color: darkPrimaryColor,
+                                text: paymentCreated ? 'VERIFY' : 'PAY',
+                                press: () async {
+                                  http.Response response = await makePayment({
+                                    "octo_shop_id": 3876,
+                                    "octo_secret":
+                                        "c66db06a-6bd7-4029-bb8c-1f582d33b62a",
+                                    "shop_transaction_id": booking.id,
+                                    "auto_capture": true,
+                                    "test": true,
+                                    "init_time": DateTime.now().toString(),
+                                    "user_data": {
+                                      "user_id":
+                                          FirebaseAuth.instance.currentUser.uid,
+                                      "phone": FirebaseAuth
+                                          .instance.currentUser.phoneNumber,
+                                      "email": "user@mail.com"
+                                    },
+                                    "total_sum": booking.data()['price'],
+                                    "currency": "UZS",
+                                    // "tag": "booking",
+                                    "description":
+                                        "Booking in " + place.data()['name'],
+                                    "payment_methods": [
+                                      {"method": "bank_card"},
+                                    ],
+                                    "return_url":
+                                        "http://footyuz.web.app/payment_done.html",
+                                    "ttl": 15,
+                                  });
+                                  Map responseData = jsonDecode(response.body);
+                                  if (responseData['error'] == 0) {
+                                    Map responseData =
+                                        jsonDecode(response.body);
+                                    if (responseData['status'] == 'created') {
+                                      launch(responseData['octo_pay_url']);
+                                    }
+                                    if (responseData['status'] == 'succeeded') {
+                                      FirebaseFirestore.instance
+                                          .collection('bookings')
+                                          .doc(booking.id)
+                                          .update({'status': 'finished'});
+                                    }
+                                  } else {
+                                    PushNotificationMessage notification =
+                                        PushNotificationMessage(
+                                      title: 'Failed',
+                                      body: 'Server returned mistake',
+                                    );
+                                    showSimpleNotification(
+                                      Container(child: Text(notification.body)),
+                                      position: NotificationPosition.top,
+                                      background: Colors.red,
+                                    );
+                                  }
+                                },
+                                color: paymentCreated
+                                    ? Colors.red
+                                    : darkPrimaryColor,
                                 textColor: whiteColor,
                               ),
                             ),

@@ -46,6 +46,8 @@ dependencies:
   cached_network_image: ^3.0.0
   shared_preferences: ^2.0.5
   flutter_screen_lock: ^4.0.3
+  http: ^0.13.3
+  url_launcher: ^6.0.9
 
 dev_dependencies:
   flutter_test:

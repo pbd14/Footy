@@ -31,7 +31,6 @@ class _OnEventScreenState extends State<OnEventScreen> {
   double initRat = 3;
   DocumentSnapshot booking;
   DocumentSnapshot place;
-  bool paymentCreated = false;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   StreamSubscription<DocumentSnapshot> bookingSubscr;
 
@@ -543,7 +542,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                             child: Container(
                               width: size.width * 0.9,
                               child: Text(
-                                'Please make your payment with credit card and click VERIFY button after',
+                                'Please make your payment with credit card',
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 8,
                                 textAlign: TextAlign.center,
@@ -571,7 +570,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                               child: RoundedButton(
                                 pw: 50,
                                 ph: 45,
-                                text: paymentCreated ? 'VERIFY' : 'PAY',
+                                text: 'PAY',
                                 press: () async {
                                   http.Response response = await makePayment({
                                     "octo_shop_id": 3876,
@@ -597,7 +596,8 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                       {"method": "bank_card"},
                                     ],
                                     "return_url":
-                                        "http://footyuz.web.app/payment_done.html",
+                                        "http://footyuz.web.app/payment_done.html?id=" +
+                                            booking.id + "&companyId=" + place.data()['owner'] + "&price=" + booking.data()['price'],
                                     "ttl": 15,
                                   });
                                   Map responseData = jsonDecode(response.body);
@@ -626,9 +626,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                     );
                                   }
                                 },
-                                color: paymentCreated
-                                    ? Colors.red
-                                    : darkPrimaryColor,
+                                color: darkPrimaryColor,
                                 textColor: whiteColor,
                               ),
                             ),

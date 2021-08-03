@@ -572,6 +572,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                 ph: 45,
                                 text: 'PAY',
                                 press: () async {
+                                  FirebaseFirestore.instance
                                   http.Response response = await makePayment({
                                     "octo_shop_id": 3876,
                                     "octo_secret":
@@ -597,7 +598,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                     ],
                                     "return_url":
                                         "http://footyuz.web.app/payment_done.html?id=" +
-                                            booking.id + "&companyId=" + place.data()['owner'] + "&price=" + booking.data()['price'],
+                                            booking.id + "&companyId=" + place.data()['owner'] + "&balance=" + booking.data()['price'],
                                     "ttl": 15,
                                   });
                                   Map responseData = jsonDecode(response.body);

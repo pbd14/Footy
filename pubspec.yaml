@@ -48,6 +48,7 @@ dependencies:
   flutter_screen_lock: ^4.0.3
   http: ^0.13.3
   url_launcher: ^6.0.9
+  encrypt: ^5.0.0
 
 dev_dependencies:
   flutter_test:

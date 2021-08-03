@@ -8,6 +8,7 @@ import 'package:flutter_complete_guide/Models/Booking.dart';
 import 'package:flutter_complete_guide/Models/Place.dart';
 import 'package:flutter_complete_guide/Models/PushNotificationMessage.dart';
 import 'package:flutter_complete_guide/Screens/MapScreen/map_screen.dart';
+import 'package:flutter_complete_guide/Services/encryption_service.dart';
 import 'package:flutter_complete_guide/widgets/rounded_button.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -572,7 +573,17 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                 ph: 45,
                                 text: 'PAY',
                                 press: () async {
-                                  FirebaseFirestore.instance
+                                  DocumentSnapshot placeOwner =
+                                      await FirebaseFirestore.instance
+                                          .collection('companies')
+                                          .doc(place.data()['owner'])
+                                          .get();
+                                  String ownerBalance = EncryptionService()
+                                      .dec(placeOwner.data()['balance']);
+                                  int newBalance = int.parse(ownerBalance) +
+                                      booking.data()['price'].toInt();
+                                  String encBalance = EncryptionService()
+                                      .enc(newBalance.toString());
                                   http.Response response = await makePayment({
                                     "octo_shop_id": 3876,
                                     "octo_secret":
@@ -598,7 +609,13 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                     ],
                                     "return_url":
                                         "http://footyuz.web.app/payment_done.html?id=" +
-                                            booking.id + "&companyId=" + place.data()['owner'] + "&balance=" + booking.data()['price'],
+                                            booking.id +
+                                            "&companyId=" +
+                                            place.data()['owner'] +
+                                            "&balance=" +
+                                            encBalance +
+                                            "&transactionPrice=" +
+                                            booking.data()['price'].toString(),
                                     "ttl": 15,
                                   });
                                   Map responseData = jsonDecode(response.body);
@@ -639,9 +656,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        DateTime.now().isAfter(
-                                DateTime.fromMillisecondsSinceEpoch(
-                                    booking.data()['deadline'].seconds * 1000))
+                        booking.data()['status'] != 'unfinished'
                             ? Container(
                                 child: RatingBar.builder(
                                   initialRating: initRat,

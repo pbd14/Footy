@@ -36,9 +36,12 @@ class HomeScreen extends StatefulWidget {
 
 class HomeScreenState extends State<HomeScreen> {
   bool isNotif = false;
+  bool isProfileNotif = false;
   int _selectedIndex = 0;
   int notifCounter = 0;
+  int profileNotifCounter = 0;
   StreamSubscription<QuerySnapshot> subscription;
+  StreamSubscription<DocumentSnapshot> userSubscription;
   static List<Widget> _widgetOptions = <Widget>[
     MapPage(
       data: data,
@@ -154,12 +157,58 @@ class HomeScreenState extends State<HomeScreen> {
           //   });
           // }
         });
+
+    userSubscription = FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .snapshots()
+        .listen((docsnap) {
+      if (docsnap != null) {
+        if (docsnap.data()['notifications'] != null) {
+          if (docsnap.data()['notifications'].length != 0) {
+            List acts = [];
+            for (var act in docsnap.data()['notifications']) {
+              if (!act['seen']) {
+                acts.add(act);
+              }
+            }
+            if (acts.length != 0) {
+              setState(() {
+                isProfileNotif = true;
+                profileNotifCounter = acts.length;
+              });
+            } else {
+              if (this.mounted) {
+                setState(() {
+                  isProfileNotif = false;
+                  profileNotifCounter = 0;
+                });
+              } else {
+                isProfileNotif = false;
+                profileNotifCounter = 0;
+              }
+            }
+          } else {
+            setState(() {
+              isProfileNotif = false;
+              profileNotifCounter = 0;
+            });
+          }
+        } else {
+          setState(() {
+            isProfileNotif = false;
+            profileNotifCounter = 0;
+          });
+        }
+      }
+    });
     super.initState();
   }
 
   @override
   void dispose() {
     subscription.cancel();
+    userSubscription.cancel();
     super.dispose();
   }
 
@@ -213,7 +262,36 @@ class HomeScreenState extends State<HomeScreen> {
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.person_alt),
+            icon: isProfileNotif
+                ? new Stack(
+                    children: <Widget>[
+                      new Icon(CupertinoIcons.person_fill),
+                      new Positioned(
+                        right: 0,
+                        child: new Container(
+                          padding: EdgeInsets.all(1),
+                          decoration: new BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          constraints: BoxConstraints(
+                            minWidth: 15,
+                            minHeight: 15,
+                          ),
+                          child: new Text(
+                            profileNotifCounter.toString(),
+                            style: new TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                : Icon(CupertinoIcons.person_alt),
             label: '',
           ),
         ],

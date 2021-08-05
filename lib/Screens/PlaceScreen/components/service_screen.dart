@@ -4,10 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Models/Booking.dart';
+import 'package:flutter_complete_guide/Models/PushNotificationMessage.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
 import 'package:flutter_complete_guide/widgets/rounded_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:overlay_support/overlay_support.dart';
 import '../../../constants.dart';
 
 // ignore: must_be_immutable
@@ -1344,47 +1346,55 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                                             nn
                                                                           ]),
                                                                     );
-                                                                    can
-                                                                        ? WidgetsBinding
-                                                                            .instance
-                                                                            .addPostFrameCallback(
-                                                                                (_) {
-                                                                            _scaffoldKey.currentState.showSnackBar(SnackBar(
-                                                                              backgroundColor: darkPrimaryColor,
-                                                                              content: Text(
-                                                                                'Booking was successful',
-                                                                                style: GoogleFonts.montserrat(
-                                                                                  textStyle: TextStyle(
-                                                                                    color: whiteColor,
-                                                                                    fontSize: 30,
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                            ));
-                                                                          })
-                                                                        : WidgetsBinding
-                                                                            .instance
-                                                                            .addPostFrameCallback((_) {
-                                                                            _scaffoldKey.currentState.showSnackBar(SnackBar(
-                                                                              backgroundColor: Colors.red,
-                                                                              content: Text(
-                                                                                'Failed to book',
-                                                                                style: GoogleFonts.montserrat(
-                                                                                  textStyle: TextStyle(
-                                                                                    color: whiteColor,
-                                                                                    fontSize: 30,
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                            ));
-                                                                          });
+                                                                    if (can) {
+                                                                      PushNotificationMessage
+                                                                          notification =
+                                                                          PushNotificationMessage(
+                                                                        title:
+                                                                            'Booked',
+                                                                        body:
+                                                                            'Bokking was successful',
+                                                                      );
+                                                                      showSimpleNotification(
+                                                                        Container(
+                                                                            child:
+                                                                                Text(notification.body)),
+                                                                        position:
+                                                                            NotificationPosition.top,
+                                                                        background:
+                                                                            darkPrimaryColor,
+                                                                      );
+                                                                    } else {
+                                                                      PushNotificationMessage
+                                                                          notification =
+                                                                          PushNotificationMessage(
+                                                                        title:
+                                                                            'Fail',
+                                                                        body:
+                                                                            'Failed to book',
+                                                                      );
+                                                                      showSimpleNotification(
+                                                                        Container(
+                                                                            child:
+                                                                                Text(notification.body)),
+                                                                        position:
+                                                                            NotificationPosition.top,
+                                                                        background:
+                                                                            Colors.red,
+                                                                      );
+                                                                    }
 
                                                                     if (can) {
+                                                                      String id = DateTime
+                                                                              .now()
+                                                                          .millisecondsSinceEpoch
+                                                                          .toString();
                                                                       FirebaseFirestore
                                                                           .instance
                                                                           .collection(
                                                                               'bookings')
-                                                                          .doc()
+                                                                          .doc(
+                                                                              id)
                                                                           .set({
                                                                         'placeId':
                                                                             widget.placeId,
@@ -1427,7 +1437,133 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                                             false,
                                                                         'payment_method':
                                                                             payment_way,
+                                                                      }).catchError(
+                                                                              (error) {
+                                                                        PushNotificationMessage
+                                                                            notification =
+                                                                            PushNotificationMessage(
+                                                                          title:
+                                                                              'Fail',
+                                                                          body:
+                                                                              'Failed to make booking',
+                                                                        );
+                                                                        showSimpleNotification(
+                                                                          Container(
+                                                                              child: Text(notification.body)),
+                                                                          position:
+                                                                              NotificationPosition.top,
+                                                                          background:
+                                                                              Colors.red,
+                                                                        );
+                                                                        if (this
+                                                                            .mounted) {
+                                                                          setState(
+                                                                              () {
+                                                                            loading =
+                                                                                false;
+                                                                          });
+                                                                        } else {
+                                                                          loading =
+                                                                              false;
+                                                                        }
                                                                       });
+                                                                      DocumentSnapshot company = await FirebaseFirestore
+                                                                          .instance
+                                                                          .collection(
+                                                                              'companies')
+                                                                          .doc(place.data()[
+                                                                              'owner'])
+                                                                          .get()
+                                                                          .catchError(
+                                                                              (error) {
+                                                                        PushNotificationMessage
+                                                                            notification =
+                                                                            PushNotificationMessage(
+                                                                          title:
+                                                                              'Fail',
+                                                                          body:
+                                                                              'Failed to make booking',
+                                                                        );
+                                                                        showSimpleNotification(
+                                                                          Container(
+                                                                              child: Text(notification.body)),
+                                                                          position:
+                                                                              NotificationPosition.top,
+                                                                          background:
+                                                                              Colors.red,
+                                                                        );
+                                                                        if (this
+                                                                            .mounted) {
+                                                                          setState(
+                                                                              () {
+                                                                            loading =
+                                                                                false;
+                                                                          });
+                                                                        } else {
+                                                                          loading =
+                                                                              false;
+                                                                        }
+                                                                      });
+                                                                      FirebaseFirestore
+                                                                          .instance
+                                                                          .collection(
+                                                                              'users')
+                                                                          .doc(company.data()[
+                                                                              'owner'])
+                                                                          .update({
+                                                                        'notifications_business':
+                                                                            FieldValue.arrayUnion([
+                                                                          {
+                                                                            'seen':
+                                                                                false,
+                                                                            'type': widget.data['type'] == 'nonver'
+                                                                                ? 'new_booking'
+                                                                                : 'offered',
+                                                                            'bookingId':
+                                                                                id,
+                                                                            'title': widget.data['type'] == 'nonver'
+                                                                                ? 'New booking'
+                                                                                : 'Offer',
+                                                                            'text': widget.data['type'] == 'nonver'
+                                                                                ? 'You have new booking at ' + place.data()['name']
+                                                                                : 'You have new offer at ' + place.data()['name'],
+                                                                            'companyName':
+                                                                                company.data()['name'],
+                                                                            'date':
+                                                                                DateTime.now(),
+                                                                          }
+                                                                        ])
+                                                                      }).catchError(
+                                                                              (error) {
+                                                                        PushNotificationMessage
+                                                                            notification =
+                                                                            PushNotificationMessage(
+                                                                          title:
+                                                                              'Fail',
+                                                                          body:
+                                                                              'Failed to make booking',
+                                                                        );
+                                                                        showSimpleNotification(
+                                                                          Container(
+                                                                              child: Text(notification.body)),
+                                                                          position:
+                                                                              NotificationPosition.top,
+                                                                          background:
+                                                                              Colors.red,
+                                                                        );
+                                                                        if (this
+                                                                            .mounted) {
+                                                                          setState(
+                                                                              () {
+                                                                            loading =
+                                                                                false;
+                                                                          });
+                                                                        } else {
+                                                                          loading =
+                                                                              false;
+                                                                        }
+                                                                      });
+
                                                                       setState(
                                                                           () {
                                                                         selectedDate =

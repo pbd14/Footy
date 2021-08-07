@@ -274,6 +274,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       ],
                                     ),
                                     ExpansionPanelList(
+                                      elevation: 0,
                                       children: [
                                         ExpansionPanel(
                                           isExpanded: expV1,

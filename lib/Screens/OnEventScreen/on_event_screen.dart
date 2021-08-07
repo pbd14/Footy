@@ -269,72 +269,318 @@ class _OnEventScreenState extends State<OnEventScreen> {
                     Container(
                       width: size.width * 0.8,
                       child: Card(
+                        elevation: 10,
+                        margin: EdgeInsets.fromLTRB(30, 5, 30, 5),
+                        child: Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    DateFormat.yMMMd()
+                                        .format(booking
+                                            .data()['timestamp_date']
+                                            .toDate())
+                                        .toString(),
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.montserrat(
+                                      textStyle: TextStyle(
+                                        color: darkColor,
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    booking.data()['from'] +
+                                        ' - ' +
+                                        booking.data()['to'],
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.montserrat(
+                                      textStyle: TextStyle(
+                                        color: darkColor,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    booking.data()['price'].toString() +
+                                        " So'm",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.montserrat(
+                                      textStyle: TextStyle(
+                                        color: darkColor,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    booking.data()['status'],
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.montserrat(
+                                      textStyle: TextStyle(
+                                        color: booking.data()['status'] ==
+                                                'unfinished'
+                                            ? darkColor
+                                            : Colors.red,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              booking.data()['payment_method'] == 'cash'
+                                  ? Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: booking.data()[
+                                                      'payment_method'] ==
+                                                  'cash'
+                                              ? darkPrimaryColor
+                                              : whiteColor,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: booking.data()[
+                                                          'payment_method'] ==
+                                                      'cash'
+                                                  ? darkPrimaryColor
+                                                      .withOpacity(0.5)
+                                                  : darkColor.withOpacity(0.5),
+                                              spreadRadius: 5,
+                                              blurRadius: 7,
+                                              offset: Offset(0,
+                                                  3), // changes position of shadow
+                                            ),
+                                          ],
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          shape: BoxShape.rectangle,
+                                        ),
+                                        width: 50,
+                                        height: 50,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              CupertinoIcons.money_dollar,
+                                              size: 20,
+                                              color: booking.data()[
+                                                          'payment_method'] ==
+                                                      'cash'
+                                                  ? whiteColor
+                                                  : darkPrimaryColor,
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              'Cash',
+                                              maxLines: 3,
+                                              style: GoogleFonts.montserrat(
+                                                textStyle: TextStyle(
+                                                  color: booking.data()[
+                                                              'payment_method'] ==
+                                                          'cash'
+                                                      ? whiteColor
+                                                      : darkPrimaryColor,
+                                                  fontSize: 8,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  : Container(),
+                              booking.data()['payment_method'] == 'octo'
+                                  ? Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: booking.data()[
+                                                      'payment_method'] ==
+                                                  'octo'
+                                              ? darkPrimaryColor
+                                              : whiteColor,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: booking.data()[
+                                                          'payment_method'] ==
+                                                      'octo'
+                                                  ? darkPrimaryColor
+                                                      .withOpacity(0.5)
+                                                  : darkColor.withOpacity(0.5),
+                                              spreadRadius: 5,
+                                              blurRadius: 7,
+                                              offset: Offset(0,
+                                                  3), // changes position of shadow
+                                            ),
+                                          ],
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          shape: BoxShape.rectangle,
+                                        ),
+                                        width: 75,
+                                        height: 75,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              CupertinoIcons.creditcard,
+                                              size: 30,
+                                              color: booking.data()[
+                                                          'payment_method'] ==
+                                                      'octo'
+                                                  ? whiteColor
+                                                  : darkPrimaryColor,
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              'Credit card',
+                                              maxLines: 3,
+                                              style: GoogleFonts.montserrat(
+                                                textStyle: TextStyle(
+                                                  color: booking.data()[
+                                                              'payment_method'] ==
+                                                          'octo'
+                                                      ? whiteColor
+                                                      : darkPrimaryColor,
+                                                  fontSize: 10,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  : Container(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      width: size.width * 0.8,
+                      child: Card(
                         elevation: 11,
                         margin: EdgeInsets.fromLTRB(30, 5, 30, 5),
                         child: Padding(
                           padding: EdgeInsets.all(10.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Text(
-                                DateFormat.yMMMd()
-                                    .format(Booking.fromSnapshot(booking)
-                                        .timestamp_date
-                                        .toDate())
-                                    .toString(),
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.montserrat(
-                                  textStyle: TextStyle(
-                                    color: darkColor,
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                              Icon(
+                                CupertinoIcons.info_circle,
+                                color: darkPrimaryColor,
+                                size: 30,
                               ),
                               SizedBox(
-                                height: 5,
+                                width: 10,
                               ),
-                              Text(
-                                Booking.fromSnapshot(booking).from +
-                                    ' - ' +
-                                    Booking.fromSnapshot(booking).to,
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.montserrat(
-                                  textStyle: TextStyle(
-                                    color: darkColor,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                Booking.fromSnapshot(booking).price.toString() +
-                                    " So'm",
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.montserrat(
-                                  textStyle: TextStyle(
-                                    color: darkColor,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                Booking.fromSnapshot(booking).status,
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.montserrat(
-                                  textStyle: TextStyle(
-                                    color:
-                                        Booking.fromSnapshot(booking).status ==
-                                                'unfinished'
-                                            ? darkColor
-                                            : Colors.red,
-                                    fontSize: 15,
-                                  ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    booking.data()['status'] == 'unfinished' ||
+                                            booking.data()['status'] ==
+                                                'verification_needed'
+                                        ? Text(
+                                            'Event has not started yet',
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 3,
+                                            textAlign: TextAlign.center,
+                                            style: GoogleFonts.montserrat(
+                                              textStyle: TextStyle(
+                                                color: darkColor,
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                          )
+                                        : Container(),
+                                    booking.data()['status'] == 'in process'
+                                        ? Text(
+                                            'Event is going on',
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 3,
+                                            textAlign: TextAlign.center,
+                                            style: GoogleFonts.montserrat(
+                                              textStyle: TextStyle(
+                                                color: greenColor,
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                          )
+                                        : Container(),
+                                    booking.data()['status'] == 'unpaid' &&
+                                            booking.data()['payment_method'] ==
+                                                'cash'
+                                        ? Text(
+                                            'Please make your payment with cash and check if owner has accepted it',
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 10,
+                                            textAlign: TextAlign.center,
+                                            style: GoogleFonts.montserrat(
+                                              textStyle: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                          )
+                                        : Container(),
+                                    booking.data()['status'] == 'unpaid' &&
+                                            booking.data()['payment_method'] ==
+                                                'octo'
+                                        ? Text(
+                                            'Please make your payment with credit card',
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 8,
+                                            textAlign: TextAlign.center,
+                                            style: GoogleFonts.montserrat(
+                                              textStyle: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                          )
+                                        : Container(),
+                                    booking.data()['status'] == 'finished'
+                                        ? Text(
+                                            'Event has ended',
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 3,
+                                            textAlign: TextAlign.center,
+                                            style: GoogleFonts.montserrat(
+                                              textStyle: TextStyle(
+                                                color: darkPrimaryColor,
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                          )
+                                        : Container(),
+                                  ],
                                 ),
                               ),
                             ],
@@ -342,225 +588,10 @@ class _OnEventScreenState extends State<OnEventScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 30),
-                    Center(
-                      child: Text(
-                        'Payment method',
-                        maxLines: 2,
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.montserrat(
-                          textStyle: TextStyle(
-                            color: darkPrimaryColor,
-                            fontSize: 30,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        booking.data()['payment_method'] == 'cash'
-                            ? Container(
-                                decoration: BoxDecoration(
-                                  color:
-                                      booking.data()['payment_method'] == 'cash'
-                                          ? darkPrimaryColor
-                                          : whiteColor,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: booking.data()['payment_method'] ==
-                                              'cash'
-                                          ? darkPrimaryColor.withOpacity(0.5)
-                                          : darkColor.withOpacity(0.5),
-                                      spreadRadius: 5,
-                                      blurRadius: 7,
-                                      offset: Offset(
-                                          0, 3), // changes position of shadow
-                                    ),
-                                  ],
-                                  borderRadius: BorderRadius.circular(10),
-                                  shape: BoxShape.rectangle,
-                                ),
-                                width: size.width * 0.3,
-                                height: 100,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      CupertinoIcons.money_dollar,
-                                      size: 40,
-                                      color: booking.data()['payment_method'] ==
-                                              'cash'
-                                          ? whiteColor
-                                          : darkPrimaryColor,
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      'Cash',
-                                      maxLines: 3,
-                                      style: GoogleFonts.montserrat(
-                                        textStyle: TextStyle(
-                                          color: booking.data()[
-                                                      'payment_method'] ==
-                                                  'cash'
-                                              ? whiteColor
-                                              : darkPrimaryColor,
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : Container(),
-                        booking.data()['payment_method'] == 'octo'
-                            ? Container(
-                                decoration: BoxDecoration(
-                                  color:
-                                      booking.data()['payment_method'] == 'octo'
-                                          ? darkPrimaryColor
-                                          : whiteColor,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: booking.data()['payment_method'] ==
-                                              'octo'
-                                          ? darkPrimaryColor.withOpacity(0.5)
-                                          : darkColor.withOpacity(0.5),
-                                      spreadRadius: 5,
-                                      blurRadius: 7,
-                                      offset: Offset(
-                                          0, 3), // changes position of shadow
-                                    ),
-                                  ],
-                                  borderRadius: BorderRadius.circular(10),
-                                  shape: BoxShape.rectangle,
-                                ),
-                                width: size.width * 0.3,
-                                height: 100,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      CupertinoIcons.creditcard,
-                                      size: 40,
-                                      color: booking.data()['payment_method'] ==
-                                              'octo'
-                                          ? whiteColor
-                                          : darkPrimaryColor,
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      'Credit card',
-                                      maxLines: 3,
-                                      style: GoogleFonts.montserrat(
-                                        textStyle: TextStyle(
-                                          color: booking.data()[
-                                                      'payment_method'] ==
-                                                  'octo'
-                                              ? whiteColor
-                                              : darkPrimaryColor,
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : Container(),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 50,
-                    ),
-
-                    booking.data()['status'] == 'unfinished' ||
-                            booking.data()['status'] == 'verification_needed'
-                        ? Center(
-                            child: Container(
-                              width: size.width * 0.9,
-                              child: Text(
-                                'Event has not started yet',
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 3,
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.montserrat(
-                                  textStyle: TextStyle(
-                                    color: darkColor,
-                                    fontSize: 30,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        : Container(),
-                    booking.data()['status'] == 'in process'
-                        ? Center(
-                            child: Container(
-                              width: size.width * 0.9,
-                              child: Text(
-                                'Event is going on',
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 3,
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.montserrat(
-                                  textStyle: TextStyle(
-                                    color: darkColor,
-                                    fontSize: 30,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        : Container(),
-                    booking.data()['status'] == 'unpaid' &&
-                            booking.data()['payment_method'] == 'cash'
-                        ? Center(
-                            child: Container(
-                              width: size.width * 0.9,
-                              child: Text(
-                                'Please make your payment with cash and check if owner has accepted it',
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 10,
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.montserrat(
-                                  textStyle: TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 30,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        : Container(),
-                    booking.data()['status'] == 'unpaid' &&
-                            booking.data()['payment_method'] == 'octo'
-                        ? Center(
-                            child: Container(
-                              width: size.width * 0.9,
-                              child: Text(
-                                'Please make your payment with credit card',
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 8,
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.montserrat(
-                                  textStyle: TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 30,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        : Container(),
                     SizedBox(
                       height: booking.data()['payment_method'] == 'octo' &&
                               booking.data()['status'] == 'unpaid'
-                          ? 20
+                          ? 10
                           : 0,
                     ),
                     booking.data()['payment_method'] == 'octo' &&
@@ -653,82 +684,92 @@ class _OnEventScreenState extends State<OnEventScreen> {
                     SizedBox(
                       height: 20,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        booking.data()['status'] != 'unfinished'
-                            ? Container(
-                                child: RatingBar.builder(
-                                  initialRating: initRat,
-                                  minRating: 1,
-                                  direction: Axis.horizontal,
-                                  allowHalfRating: true,
-                                  itemCount: 5,
-                                  itemPadding:
-                                      EdgeInsets.symmetric(horizontal: 4.0),
-                                  itemBuilder: (context, _) => Icon(
-                                    CupertinoIcons.star_fill,
-                                    color: Colors.yellow,
-                                  ),
-                                  onRatingUpdate: (rating) {
-                                    var dataBooking = booking.id;
-                                    FirebaseFirestore.instance
-                                        .collection('locations')
-                                        .doc(Place.fromSnapshot(place).id)
-                                        .update({
-                                      'rates.$dataBooking': rating,
-                                    });
-                                    FirebaseFirestore.instance
-                                        .collection('bookings')
-                                        .doc(booking.id)
-                                        .update({'isRated': true});
-                                    WidgetsBinding.instance
-                                        .addPostFrameCallback((_) {
-                                      _scaffoldKey.currentState
-                                          .showSnackBar(SnackBar(
-                                        backgroundColor: darkPrimaryColor,
-                                        content: Text(
-                                          'Rating was saved',
-                                          style: GoogleFonts.montserrat(
-                                            textStyle: TextStyle(
-                                              color: whiteColor,
-                                              fontSize: 20,
-                                            ),
-                                          ),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      width: size.width * 0.9,
+                      child: Card(
+                        elevation: 10,
+                        child: Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              booking.data()['status'] != 'unfinished'
+                                  ? Container(
+                                      child: RatingBar.builder(
+                                        initialRating: initRat,
+                                        minRating: 1,
+                                        direction: Axis.horizontal,
+                                        allowHalfRating: true,
+                                        itemCount: 5,
+                                        itemPadding: EdgeInsets.symmetric(
+                                            horizontal: 4.0),
+                                        itemBuilder: (context, _) => Icon(
+                                          CupertinoIcons.star_fill,
+                                          color: Colors.yellow,
                                         ),
-                                      ));
-                                    });
-                                  },
+                                        onRatingUpdate: (rating) {
+                                          var dataBooking = booking.id;
+                                          FirebaseFirestore.instance
+                                              .collection('locations')
+                                              .doc(Place.fromSnapshot(place).id)
+                                              .update({
+                                            'rates.$dataBooking': rating,
+                                          });
+                                          FirebaseFirestore.instance
+                                              .collection('bookings')
+                                              .doc(booking.id)
+                                              .update({'isRated': true});
+                                          WidgetsBinding.instance
+                                              .addPostFrameCallback((_) {
+                                            _scaffoldKey.currentState
+                                                .showSnackBar(SnackBar(
+                                              backgroundColor: darkPrimaryColor,
+                                              content: Text(
+                                                'Rating was saved',
+                                                style: GoogleFonts.montserrat(
+                                                  textStyle: TextStyle(
+                                                    color: whiteColor,
+                                                    fontSize: 20,
+                                                  ),
+                                                ),
+                                              ),
+                                            ));
+                                          });
+                                        },
+                                      ),
+                                    )
+                                  : Container(),
+                              IconButton(
+                                iconSize: 30,
+                                icon: Icon(
+                                  CupertinoIcons.map_pin_ellipse,
+                                  color: darkPrimaryColor,
                                 ),
-                              )
-                            : Container(),
-                        IconButton(
-                          iconSize: 30,
-                          icon: Icon(
-                            CupertinoIcons.map_pin_ellipse,
-                            color: darkPrimaryColor,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              loading = true;
-                            });
-                            Navigator.push(
-                              context,
-                              SlideRightRoute(
-                                page: MapScreen(
-                                  data: {
-                                    'lat': Place.fromSnapshot(place).lat,
-                                    'lon': Place.fromSnapshot(place).lon
-                                  },
-                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    loading = true;
+                                  });
+                                  Navigator.push(
+                                    context,
+                                    SlideRightRoute(
+                                      page: MapScreen(
+                                        data: {
+                                          'lat': Place.fromSnapshot(place).lat,
+                                          'lon': Place.fromSnapshot(place).lon
+                                        },
+                                      ),
+                                    ),
+                                  );
+                                  setState(() {
+                                    loading = false;
+                                  });
+                                },
                               ),
-                            );
-                            setState(() {
-                              loading = false;
-                            });
-                          },
+                            ],
+                          ),
                         ),
-                      ],
+                      ),
                     ),
                     SizedBox(
                       height: 20,

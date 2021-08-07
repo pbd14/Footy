@@ -425,29 +425,37 @@ class _History1State extends State<History1>
                           child: Container(
                             height: 450,
                             width: size.width * 0.9,
-                            child: SfCalendar(
-                              dataSource: MeetingDataSource(_getDataSource()),
-                              todayHighlightColor: darkPrimaryColor,
-                              cellBorderColor: darkPrimaryColor,
-                              allowViewNavigation: true,
-                              view: CalendarView.month,
-                              firstDayOfWeek: 1,
-                              monthViewSettings: MonthViewSettings(
-                                showAgenda: true,
-                                agendaStyle: AgendaStyle(
-                                  dateTextStyle: GoogleFonts.montserrat(
-                                    textStyle: TextStyle(
-                                      color: darkPrimaryColor,
-                                    ),
-                                  ),
-                                  dayTextStyle: GoogleFonts.montserrat(
-                                    textStyle: TextStyle(
-                                      color: darkPrimaryColor,
-                                    ),
-                                  ),
-                                  appointmentTextStyle: GoogleFonts.montserrat(
-                                    textStyle: TextStyle(
-                                      color: whiteColor,
+                            child: Card(
+                              elevation: 10,
+                              child: Padding(
+                                padding: EdgeInsets.all(5.0),
+                                child: SfCalendar(
+                                  dataSource:
+                                      MeetingDataSource(_getDataSource()),
+                                  todayHighlightColor: darkPrimaryColor,
+                                  cellBorderColor: darkPrimaryColor,
+                                  allowViewNavigation: true,
+                                  view: CalendarView.month,
+                                  firstDayOfWeek: 1,
+                                  monthViewSettings: MonthViewSettings(
+                                    showAgenda: true,
+                                    agendaStyle: AgendaStyle(
+                                      dateTextStyle: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          color: darkPrimaryColor,
+                                        ),
+                                      ),
+                                      dayTextStyle: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          color: darkPrimaryColor,
+                                        ),
+                                      ),
+                                      appointmentTextStyle:
+                                          GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          color: whiteColor,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),

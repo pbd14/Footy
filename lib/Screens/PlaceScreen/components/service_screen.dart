@@ -94,9 +94,9 @@ class _PlaceScreenState extends State<ServiceScreen> {
       if (selectedDate.day == DateTime.now().day) {
         if ((selectedTime.minute + selectedTime.hour * 60) -
                 (DateTime.now().minute + DateTime.now().hour * 60) <
-            240) {
+            120) {
           setState(() {
-            error = 'Booking should be made 4 hours in advance for this place';
+            error = 'Booking should be made 2 hours in advance for this place';
             loading1 = false;
             verified = false;
           });
@@ -1427,7 +1427,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                                           selectedDate
                                                                               .day,
                                                                           int.parse(_hour) -
-                                                                              3,
+                                                                              1,
                                                                           int.parse(
                                                                               _minute),
                                                                         ),

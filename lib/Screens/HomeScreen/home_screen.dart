@@ -233,7 +233,7 @@ class HomeScreenState extends State<HomeScreen> {
             icon: isNotif
                 ? new Stack(
                     children: <Widget>[
-                      new Icon(Icons.access_alarm),
+                      new Icon(CupertinoIcons.clock),
                       new Positioned(
                         right: 0,
                         child: new Container(
@@ -290,8 +290,8 @@ class HomeScreenState extends State<HomeScreen> {
                         ),
                       )
                     ],
-                  )
-                : Icon(CupertinoIcons.person_alt),
+                  ) 
+                : Icon(CupertinoIcons.person_fill),
             label: '',
           ),
         ],

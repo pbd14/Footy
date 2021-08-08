@@ -91,7 +91,9 @@ class _PlaceScreenState extends State<ServiceScreen> {
     }
 
     if (place.data()['type'] == 'verification_needed') {
-      if (selectedDate.day == DateTime.now().day) {
+      if (selectedDate.day == DateTime.now().day &&
+          selectedDate.month == DateTime.now().month &&
+          selectedDate.year == DateTime.now().year) {
         if ((selectedTime.minute + selectedTime.hour * 60) -
                 (DateTime.now().minute + DateTime.now().hour * 60) <
             120) {
@@ -113,86 +115,97 @@ class _PlaceScreenState extends State<ServiceScreen> {
       });
       return;
     } else {
-      if (widget.data['days'][_dow]['status'] == 'closed') {
+      if (widget.data['vacation_days'] != null &&
+          widget.data['vacation_days']
+              .contains(Timestamp.fromDate(selectedDate))) {
         setState(() {
           error = 'This place is closed this day';
           loading1 = false;
           verified = false;
         });
       } else {
-        TimeOfDay placeTo = TimeOfDay.fromDateTime(
-            DateFormat.Hm().parse(widget.data['days'][_dow]['to']));
-        TimeOfDay placeFrom = TimeOfDay.fromDateTime(
-            DateFormat.Hm().parse(widget.data['days'][_dow]['from']));
-        double dplaceTo = placeTo.minute + placeTo.hour * 60.0;
-        double dplaceFrom = placeFrom.minute + placeFrom.hour * 60.0;
-        if (dtime1 < dplaceFrom || dtime2 < dplaceFrom) {
+        if (widget.data['days'][_dow]['status'] == 'closed') {
           setState(() {
-            error = 'Too early';
+            error = 'This place is closed this day';
             loading1 = false;
             verified = false;
           });
-          return;
-        }
-        if (dtime1 > dplaceTo || dtime2 > dplaceTo) {
-          setState(() {
-            error = 'Too late';
-            loading1 = false;
-            verified = false;
-          });
-          return;
-        }
-        if (dtime1 >= dplaceFrom && dtime2 <= dplaceTo) {
-          var data = await FirebaseFirestore.instance
-              .collection('bookings')
-              .where(
-                'date',
-                isEqualTo: selectedDate.toString(),
-              )
-              .where(
-                'serviceId',
-                isEqualTo: widget.serviceId,
-              )
-              .get();
-          List _bookings = data.docs;
-          for (DocumentSnapshot booking in _bookings) {
-            TimeOfDay bookingTo = TimeOfDay.fromDateTime(
-                DateFormat.Hm().parse(Booking.fromSnapshot(booking).to));
-            TimeOfDay bookingFrom = TimeOfDay.fromDateTime(
-                DateFormat.Hm().parse(Booking.fromSnapshot(booking).from));
-            double dbookingTo = bookingTo.minute + bookingTo.hour * 60.0;
-            double dbookingFrom = bookingFrom.minute + bookingFrom.hour * 60.0;
-            if (dtime1 >= dbookingFrom && dtime1 < dbookingTo) {
-              setState(() {
-                error = 'This time is already booked';
-                loading1 = false;
-                verified = false;
-              });
-              return;
-            }
-            if (dtime2 <= dbookingTo && dtime2 > dbookingFrom) {
-              setState(() {
-                error = 'This time is already booked';
-                loading1 = false;
-                verified = false;
-              });
-              return;
-            }
-            if (dtime1 <= dbookingFrom && dtime2 >= dbookingTo) {
-              setState(() {
-                error = 'This time is already booked';
-                loading1 = false;
-                verified = false;
-              });
-              return;
-            }
+        } else {
+          TimeOfDay placeTo = TimeOfDay.fromDateTime(
+              DateFormat.Hm().parse(widget.data['days'][_dow]['to']));
+          TimeOfDay placeFrom = TimeOfDay.fromDateTime(
+              DateFormat.Hm().parse(widget.data['days'][_dow]['from']));
+          double dplaceTo = placeTo.minute + placeTo.hour * 60.0;
+          double dplaceFrom = placeFrom.minute + placeFrom.hour * 60.0;
+          if (dtime1 < dplaceFrom || dtime2 < dplaceFrom) {
+            setState(() {
+              error = 'Too early';
+              loading1 = false;
+              verified = false;
+            });
+            return;
           }
-          setState(() {
-            duration = dtime2 - dtime1;
-            price = duration * double.parse(widget.data['spm']);
-            loading1 = false;
-            verified = true;
-          });
+          if (dtime1 > dplaceTo || dtime2 > dplaceTo) {
+            setState(() {
+              error = 'Too late';
+              loading1 = false;
+              verified = false;
+            });
+            return;
+          }
+          if (dtime1 >= dplaceFrom && dtime2 <= dplaceTo) {
+            var data = await FirebaseFirestore.instance
+                .collection('bookings')
+                .where(
+                  'date',
+                  isEqualTo: selectedDate.toString(),
+                )
+                .where(
+                  'serviceId',
+                  isEqualTo: widget.serviceId,
+                )
+                .get();
+            List _bookings = data.docs;
+            for (DocumentSnapshot booking in _bookings) {
+              TimeOfDay bookingTo = TimeOfDay.fromDateTime(
+                  DateFormat.Hm().parse(Booking.fromSnapshot(booking).to));
+              TimeOfDay bookingFrom = TimeOfDay.fromDateTime(
+                  DateFormat.Hm().parse(Booking.fromSnapshot(booking).from));
+              double dbookingTo = bookingTo.minute + bookingTo.hour * 60.0;
+              double dbookingFrom =
+                  bookingFrom.minute + bookingFrom.hour * 60.0;
+              if (dtime1 >= dbookingFrom && dtime1 < dbookingTo) {
+                setState(() {
+                  error = 'This time is already booked';
+                  loading1 = false;
+                  verified = false;
+                });
+                return;
+              }
+              if (dtime2 <= dbookingTo && dtime2 > dbookingFrom) {
+                setState(() {
+                  error = 'This time is already booked';
+                  loading1 = false;
+                  verified = false;
+                });
+                return;
+              }
+              if (dtime1 <= dbookingFrom && dtime2 >= dbookingTo) {
+                setState(() {
+                  error = 'This time is already booked';
+                  loading1 = false;
+                  verified = false;
+                });
+                return;
+              }
+            }
+            setState(() {
+              duration = dtime2 - dtime1;
+              price = duration * double.parse(widget.data['spm']);
+              loading1 = false;
+              verified = true;
+            });
+          }
         }
       }
     }
@@ -301,7 +314,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
         context: context,
         initialDate: selectedDate,
         initialDatePickerMode: DatePickerMode.day,
-        firstDate: DateTime(2015),
+        firstDate: DateTime.now(),
         lastDate: DateTime(2101));
     if (picked != null) {
       setState(() {
@@ -1566,6 +1579,12 @@ class _PlaceScreenState extends State<ServiceScreen> {
 
                                                                       setState(
                                                                           () {
+                                                                        _dateController
+                                                                            .clear();
+                                                                        _timeController
+                                                                            .clear();
+                                                                        _timeController2
+                                                                            .clear();
                                                                         selectedDate =
                                                                             DateTime.now();
                                                                         _time =
@@ -1608,6 +1627,12 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                                     } else {
                                                                       setState(
                                                                           () {
+                                                                        _dateController
+                                                                            .clear();
+                                                                        _timeController
+                                                                            .clear();
+                                                                        _timeController2
+                                                                            .clear();
                                                                         selectedDate =
                                                                             DateTime.now();
                                                                         _time =

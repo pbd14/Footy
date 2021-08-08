@@ -4,12 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_complete_guide/Models/Booking.dart';
 import 'package:flutter_complete_guide/Models/Place.dart';
 import 'package:flutter_complete_guide/Models/PushNotificationMessage.dart';
 import 'package:flutter_complete_guide/Screens/MapScreen/map_screen.dart';
 import 'package:flutter_complete_guide/Services/encryption_service.dart';
 import 'package:flutter_complete_guide/widgets/rounded_button.dart';
+import 'package:flutter_complete_guide/widgets/rounded_text_input.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
@@ -30,9 +30,13 @@ class OnEventScreen extends StatefulWidget {
 class _OnEventScreenState extends State<OnEventScreen> {
   bool loading = true;
   double initRat = 3;
+  String reason = '';
+  var cancellations_num = 0;
   DocumentSnapshot booking;
   DocumentSnapshot place;
+  DocumentSnapshot user;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _formKey = GlobalKey<FormState>();
   StreamSubscription<DocumentSnapshot> bookingSubscr;
 
   @override
@@ -42,6 +46,10 @@ class _OnEventScreenState extends State<OnEventScreen> {
   }
 
   Future<void> prepare() async {
+    user = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .get();
     bookingSubscr = FirebaseFirestore.instance
         .collection('bookings')
         .doc(widget.bookingId)
@@ -53,6 +61,9 @@ class _OnEventScreenState extends State<OnEventScreen> {
           .get();
       if (this.mounted) {
         setState(() {
+          if (user.data()['cancellations_num'] != null) {
+            cancellations_num = user.data()['cancellations_num'];
+          }
           booking = thisBooking;
           if (place.data()['rates'] != null) {
             if (place.data()['rates'].containsKey(thisBooking.id)) {
@@ -62,6 +73,9 @@ class _OnEventScreenState extends State<OnEventScreen> {
           loading = false;
         });
       } else {
+        if (user.data()['cancellations_num'] != null) {
+          cancellations_num = user.data()['cancellations_num'];
+        }
         booking = thisBooking;
         if (place.data()['rates'] != null) {
           if (place.data()['rates'].containsKey(thisBooking.id)) {
@@ -479,6 +493,340 @@ class _OnEventScreenState extends State<OnEventScreen> {
                         ),
                       ),
                     ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    DateTime.now().isBefore(DateTime.fromMillisecondsSinceEpoch(
+                                booking.data()['deadline'].seconds * 1000 -
+                                    3600000)) &&
+                            cancellations_num < 6
+                        ? Container(
+                            width: size.width * 0.8,
+                            child: Card(
+                              elevation: 11,
+                              margin: EdgeInsets.fromLTRB(30, 5, 30, 5),
+                              child: Padding(
+                                padding: EdgeInsets.all(10.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Icon(
+                                      CupertinoIcons.info_circle,
+                                      color: darkPrimaryColor,
+                                      size: 30,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'You can cancel event 2 hours before it starts. You can cancel only 5 bookings. You have ' +
+                                                cancellations_num.toString() +
+                                                ' already',
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 10,
+                                            textAlign: TextAlign.center,
+                                            style: GoogleFonts.montserrat(
+                                              textStyle: TextStyle(
+                                                color: darkPrimaryColor,
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(height: 10),
+                                          Center(
+                                            child: RoundedButton(
+                                              pw: 100,
+                                              ph: 45,
+                                              text: 'Cancel',
+                                              press: () {
+                                                showDialog(
+                                                  barrierDismissible: false,
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return AlertDialog(
+                                                      title:
+                                                          const Text('Cancel?'),
+                                                      content: const Text(
+                                                          'Are you sure you want to cancel the booking?'),
+                                                      scrollable: true,
+                                                      actions: <Widget>[
+                                                        Form(
+                                                          key: _formKey,
+                                                          child: Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              RoundedTextInput(
+                                                                validator: (val) =>
+                                                                    val.length >=
+                                                                            5
+                                                                        ? null
+                                                                        : 'Minimum 5 characters',
+                                                                hintText:
+                                                                    "Reason",
+                                                                length: 500,
+                                                                type: TextInputType
+                                                                    .multiline,
+                                                                onChanged:
+                                                                    (value) {
+                                                                  this.reason =
+                                                                      value;
+                                                                },
+                                                              ),
+                                                              SizedBox(
+                                                                  height: 20),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        TextButton(
+                                                          onPressed: () async {
+                                                            if (_formKey
+                                                                .currentState
+                                                                .validate()) {
+                                                              setState(() {
+                                                                loading = true;
+                                                              });
+                                                              DocumentSnapshot
+                                                                  company =
+                                                                  await FirebaseFirestore
+                                                                      .instance
+                                                                      .collection(
+                                                                          'companies')
+                                                                      .doc(place
+                                                                              .data()[
+                                                                          'owner'])
+                                                                      .get();
+
+                                                              FirebaseFirestore
+                                                                  .instance
+                                                                  .collection(
+                                                                      'users')
+                                                                  .doc(FirebaseAuth
+                                                                      .instance
+                                                                      .currentUser
+                                                                      .uid)
+                                                                  .update({
+                                                                'cancellations_num':
+                                                                    cancellations_num +
+                                                                        1,
+                                                              }).catchError(
+                                                                      (error) {
+                                                                setState(() {
+                                                                  loading =
+                                                                      false;
+                                                                });
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop(false);
+                                                                PushNotificationMessage
+                                                                    notification =
+                                                                    PushNotificationMessage(
+                                                                  title: 'Fail',
+                                                                  body:
+                                                                      'Failed to cancel booking',
+                                                                );
+                                                                showSimpleNotification(
+                                                                  Container(
+                                                                      child: Text(
+                                                                          notification
+                                                                              .body)),
+                                                                  position:
+                                                                      NotificationPosition
+                                                                          .top,
+                                                                  background:
+                                                                      Colors
+                                                                          .red,
+                                                                );
+                                                              });
+
+                                                              FirebaseFirestore
+                                                                  .instance
+                                                                  .collection(
+                                                                      'bookings')
+                                                                  .doc(booking
+                                                                      .id)
+                                                                  .delete()
+                                                                  .catchError(
+                                                                      (error) {
+                                                                setState(() {
+                                                                  loading =
+                                                                      false;
+                                                                });
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop(false);
+                                                                PushNotificationMessage
+                                                                    notification =
+                                                                    PushNotificationMessage(
+                                                                  title: 'Fail',
+                                                                  body:
+                                                                      'Failed to cancel booking',
+                                                                );
+                                                                showSimpleNotification(
+                                                                  Container(
+                                                                      child: Text(
+                                                                          notification
+                                                                              .body)),
+                                                                  position:
+                                                                      NotificationPosition
+                                                                          .top,
+                                                                  background:
+                                                                      Colors
+                                                                          .red,
+                                                                );
+                                                              });
+                                                              FirebaseFirestore
+                                                                  .instance
+                                                                  .collection(
+                                                                      'users')
+                                                                  .doc(company
+                                                                          .data()[
+                                                                      'owner'])
+                                                                  .update({
+                                                                'notifications_business':
+                                                                    FieldValue
+                                                                        .arrayUnion([
+                                                                  {
+                                                                    'seen':
+                                                                        false,
+                                                                    'type':
+                                                                        'booking_canceled',
+                                                                    // 'bookingId':
+                                                                    //     booking.id,
+                                                                    'title':
+                                                                        'Canceled',
+                                                                    'text': 'Client has canceled the booking (' +
+                                                                        place.data()[
+                                                                            'name'] +
+                                                                        ' ' +
+                                                                        DateFormat.yMMMd()
+                                                                            .format(booking
+                                                                                .data()[
+                                                                                    'timestamp_date']
+                                                                                .toDate())
+                                                                            .toString() +
+                                                                        ')' +
+                                                                        '. Reason: ' +
+                                                                        reason +
+                                                                        '. Contact: ' +
+                                                                        FirebaseAuth
+                                                                            .instance
+                                                                            .currentUser
+                                                                            .phoneNumber,
+                                                                    'companyName':
+                                                                        company.data()[
+                                                                            'name'],
+                                                                    'date':
+                                                                        DateTime
+                                                                            .now(),
+                                                                  }
+                                                                ])
+                                                              }).catchError(
+                                                                      (error) {
+                                                                setState(() {
+                                                                  loading =
+                                                                      false;
+                                                                });
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop(false);
+                                                                PushNotificationMessage
+                                                                    notification =
+                                                                    PushNotificationMessage(
+                                                                  title: 'Fail',
+                                                                  body:
+                                                                      'Failed to cancel booking',
+                                                                );
+                                                                showSimpleNotification(
+                                                                  Container(
+                                                                      child: Text(
+                                                                          notification
+                                                                              .body)),
+                                                                  position:
+                                                                      NotificationPosition
+                                                                          .top,
+                                                                  background:
+                                                                      Colors
+                                                                          .red,
+                                                                );
+                                                              });
+
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop(true);
+                                                              Navigator.pop(
+                                                                  context);
+                                                              PushNotificationMessage
+                                                                  notification =
+                                                                  PushNotificationMessage(
+                                                                title:
+                                                                    'Canceled',
+                                                                body:
+                                                                    'The booking was canceled',
+                                                              );
+                                                              showSimpleNotification(
+                                                                Container(
+                                                                    child: Text(
+                                                                        notification
+                                                                            .body)),
+                                                                position:
+                                                                    NotificationPosition
+                                                                        .top,
+                                                                background:
+                                                                    Colors.red,
+                                                              );
+                                                              setState(() {
+                                                                loading = false;
+                                                              });
+                                                            }
+                                                          },
+                                                          child: const Text(
+                                                            'Yes',
+                                                            style: TextStyle(
+                                                                color:
+                                                                    primaryColor),
+                                                          ),
+                                                        ),
+                                                        TextButton(
+                                                          onPressed: () =>
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop(false),
+                                                          child: const Text(
+                                                            'No',
+                                                            style: TextStyle(
+                                                                color:
+                                                                    Colors.red),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              color: Colors.red,
+                                              textColor: whiteColor,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        : Container(),
                     SizedBox(
                       height: 20,
                     ),

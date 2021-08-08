@@ -35,6 +35,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
   DocumentSnapshot booking;
   DocumentSnapshot place;
   DocumentSnapshot user;
+  DocumentSnapshot company;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   StreamSubscription<DocumentSnapshot> bookingSubscr;
@@ -58,6 +59,10 @@ class _OnEventScreenState extends State<OnEventScreen> {
       place = await FirebaseFirestore.instance
           .collection('locations')
           .doc(thisBooking.data()['placeId'])
+          .get();
+      company = await FirebaseFirestore.instance
+          .collection('companies')
+          .doc(place.data()['owner'])
           .get();
       if (this.mounted) {
         setState(() {
@@ -172,7 +177,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                             style: GoogleFonts.montserrat(
                               textStyle: TextStyle(
                                 color: whiteColor,
-                                fontSize: 20,
+                                fontSize: 15,
                               ),
                             ),
                           ),
@@ -279,6 +284,74 @@ class _OnEventScreenState extends State<OnEventScreen> {
                     //               Place.fromSnapshot(place).lon))
                     //     ]),
                     //   )
+
+                    Container(
+                      width: size.width * 0.8,
+                      child: Card(
+                        elevation: 10,
+                        margin: EdgeInsets.fromLTRB(30, 5, 30, 5),
+                        child: Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              for (String phone in company.data()['phones'])
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      phone,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          color: darkColor,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    CupertinoButton(
+                                      padding: EdgeInsets.zero,
+                                      onPressed: () async {
+                                        await launch("tel:" + phone);
+                                      },
+                                      child: Container(
+                                        height: 40,
+                                        width: 40,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: primaryColor,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: darkPrimaryColor
+                                                  .withOpacity(0.5),
+                                              spreadRadius: 5,
+                                              blurRadius: 7,
+                                              offset: Offset(0,
+                                                  3), // changes position of shadow
+                                            ),
+                                          ],
+                                        ),
+                                        child: Icon(
+                                          CupertinoIcons.phone_fill,
+                                          color: whiteColor,
+                                          size: 20,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
 
                     Container(
                       width: size.width * 0.8,
@@ -589,24 +662,13 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                                           height: 10,
                                                         ),
                                                         TextButton(
-                                                          onPressed: () async {
+                                                          onPressed: () {
                                                             if (_formKey
                                                                 .currentState
                                                                 .validate()) {
                                                               setState(() {
                                                                 loading = true;
                                                               });
-                                                              DocumentSnapshot
-                                                                  company =
-                                                                  await FirebaseFirestore
-                                                                      .instance
-                                                                      .collection(
-                                                                          'companies')
-                                                                      .doc(place
-                                                                              .data()[
-                                                                          'owner'])
-                                                                      .get();
-
                                                               FirebaseFirestore
                                                                   .instance
                                                                   .collection(

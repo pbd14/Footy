@@ -58,6 +58,7 @@ class AuthService {
           .set({
         'status': 'default',
         'cancellations_num': 0,
+        'phone': FirebaseAuth.instance.currentUser.phoneNumber,
       });
       final pushNotificationService =
           PushNotificationService(_firebaseMessaging);

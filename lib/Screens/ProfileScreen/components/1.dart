@@ -227,10 +227,7 @@ class _ProfileScreen1State extends State<ProfileScreen1> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            notifs[index]['seen']
-                                                ? notifs[index]['seen']
-                                                    .toString()
-                                                : notifs[index]['title'],
+                                            notifs[index]['title'],
                                             overflow: TextOverflow.ellipsis,
                                             style: GoogleFonts.montserrat(
                                               textStyle: TextStyle(

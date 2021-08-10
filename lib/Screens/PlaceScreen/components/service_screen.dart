@@ -376,6 +376,35 @@ class _PlaceScreenState extends State<ServiceScreen> {
         _timeController.text = formatDate(
             DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
             [HH, ':', nn]).toString();
+        if (widget.data['isFixed'] != null && widget.data['isFixed']) {
+          int fixedHour = selectedTime.hour;
+          int fixedMinute = selectedTime.minute + widget.data['fixedDuration'];
+          while (fixedMinute >= 60) {
+            fixedHour = fixedHour + 1;
+            fixedMinute = fixedMinute - 60;
+          }
+          if (fixedHour > 23) {
+            error = 'Too late';
+            loading1 = false;
+            verified = false;
+            String fixedMinuteString;
+            if (fixedMinute < 10) {
+              fixedMinuteString = '0' + fixedMinute.toString();
+            } else {
+              fixedMinuteString = fixedMinute.toString();
+            }
+            _time2 = fixedHour.toString() + ':' + fixedMinuteString;
+          } else {
+            String fixedMinuteString;
+            if (fixedMinute < 10) {
+              fixedMinuteString = '0' + fixedMinute.toString();
+            } else {
+              fixedMinuteString = fixedMinute.toString();
+            }
+            _time2 = fixedHour.toString() + ':' + fixedMinuteString;
+            selectedTime2 = TimeOfDay(hour: fixedHour, minute: fixedMinute);
+          }
+        }
       });
       if (_dow != null && _time != null && _time2 != null) {
         setState(() {
@@ -999,39 +1028,55 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                     ),
                                   ),
                                 ),
-                                InkWell(
-                                  onTap: () {
-                                    _selectTime2(context);
-                                  },
-                                  child: Container(
-                                    margin: EdgeInsets.all(10),
-                                    width: _width * 0.3,
-                                    height: _height * 0.085,
-                                    alignment: Alignment.center,
-                                    decoration:
-                                        BoxDecoration(color: lightPrimaryColor),
-                                    child: TextFormField(
-                                      style: GoogleFonts.montserrat(
-                                        textStyle: TextStyle(
-                                          color: darkPrimaryColor,
-                                          fontSize: 20,
+                                widget.data['isFixed'] != null &&
+                                        widget.data['isFixed']
+                                    ? _time2 != null
+                                        ? Text(
+                                            '  ' + _time2,
+                                            style: GoogleFonts.montserrat(
+                                              textStyle: TextStyle(
+                                                color: darkColor,
+                                                fontSize: 20,
+                                              ),
+                                            ),
+                                          )
+                                        : Container()
+                                    : InkWell(
+                                        onTap: () {
+                                          _selectTime2(context);
+                                        },
+                                        child: Container(
+                                          margin: EdgeInsets.all(10),
+                                          width: _width * 0.3,
+                                          height: _height * 0.085,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                              color: lightPrimaryColor),
+                                          child: TextFormField(
+                                            style: GoogleFonts.montserrat(
+                                              textStyle: TextStyle(
+                                                color: darkPrimaryColor,
+                                                fontSize: 20,
+                                              ),
+                                            ),
+                                            textAlign: TextAlign.center,
+                                            onSaved: (String val) {
+                                              _setTime2 = val;
+                                            },
+                                            enabled: false,
+                                            keyboardType: TextInputType.text,
+                                            controller: _timeController2,
+                                            decoration: InputDecoration(
+                                                disabledBorder:
+                                                    UnderlineInputBorder(
+                                                        borderSide:
+                                                            BorderSide.none),
+                                                // labelText: 'Time',
+                                                contentPadding:
+                                                    EdgeInsets.all(5)),
+                                          ),
                                         ),
                                       ),
-                                      textAlign: TextAlign.center,
-                                      onSaved: (String val) {
-                                        _setTime2 = val;
-                                      },
-                                      enabled: false,
-                                      keyboardType: TextInputType.text,
-                                      controller: _timeController2,
-                                      decoration: InputDecoration(
-                                          disabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide.none),
-                                          // labelText: 'Time',
-                                          contentPadding: EdgeInsets.all(5)),
-                                    ),
-                                  ),
-                                ),
                               ],
                             ),
                             SizedBox(height: 10),
@@ -1623,6 +1668,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                                             DateTime.now();
                                                                         payment_way =
                                                                             '';
+                                                                        
                                                                       });
                                                                     } else {
                                                                       setState(

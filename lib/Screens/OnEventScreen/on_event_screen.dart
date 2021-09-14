@@ -92,16 +92,6 @@ class _OnEventScreenState extends State<OnEventScreen> {
     });
   }
 
-  Future<http.Response> makePayment(Map data) {
-    return http.post(
-      Uri.parse('https://secure.octo.uz/prepare_payment'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(data),
-    );
-  }
-
   @override
   void initState() {
     super.initState();
@@ -944,11 +934,9 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                             ),
                                           )
                                         : Container(),
-                                    booking.data()['status'] == 'unpaid' &&
-                                            booking.data()['payment_method'] ==
-                                                'cash'
+                                    booking.data()['status'] == 'unpaid' 
                                         ? Text(
-                                            'Please make your payment with cash and check if owner has accepted it',
+                                            'Please make your payment and check if owner has accepted it',
                                             overflow: TextOverflow.ellipsis,
                                             maxLines: 10,
                                             textAlign: TextAlign.center,
@@ -998,99 +986,6 @@ class _OnEventScreenState extends State<OnEventScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: booking.data()['payment_method'] == 'octo' &&
-                              booking.data()['status'] == 'unpaid'
-                          ? 10
-                          : 0,
-                    ),
-                    booking.data()['payment_method'] == 'octo' &&
-                            booking.data()['status'] == 'unpaid'
-                        ? Center(
-                            child: Container(
-                              width: size.width * 0.4,
-                              child: RoundedButton(
-                                pw: 50,
-                                ph: 45,
-                                text: 'PAY',
-                                press: () async {
-                                  DocumentSnapshot placeOwner =
-                                      await FirebaseFirestore.instance
-                                          .collection('companies')
-                                          .doc(place.data()['owner'])
-                                          .get();
-                                  String ownerBalance = EncryptionService()
-                                      .dec(placeOwner.data()['balance']);
-                                  int newBalance = int.parse(ownerBalance) +
-                                      booking.data()['price'].toInt();
-                                  String encBalance = EncryptionService()
-                                      .enc(newBalance.toString());
-                                  http.Response response = await makePayment({
-                                    "octo_shop_id": 3876,
-                                    "octo_secret":
-                                        "c66db06a-6bd7-4029-bb8c-1f582d33b62a",
-                                    "shop_transaction_id": booking.id,
-                                    "auto_capture": true,
-                                    "test": true,
-                                    "init_time": DateTime.now().toString(),
-                                    "user_data": {
-                                      "user_id":
-                                          FirebaseAuth.instance.currentUser.uid,
-                                      "phone": FirebaseAuth
-                                          .instance.currentUser.phoneNumber,
-                                      "email": "user@mail.com"
-                                    },
-                                    "total_sum": booking.data()['price'],
-                                    "currency": "UZS",
-                                    // "tag": "booking",
-                                    "description":
-                                        "Booking in " + place.data()['name'],
-                                    "payment_methods": [
-                                      {"method": "bank_card"},
-                                    ],
-                                    "return_url":
-                                        "http://footyuz.web.app/payment_done.html?id=" +
-                                            booking.id +
-                                            "&companyId=" +
-                                            place.data()['owner'] +
-                                            "&balance=" +
-                                            encBalance +
-                                            "&transactionPrice=" +
-                                            booking.data()['price'].toString(),
-                                    "ttl": 15,
-                                  });
-                                  Map responseData = jsonDecode(response.body);
-                                  if (responseData['error'] == 0) {
-                                    Map responseData =
-                                        jsonDecode(response.body);
-                                    if (responseData['status'] == 'created') {
-                                      launch(responseData['octo_pay_url']);
-                                    }
-                                    if (responseData['status'] == 'succeeded') {
-                                      FirebaseFirestore.instance
-                                          .collection('bookings')
-                                          .doc(booking.id)
-                                          .update({'status': 'finished'});
-                                    }
-                                  } else {
-                                    PushNotificationMessage notification =
-                                        PushNotificationMessage(
-                                      title: 'Failed',
-                                      body: 'Server returned mistake',
-                                    );
-                                    showSimpleNotification(
-                                      Container(child: Text(notification.body)),
-                                      position: NotificationPosition.top,
-                                      background: Colors.red,
-                                    );
-                                  }
-                                },
-                                color: darkPrimaryColor,
-                                textColor: whiteColor,
-                              ),
-                            ),
-                          )
-                        : Container(),
                     SizedBox(
                       height: 20,
                     ),

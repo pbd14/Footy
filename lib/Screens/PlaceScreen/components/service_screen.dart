@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_format/date_format.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Models/Booking.dart';
@@ -29,6 +30,8 @@ class _PlaceScreenState extends State<ServiceScreen> {
   double _width;
   double duration = 0;
   double price = 0;
+  double servicePrice = 0;
+  double commissionPrice = 0;
 
   bool verified = false;
   bool loading1 = false;
@@ -199,9 +202,17 @@ class _PlaceScreenState extends State<ServiceScreen> {
                 return;
               }
             }
+
+            RemoteConfig remoteConfig = RemoteConfig.instance;
+            bool updated = await remoteConfig.fetchAndActivate();
+            print('HETGJ');
+            print(remoteConfig.getDouble('booking_commission'));
             setState(() {
               duration = dtime2 - dtime1;
-              price = duration * double.parse(widget.data['spm']);
+              servicePrice = duration * double.parse(widget.data['spm']);
+              commissionPrice =
+                  servicePrice * remoteConfig.getDouble('booking_commission');
+              price = servicePrice + commissionPrice;
               loading1 = false;
               verified = true;
             });
@@ -1139,20 +1150,69 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                           ),
                                                         ),
                                                         SizedBox(
-                                                          height: 5,
+                                                          height: 15,
                                                         ),
                                                         Text(
-                                                          price.toString() +
-                                                              " So'm ",
+                                                          'Service: ' +
+                                                              servicePrice
+                                                                  .toString() +
+                                                              " UZS ",
                                                           style: GoogleFonts
                                                               .montserrat(
                                                             textStyle:
                                                                 TextStyle(
                                                               color: darkColor,
-                                                              fontSize: 20,
+                                                              fontSize: 15,
                                                             ),
                                                           ),
                                                         ),
+                                                        // SizedBox(
+                                                        //   height: 5,
+                                                        // ),
+                                                        Text(
+                                                          '+',
+                                                          style: GoogleFonts
+                                                              .montserrat(
+                                                            textStyle:
+                                                                TextStyle(
+                                                              color: darkColor,
+                                                              fontSize: 15,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        // SizedBox(
+                                                        //   height: 5,
+                                                        // ),
+                                                        Text(
+                                                          'Commission: ' +
+                                                              commissionPrice
+                                                                  .toString() +
+                                                              " UZS ",
+                                                          style: GoogleFonts
+                                                              .montserrat(
+                                                            textStyle:
+                                                                TextStyle(
+                                                              color: darkColor,
+                                                              fontSize: 15,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        Text(
+                                                          price.toString() +
+                                                              " UZS ",
+                                                          style: GoogleFonts
+                                                              .montserrat(
+                                                            textStyle:
+                                                                TextStyle(
+                                                              color: darkColor,
+                                                              fontSize: 25,
+                                                            ),
+                                                          ),
+                                                        ),
+
                                                         SizedBox(height: 30),
                                                         Text(
                                                           'Choose payment method',
@@ -1464,6 +1524,10 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                                             .uid,
                                                                         'price':
                                                                             price.roundToDouble(),
+                                                                        'servicePrice':
+                                                                            servicePrice.roundToDouble(),
+                                                                        'commissionPrice':
+                                                                            commissionPrice.roundToDouble(),
                                                                         'from':
                                                                             _time,
                                                                         'to':
@@ -1640,6 +1704,10 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                                             0;
                                                                         price =
                                                                             0;
+                                                                        servicePrice =
+                                                                            0;
+                                                                        commissionPrice =
+                                                                            0;
                                                                         selectedTime = TimeOfDay(
                                                                             hour:
                                                                                 00,
@@ -1668,7 +1736,6 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                                             DateTime.now();
                                                                         payment_way =
                                                                             '';
-                                                                        
                                                                       });
                                                                     } else {
                                                                       setState(
@@ -1688,6 +1755,10 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                                         duration =
                                                                             0;
                                                                         price =
+                                                                            0;
+                                                                        servicePrice =
+                                                                            0;
+                                                                        commissionPrice =
                                                                             0;
                                                                         selectedTime = TimeOfDay(
                                                                             hour:

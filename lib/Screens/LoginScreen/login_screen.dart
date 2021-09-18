@@ -51,16 +51,225 @@ class _LoginScreenState extends State<LoginScreen> {
                       textStyle: TextStyle(
                         color: whiteColor,
                         fontSize: 25,
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
-                  SizedBox(height: 30),
+                  SizedBox(
+                    height: !codeSent ? 100 : 0,
+                  ),
+                  !codeSent
+                      ? Stack(
+                          alignment: Alignment.center,
+                          clipBehavior: Clip.none,
+                          children: [
+                            Image.asset(
+                              'assets/images/nature1.jpg',
+                              height: 200,
+                              width: size.width * 0.9,
+                              fit: BoxFit.cover,
+                            ),
+                            Positioned(
+                              top: 120,
+                              child: Container(
+                                width: size.width * 0.8,
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  elevation: 10,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(20),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Online bookings',
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: GoogleFonts.montserrat(
+                                            textStyle: TextStyle(
+                                              color: darkColor,
+                                              fontSize: 28,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(
+                                          'Make bookings online without problems. No more need to contact administrators and have time-consuming talks',
+                                          maxLines: 10,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: GoogleFonts.montserrat(
+                                            textStyle: TextStyle(
+                                              color: darkColor,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w300,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                          ],
+                        )
+                      : Container(),
+                  SizedBox(
+                    height: !codeSent ? 200 : 0,
+                  ),
+                  !codeSent
+                      ? Stack(
+                          alignment: Alignment.center,
+                          clipBehavior: Clip.none,
+                          children: [
+                            Image.asset(
+                              'assets/images/nature2.jpg',
+                              height: 200,
+                              width: size.width * 0.9,
+                              fit: BoxFit.cover,
+                            ),
+                            Positioned(
+                              top: 120,
+                              child: Container(
+                                width: size.width * 0.8,
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  elevation: 10,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(20),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          '2 minutes',
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: GoogleFonts.montserrat(
+                                            textStyle: TextStyle(
+                                              color: darkColor,
+                                              fontSize: 28,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(
+                                          'You will need only 2 minutes to make booking anywhere. ',
+                                          maxLines: 10,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: GoogleFonts.montserrat(
+                                            textStyle: TextStyle(
+                                              color: darkColor,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w300,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                          ],
+                        )
+                      : Container(),
+                  SizedBox(
+                    height: !codeSent ? 200 : 0,
+                  ),
+                  !codeSent
+                      ? Stack(
+                          alignment: Alignment.center,
+                          clipBehavior: Clip.none,
+                          children: [
+                            Image.asset(
+                              'assets/images/nature3.jpg',
+                              height: 200,
+                              width: size.width * 0.9,
+                              fit: BoxFit.cover,
+                            ),
+                            Positioned(
+                              top: 120,
+                              child: Container(
+                                width: size.width * 0.8,
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  elevation: 10,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(20),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Timetable',
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: GoogleFonts.montserrat(
+                                            textStyle: TextStyle(
+                                              color: darkColor,
+                                              fontSize: 28,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(
+                                          'Convenient timetable that organizes your bookings and regulates them.',
+                                          maxLines: 10,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: GoogleFonts.montserrat(
+                                            textStyle: TextStyle(
+                                              color: darkColor,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w300,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                          ],
+                        )
+                      : Container(),
+                  SizedBox(
+                    height: !codeSent ? 150 : 50,
+                  ),
                   Center(
                     child: Container(
                       width: size.width * 0.95,
                       child: Card(
                         margin: EdgeInsets.all(10),
+                        shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
                         child: Form(
                           key: _formKey,
                           child: Column(
@@ -129,7 +338,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                               smsCode, verificationId, context);
                                       if (res == null) {
                                         setState(() {
-                                          error = 'Enter valid data';
+                                          // error = 'Enter valid data';
                                           loading = false;
                                         });
                                       }

@@ -1105,7 +1105,8 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                     child: Column(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
-                                                              .center,
+                                                              .start,
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: <Widget>[
                                                         Text(
                                                           DateFormat.yMMMd()
@@ -1157,20 +1158,6 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                               servicePrice
                                                                   .toString() +
                                                               " UZS ",
-                                                          style: GoogleFonts
-                                                              .montserrat(
-                                                            textStyle:
-                                                                TextStyle(
-                                                              color: darkColor,
-                                                              fontSize: 15,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        // SizedBox(
-                                                        //   height: 5,
-                                                        // ),
-                                                        Text(
-                                                          '+',
                                                           style: GoogleFonts
                                                               .montserrat(
                                                             textStyle:
@@ -1424,379 +1411,381 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                           height: 35,
                                                         ),
                                                         payment_way.isNotEmpty
-                                                            ? Builder(
-                                                                builder:
-                                                                    (context) =>
-                                                                        RoundedButton(
-                                                                  ph: 40,
-                                                                  pw: 100,
-                                                                  text: 'Book',
-                                                                  press:
-                                                                      () async {
-                                                                    setState(
-                                                                        () {
-                                                                      loading =
-                                                                          true;
-                                                                    });
-                                                                    await _bookButton(
-                                                                      formatDate(
-                                                                          DateTime(
-                                                                              2019,
-                                                                              08,
-                                                                              1,
-                                                                              selectedTime.hour,
-                                                                              selectedTime.minute),
-                                                                          [
-                                                                            HH,
-                                                                            ':',
-                                                                            nn
-                                                                          ]),
-                                                                      formatDate(
-                                                                          DateTime(
-                                                                              2019,
-                                                                              08,
-                                                                              1,
-                                                                              selectedTime2.hour,
-                                                                              selectedTime2.minute),
-                                                                          [
-                                                                            HH,
-                                                                            ':',
-                                                                            nn
-                                                                          ]),
-                                                                    );
-                                                                    if (can) {
-                                                                      PushNotificationMessage
-                                                                          notification =
-                                                                          PushNotificationMessage(
-                                                                        title:
-                                                                            'Booked',
-                                                                        body:
-                                                                            'Bokking was successful',
-                                                                      );
-                                                                      showSimpleNotification(
-                                                                        Container(
-                                                                            child:
-                                                                                Text(notification.body)),
-                                                                        position:
-                                                                            NotificationPosition.top,
-                                                                        background:
-                                                                            darkPrimaryColor,
-                                                                      );
-                                                                    } else {
-                                                                      PushNotificationMessage
-                                                                          notification =
-                                                                          PushNotificationMessage(
-                                                                        title:
-                                                                            'Fail',
-                                                                        body:
-                                                                            'Failed to book',
-                                                                      );
-                                                                      showSimpleNotification(
-                                                                        Container(
-                                                                            child:
-                                                                                Text(notification.body)),
-                                                                        position:
-                                                                            NotificationPosition.top,
-                                                                        background:
-                                                                            Colors.red,
-                                                                      );
-                                                                    }
-
-                                                                    if (can) {
-                                                                      String id = DateTime
-                                                                              .now()
-                                                                          .millisecondsSinceEpoch
-                                                                          .toString();
-                                                                      FirebaseFirestore
-                                                                          .instance
-                                                                          .collection(
-                                                                              'bookings')
-                                                                          .doc(
-                                                                              id)
-                                                                          .set({
-                                                                        'placeId':
-                                                                            widget.placeId,
-                                                                        'serviceId':
-                                                                            widget.serviceId,
-                                                                        'userId': FirebaseAuth
-                                                                            .instance
-                                                                            .currentUser
-                                                                            .uid,
-                                                                        'price':
-                                                                            price.roundToDouble(),
-                                                                        'servicePrice':
-                                                                            servicePrice.roundToDouble(),
-                                                                        'commissionPrice':
-                                                                            commissionPrice.roundToDouble(),
-                                                                        'from':
-                                                                            _time,
-                                                                        'to':
-                                                                            _time2,
-                                                                        'date':
-                                                                            selectedDate.toString(),
-                                                                        'timestamp_date':
-                                                                            selectedDate,
-                                                                        'status': widget.data['type'] ==
-                                                                                'nonver'
-                                                                            ? 'unfinished'
-                                                                            : 'verification_needed',
-                                                                        'deadline':
+                                                            ? Center(
+                                                              child: Builder(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          RoundedButton(
+                                                                    ph: 40,
+                                                                    pw: 100,
+                                                                    text: 'Book',
+                                                                    press:
+                                                                        () async {
+                                                                      setState(
+                                                                          () {
+                                                                        loading =
+                                                                            true;
+                                                                      });
+                                                                      await _bookButton(
+                                                                        formatDate(
                                                                             DateTime(
-                                                                          selectedDate
-                                                                              .year,
-                                                                          selectedDate
-                                                                              .month,
-                                                                          selectedDate
-                                                                              .day,
-                                                                          int.parse(_hour) -
-                                                                              1,
-                                                                          int.parse(
-                                                                              _minute),
-                                                                        ),
-                                                                        'seen_status':
-                                                                            'unseen',
-                                                                        'isRated':
-                                                                            false,
-                                                                        'payment_method':
-                                                                            payment_way,
-                                                                      }).catchError(
-                                                                              (error) {
+                                                                                2019,
+                                                                                08,
+                                                                                1,
+                                                                                selectedTime.hour,
+                                                                                selectedTime.minute),
+                                                                            [
+                                                                              HH,
+                                                                              ':',
+                                                                              nn
+                                                                            ]),
+                                                                        formatDate(
+                                                                            DateTime(
+                                                                                2019,
+                                                                                08,
+                                                                                1,
+                                                                                selectedTime2.hour,
+                                                                                selectedTime2.minute),
+                                                                            [
+                                                                              HH,
+                                                                              ':',
+                                                                              nn
+                                                                            ]),
+                                                                      );
+                                                                      if (can) {
+                                                                        PushNotificationMessage
+                                                                            notification =
+                                                                            PushNotificationMessage(
+                                                                          title:
+                                                                              'Booked',
+                                                                          body:
+                                                                              'Bokking was successful',
+                                                                        );
+                                                                        showSimpleNotification(
+                                                                          Container(
+                                                                              child:
+                                                                                  Text(notification.body)),
+                                                                          position:
+                                                                              NotificationPosition.top,
+                                                                          background:
+                                                                              darkPrimaryColor,
+                                                                        );
+                                                                      } else {
                                                                         PushNotificationMessage
                                                                             notification =
                                                                             PushNotificationMessage(
                                                                           title:
                                                                               'Fail',
                                                                           body:
-                                                                              'Failed to make booking',
+                                                                              'Failed to book',
                                                                         );
                                                                         showSimpleNotification(
                                                                           Container(
-                                                                              child: Text(notification.body)),
+                                                                              child:
+                                                                                  Text(notification.body)),
                                                                           position:
                                                                               NotificationPosition.top,
                                                                           background:
                                                                               Colors.red,
                                                                         );
-                                                                        if (this
-                                                                            .mounted) {
-                                                                          setState(
-                                                                              () {
-                                                                            loading =
-                                                                                false;
-                                                                          });
-                                                                        } else {
-                                                                          loading =
-                                                                              false;
-                                                                        }
-                                                                      });
-                                                                      DocumentSnapshot company = await FirebaseFirestore
-                                                                          .instance
-                                                                          .collection(
-                                                                              'companies')
-                                                                          .doc(place.data()[
-                                                                              'owner'])
-                                                                          .get()
-                                                                          .catchError(
-                                                                              (error) {
-                                                                        PushNotificationMessage
-                                                                            notification =
-                                                                            PushNotificationMessage(
-                                                                          title:
-                                                                              'Fail',
-                                                                          body:
-                                                                              'Failed to make booking',
-                                                                        );
-                                                                        showSimpleNotification(
-                                                                          Container(
-                                                                              child: Text(notification.body)),
-                                                                          position:
-                                                                              NotificationPosition.top,
-                                                                          background:
-                                                                              Colors.red,
-                                                                        );
-                                                                        if (this
-                                                                            .mounted) {
-                                                                          setState(
-                                                                              () {
-                                                                            loading =
-                                                                                false;
-                                                                          });
-                                                                        } else {
-                                                                          loading =
-                                                                              false;
-                                                                        }
-                                                                      });
-                                                                      FirebaseFirestore
-                                                                          .instance
-                                                                          .collection(
-                                                                              'users')
-                                                                          .doc(company.data()[
-                                                                              'owner'])
-                                                                          .update({
-                                                                        'notifications_business':
-                                                                            FieldValue.arrayUnion([
-                                                                          {
-                                                                            'seen':
-                                                                                false,
-                                                                            'type': widget.data['type'] == 'nonver'
-                                                                                ? 'new_booking'
-                                                                                : 'offered',
-                                                                            'bookingId':
-                                                                                id,
-                                                                            'title': widget.data['type'] == 'nonver'
-                                                                                ? 'New booking'
-                                                                                : 'Offer',
-                                                                            'text': widget.data['type'] == 'nonver'
-                                                                                ? 'You have new booking at ' + place.data()['name']
-                                                                                : 'You have new offer at ' + place.data()['name'],
-                                                                            'companyName':
-                                                                                company.data()['name'],
-                                                                            'date':
-                                                                                DateTime.now(),
-                                                                          }
-                                                                        ])
-                                                                      }).catchError(
-                                                                              (error) {
-                                                                        PushNotificationMessage
-                                                                            notification =
-                                                                            PushNotificationMessage(
-                                                                          title:
-                                                                              'Fail',
-                                                                          body:
-                                                                              'Failed to make booking',
-                                                                        );
-                                                                        showSimpleNotification(
-                                                                          Container(
-                                                                              child: Text(notification.body)),
-                                                                          position:
-                                                                              NotificationPosition.top,
-                                                                          background:
-                                                                              Colors.red,
-                                                                        );
-                                                                        if (this
-                                                                            .mounted) {
-                                                                          setState(
-                                                                              () {
-                                                                            loading =
-                                                                                false;
-                                                                          });
-                                                                        } else {
-                                                                          loading =
-                                                                              false;
-                                                                        }
-                                                                      });
+                                                                      }
 
-                                                                      setState(
-                                                                          () {
-                                                                        _dateController
-                                                                            .clear();
-                                                                        _timeController
-                                                                            .clear();
-                                                                        _timeController2
-                                                                            .clear();
-                                                                        selectedDate =
-                                                                            DateTime.now();
-                                                                        _time =
-                                                                            null;
-                                                                        _time2 =
-                                                                            null;
-                                                                        duration =
-                                                                            0;
-                                                                        price =
-                                                                            0;
-                                                                        servicePrice =
-                                                                            0;
-                                                                        commissionPrice =
-                                                                            0;
-                                                                        selectedTime = TimeOfDay(
-                                                                            hour:
-                                                                                00,
-                                                                            minute:
-                                                                                00);
-                                                                        selectedTime2 = TimeOfDay(
-                                                                            hour:
-                                                                                00,
-                                                                            minute:
-                                                                                00);
-                                                                        _setDate =
-                                                                            null;
-                                                                        _dow =
-                                                                            null;
-                                                                        verified =
-                                                                            false;
-                                                                        loading1 =
-                                                                            false;
-                                                                        verifying =
-                                                                            false;
-                                                                        loading =
-                                                                            false;
-                                                                        can =
-                                                                            true;
-                                                                        selectedDate =
-                                                                            DateTime.now();
-                                                                        payment_way =
-                                                                            '';
-                                                                      });
-                                                                    } else {
-                                                                      setState(
-                                                                          () {
-                                                                        _dateController
-                                                                            .clear();
-                                                                        _timeController
-                                                                            .clear();
-                                                                        _timeController2
-                                                                            .clear();
-                                                                        selectedDate =
-                                                                            DateTime.now();
-                                                                        _time =
-                                                                            null;
-                                                                        _time2 =
-                                                                            null;
-                                                                        duration =
-                                                                            0;
-                                                                        price =
-                                                                            0;
-                                                                        servicePrice =
-                                                                            0;
-                                                                        commissionPrice =
-                                                                            0;
-                                                                        selectedTime = TimeOfDay(
-                                                                            hour:
-                                                                                00,
-                                                                            minute:
-                                                                                00);
-                                                                        selectedTime2 = TimeOfDay(
-                                                                            hour:
-                                                                                00,
-                                                                            minute:
-                                                                                00);
-                                                                        _setDate =
-                                                                            null;
-                                                                        _dow =
-                                                                            null;
-                                                                        verified =
-                                                                            false;
-                                                                        loading1 =
-                                                                            false;
-                                                                        verifying =
-                                                                            false;
-                                                                        loading =
-                                                                            false;
-                                                                        can =
-                                                                            true;
-                                                                        selectedDate =
-                                                                            DateTime.now();
-                                                                        payment_way =
-                                                                            '';
-                                                                      });
-                                                                    }
-                                                                  },
-                                                                  color:
-                                                                      darkPrimaryColor,
-                                                                  textColor:
-                                                                      whiteColor,
+                                                                      if (can) {
+                                                                        String id = DateTime
+                                                                                .now()
+                                                                            .millisecondsSinceEpoch
+                                                                            .toString();
+                                                                        FirebaseFirestore
+                                                                            .instance
+                                                                            .collection(
+                                                                                'bookings')
+                                                                            .doc(
+                                                                                id)
+                                                                            .set({
+                                                                          'placeId':
+                                                                              widget.placeId,
+                                                                          'serviceId':
+                                                                              widget.serviceId,
+                                                                          'userId': FirebaseAuth
+                                                                              .instance
+                                                                              .currentUser
+                                                                              .uid,
+                                                                          'price':
+                                                                              price.roundToDouble(),
+                                                                          'servicePrice':
+                                                                              servicePrice.roundToDouble(),
+                                                                          'commissionPrice':
+                                                                              commissionPrice.roundToDouble(),
+                                                                          'from':
+                                                                              _time,
+                                                                          'to':
+                                                                              _time2,
+                                                                          'date':
+                                                                              selectedDate.toString(),
+                                                                          'timestamp_date':
+                                                                              selectedDate,
+                                                                          'status': widget.data['type'] ==
+                                                                                  'nonver'
+                                                                              ? 'unfinished'
+                                                                              : 'verification_needed',
+                                                                          'deadline':
+                                                                              DateTime(
+                                                                            selectedDate
+                                                                                .year,
+                                                                            selectedDate
+                                                                                .month,
+                                                                            selectedDate
+                                                                                .day,
+                                                                            int.parse(_hour) -
+                                                                                1,
+                                                                            int.parse(
+                                                                                _minute),
+                                                                          ),
+                                                                          'seen_status':
+                                                                              'unseen',
+                                                                          'isRated':
+                                                                              false,
+                                                                          'payment_method':
+                                                                              payment_way,
+                                                                        }).catchError(
+                                                                                (error) {
+                                                                          PushNotificationMessage
+                                                                              notification =
+                                                                              PushNotificationMessage(
+                                                                            title:
+                                                                                'Fail',
+                                                                            body:
+                                                                                'Failed to make booking',
+                                                                          );
+                                                                          showSimpleNotification(
+                                                                            Container(
+                                                                                child: Text(notification.body)),
+                                                                            position:
+                                                                                NotificationPosition.top,
+                                                                            background:
+                                                                                Colors.red,
+                                                                          );
+                                                                          if (this
+                                                                              .mounted) {
+                                                                            setState(
+                                                                                () {
+                                                                              loading =
+                                                                                  false;
+                                                                            });
+                                                                          } else {
+                                                                            loading =
+                                                                                false;
+                                                                          }
+                                                                        });
+                                                                        DocumentSnapshot company = await FirebaseFirestore
+                                                                            .instance
+                                                                            .collection(
+                                                                                'companies')
+                                                                            .doc(place.data()[
+                                                                                'owner'])
+                                                                            .get()
+                                                                            .catchError(
+                                                                                (error) {
+                                                                          PushNotificationMessage
+                                                                              notification =
+                                                                              PushNotificationMessage(
+                                                                            title:
+                                                                                'Fail',
+                                                                            body:
+                                                                                'Failed to make booking',
+                                                                          );
+                                                                          showSimpleNotification(
+                                                                            Container(
+                                                                                child: Text(notification.body)),
+                                                                            position:
+                                                                                NotificationPosition.top,
+                                                                            background:
+                                                                                Colors.red,
+                                                                          );
+                                                                          if (this
+                                                                              .mounted) {
+                                                                            setState(
+                                                                                () {
+                                                                              loading =
+                                                                                  false;
+                                                                            });
+                                                                          } else {
+                                                                            loading =
+                                                                                false;
+                                                                          }
+                                                                        });
+                                                                        FirebaseFirestore
+                                                                            .instance
+                                                                            .collection(
+                                                                                'users')
+                                                                            .doc(company.data()[
+                                                                                'owner'])
+                                                                            .update({
+                                                                          'notifications_business':
+                                                                              FieldValue.arrayUnion([
+                                                                            {
+                                                                              'seen':
+                                                                                  false,
+                                                                              'type': widget.data['type'] == 'nonver'
+                                                                                  ? 'new_booking'
+                                                                                  : 'offered',
+                                                                              'bookingId':
+                                                                                  id,
+                                                                              'title': widget.data['type'] == 'nonver'
+                                                                                  ? 'New booking'
+                                                                                  : 'Offer',
+                                                                              'text': widget.data['type'] == 'nonver'
+                                                                                  ? 'You have new booking at ' + place.data()['name']
+                                                                                  : 'You have new offer at ' + place.data()['name'],
+                                                                              'companyName':
+                                                                                  company.data()['name'],
+                                                                              'date':
+                                                                                  DateTime.now(),
+                                                                            }
+                                                                          ])
+                                                                        }).catchError(
+                                                                                (error) {
+                                                                          PushNotificationMessage
+                                                                              notification =
+                                                                              PushNotificationMessage(
+                                                                            title:
+                                                                                'Fail',
+                                                                            body:
+                                                                                'Failed to make booking',
+                                                                          );
+                                                                          showSimpleNotification(
+                                                                            Container(
+                                                                                child: Text(notification.body)),
+                                                                            position:
+                                                                                NotificationPosition.top,
+                                                                            background:
+                                                                                Colors.red,
+                                                                          );
+                                                                          if (this
+                                                                              .mounted) {
+                                                                            setState(
+                                                                                () {
+                                                                              loading =
+                                                                                  false;
+                                                                            });
+                                                                          } else {
+                                                                            loading =
+                                                                                false;
+                                                                          }
+                                                                        });
+
+                                                                        setState(
+                                                                            () {
+                                                                          _dateController
+                                                                              .clear();
+                                                                          _timeController
+                                                                              .clear();
+                                                                          _timeController2
+                                                                              .clear();
+                                                                          selectedDate =
+                                                                              DateTime.now();
+                                                                          _time =
+                                                                              null;
+                                                                          _time2 =
+                                                                              null;
+                                                                          duration =
+                                                                              0;
+                                                                          price =
+                                                                              0;
+                                                                          servicePrice =
+                                                                              0;
+                                                                          commissionPrice =
+                                                                              0;
+                                                                          selectedTime = TimeOfDay(
+                                                                              hour:
+                                                                                  00,
+                                                                              minute:
+                                                                                  00);
+                                                                          selectedTime2 = TimeOfDay(
+                                                                              hour:
+                                                                                  00,
+                                                                              minute:
+                                                                                  00);
+                                                                          _setDate =
+                                                                              null;
+                                                                          _dow =
+                                                                              null;
+                                                                          verified =
+                                                                              false;
+                                                                          loading1 =
+                                                                              false;
+                                                                          verifying =
+                                                                              false;
+                                                                          loading =
+                                                                              false;
+                                                                          can =
+                                                                              true;
+                                                                          selectedDate =
+                                                                              DateTime.now();
+                                                                          payment_way =
+                                                                              '';
+                                                                        });
+                                                                      } else {
+                                                                        setState(
+                                                                            () {
+                                                                          _dateController
+                                                                              .clear();
+                                                                          _timeController
+                                                                              .clear();
+                                                                          _timeController2
+                                                                              .clear();
+                                                                          selectedDate =
+                                                                              DateTime.now();
+                                                                          _time =
+                                                                              null;
+                                                                          _time2 =
+                                                                              null;
+                                                                          duration =
+                                                                              0;
+                                                                          price =
+                                                                              0;
+                                                                          servicePrice =
+                                                                              0;
+                                                                          commissionPrice =
+                                                                              0;
+                                                                          selectedTime = TimeOfDay(
+                                                                              hour:
+                                                                                  00,
+                                                                              minute:
+                                                                                  00);
+                                                                          selectedTime2 = TimeOfDay(
+                                                                              hour:
+                                                                                  00,
+                                                                              minute:
+                                                                                  00);
+                                                                          _setDate =
+                                                                              null;
+                                                                          _dow =
+                                                                              null;
+                                                                          verified =
+                                                                              false;
+                                                                          loading1 =
+                                                                              false;
+                                                                          verifying =
+                                                                              false;
+                                                                          loading =
+                                                                              false;
+                                                                          can =
+                                                                              true;
+                                                                          selectedDate =
+                                                                              DateTime.now();
+                                                                          payment_way =
+                                                                              '';
+                                                                        });
+                                                                      }
+                                                                    },
+                                                                    color:
+                                                                        darkPrimaryColor,
+                                                                    textColor:
+                                                                        whiteColor,
+                                                                  ),
                                                                 ),
-                                                              )
+                                                            )
                                                             : Container()
                                                         // Builder(
                                                         //   builder: (context) =>

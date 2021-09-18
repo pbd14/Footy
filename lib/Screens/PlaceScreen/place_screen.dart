@@ -357,7 +357,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                               ),
                             ),
                             subtitle: Text(
-                              'Sum per minute ' + service['spm'].toString(),
+                              'UZS per minute ' + service['spm'].toString(),
                               style: GoogleFonts.montserrat(
                                 textStyle: TextStyle(
                                   color: whiteColor,

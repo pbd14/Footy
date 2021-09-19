@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/Models/LanguageData.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
 import 'package:flutter_complete_guide/Services/auth_service.dart';
+import 'package:flutter_complete_guide/Services/languages/languages.dart';
+import 'package:flutter_complete_guide/Services/languages/locale_constant.dart';
 import 'package:flutter_complete_guide/constants.dart';
 import 'package:flutter_complete_guide/widgets/rounded_button.dart';
 import 'package:flutter_complete_guide/widgets/rounded_phone_input_field.dart';
@@ -46,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: size.height * 0.2,
                   ),
                   Text(
-                    'WELCOME TO FOOTY',
+                    Languages.of(context).welcomeToFooty,
                     style: GoogleFonts.montserrat(
                       textStyle: TextStyle(
                         color: whiteColor,
@@ -55,6 +58,71 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
+                  SizedBox(
+                    height: !codeSent ? 100 : 0,
+                  ),
+                  !codeSent
+                      ? Container(
+                          width: size.width * 0.8,
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            elevation: 10,
+                            child: Padding(
+                              padding: EdgeInsets.all(20),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    'Language',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.montserrat(
+                                      textStyle: TextStyle(
+                                        color: darkColor,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  DropdownButton<LanguageData>(
+                                    iconSize: 30,
+                                    hint: Text(Languages.of(context)
+                                        .labelSelectLanguage),
+                                    onChanged: (LanguageData language) {
+                                      changeLanguage(
+                                          context, language.languageCode);
+                                    },
+                                    items: LanguageData.languageList()
+                                        .map<DropdownMenuItem<LanguageData>>(
+                                          (e) => DropdownMenuItem<LanguageData>(
+                                            value: e,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: <Widget>[
+                                                Text(
+                                                  e.flag,
+                                                  style:
+                                                      TextStyle(fontSize: 30),
+                                                ),
+                                                Text(e.name)
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                        .toList(),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        )
+                      : Container(),
                   SizedBox(
                     height: !codeSent ? 100 : 0,
                   ),
@@ -85,7 +153,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          'Online bookings',
+                                          Languages.of(context)
+                                              .loginScreen1head,
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                           style: GoogleFonts.montserrat(
@@ -100,7 +169,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           height: 10,
                                         ),
                                         Text(
-                                          'Make bookings online without problems. No more need to contact administrators and have time-consuming talks',
+                                          Languages.of(context)
+                                              .loginScreen1text,
                                           maxLines: 10,
                                           overflow: TextOverflow.ellipsis,
                                           style: GoogleFonts.montserrat(
@@ -153,7 +223,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          '2 minutes',
+                                          Languages.of(context)
+                                              .loginScreen2head,
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                           style: GoogleFonts.montserrat(
@@ -168,7 +239,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           height: 10,
                                         ),
                                         Text(
-                                          'You will need only 2 minutes to make booking anywhere',
+                                          Languages.of(context)
+                                              .loginScreen2text,
                                           maxLines: 10,
                                           overflow: TextOverflow.ellipsis,
                                           style: GoogleFonts.montserrat(
@@ -221,7 +293,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          'Timetable',
+                                          Languages.of(context)
+                                              .loginScreen3head,
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                           style: GoogleFonts.montserrat(
@@ -236,7 +309,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           height: 10,
                                         ),
                                         Text(
-                                          'Convenient timetable that organizes your bookings and regulates them',
+                                          Languages.of(context)
+                                              .loginScreen3text,
                                           maxLines: 10,
                                           overflow: TextOverflow.ellipsis,
                                           style: GoogleFonts.montserrat(
@@ -268,8 +342,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Card(
                         margin: EdgeInsets.all(10),
                         shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
                         child: Form(
                           key: _formKey,
                           child: Column(
@@ -279,7 +353,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 height: 40,
                               ),
                               Text(
-                                'Get Started',
+                                Languages.of(context).getStarted,
                                 style: GoogleFonts.montserrat(
                                   textStyle: TextStyle(
                                     color: darkPrimaryColor,

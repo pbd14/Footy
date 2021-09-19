@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_complete_guide/Models/LanguageData.dart';
 import 'package:flutter_complete_guide/Models/PushNotificationMessage.dart';
+import 'package:flutter_complete_guide/Services/languages/languages.dart';
+import 'package:flutter_complete_guide/Services/languages/locale_constant.dart';
 import 'package:flutter_complete_guide/constants.dart';
 import 'package:flutter_complete_guide/widgets/rounded_text_input.dart';
 import 'package:flutter_screen_lock/functions.dart';
@@ -148,58 +151,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                         ),
                                       ),
                                       SizedBox(height: 10),
-                                      DropdownButton<String>(
-                                        isExpanded: true,
-                                        hint: Text(
-                                          lang != null ? lang : 'Language',
-                                          textScaleFactor: 1,
-                                          style: GoogleFonts.montserrat(
-                                            textStyle: TextStyle(
-                                              color: darkPrimaryColor,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                        items: [
-                                          new DropdownMenuItem<String>(
-                                            value: 'UZ',
-                                            child: new Text(
-                                              'Uzbek',
-                                              textScaleFactor: 1,
-                                            ),
-                                          ),
-                                          new DropdownMenuItem<String>(
-                                            value: 'RU',
-                                            child: new Text(
-                                              'Russian',
-                                              textScaleFactor: 1,
-                                            ),
-                                          ),
-                                          new DropdownMenuItem<String>(
-                                            value: 'EN',
-                                            child: new Text(
-                                              'English',
-                                              textScaleFactor: 1,
-                                            ),
-                                          ),
-                                        ],
-                                        onChanged: (value) {
-                                          setState(() {
-                                            lang = value;
-                                          });
-                                          prefs.setString('lang', value);
-                                          PushNotificationMessage notification =
-                                              PushNotificationMessage(
-                                            title: 'Saved',
-                                            body: 'Language is saved',
-                                          );
-                                          showSimpleNotification(
-                                            Container(
-                                                child: Text(notification.body)),
-                                            position: NotificationPosition.top,
-                                            background: primaryColor,
-                                          );
+                                      DropdownButton<LanguageData>(
+                                        iconSize: 30,
+                                        hint: Text(Languages.of(context)
+                                            .labelSelectLanguage),
+                                        onChanged: (LanguageData language) {
+                                          changeLanguage(
+                                              context, language.languageCode);
                                         },
+                                        items: LanguageData.languageList()
+                                            .map<
+                                                DropdownMenuItem<LanguageData>>(
+                                              (e) => DropdownMenuItem<
+                                                  LanguageData>(
+                                                value: e,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceAround,
+                                                  children: <Widget>[
+                                                    Text(
+                                                      e.flag,
+                                                      style: TextStyle(
+                                                          fontSize: 30),
+                                                    ),
+                                                    Text(e.name)
+                                                  ],
+                                                ),
+                                              ),
+                                            )
+                                            .toList(),
                                       ),
                                       SizedBox(
                                         height: 20,

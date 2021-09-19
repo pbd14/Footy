@@ -120,6 +120,9 @@ class _History2State extends State<History2>
                               margin: EdgeInsets.symmetric(horizontal: 10.0),
                               // padding: EdgeInsets.all(10),
                               child: Card(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
                                 margin: EdgeInsets.all(5),
                                 elevation: 10,
                                 child: Center(

@@ -289,6 +289,9 @@ class _OnEventScreenState extends State<OnEventScreen> {
                       Container(
                         width: size.width * 0.8,
                         child: Card(
+                          shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
                           elevation: 10,
                           margin: EdgeInsets.fromLTRB(30, 5, 30, 5),
                           child: Padding(
@@ -357,6 +360,9 @@ class _OnEventScreenState extends State<OnEventScreen> {
                       Container(
                         width: size.width * 0.8,
                         child: Card(
+                          shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
                           elevation: 10,
                           margin: EdgeInsets.fromLTRB(30, 5, 30, 5),
                           child: Padding(
@@ -611,6 +617,9 @@ class _OnEventScreenState extends State<OnEventScreen> {
                           ? Container(
                               width: size.width * 0.8,
                               child: Card(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
                                 elevation: 11,
                                 margin: EdgeInsets.fromLTRB(30, 5, 30, 5),
                                 child: Padding(
@@ -929,6 +938,9 @@ class _OnEventScreenState extends State<OnEventScreen> {
                       Container(
                         width: size.width * 0.8,
                         child: Card(
+                          shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
                           elevation: 11,
                           margin: EdgeInsets.fromLTRB(30, 5, 30, 5),
                           child: Padding(
@@ -1040,6 +1052,9 @@ class _OnEventScreenState extends State<OnEventScreen> {
                         margin: EdgeInsets.symmetric(horizontal: 10),
                         width: size.width * 0.9,
                         child: Card(
+                          shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
                           elevation: 10,
                           child: Padding(
                             padding: EdgeInsets.all(10.0),

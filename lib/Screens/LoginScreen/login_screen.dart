@@ -168,7 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           height: 10,
                                         ),
                                         Text(
-                                          'You will need only 2 minutes to make booking anywhere. ',
+                                          'You will need only 2 minutes to make booking anywhere',
                                           maxLines: 10,
                                           overflow: TextOverflow.ellipsis,
                                           style: GoogleFonts.montserrat(
@@ -236,7 +236,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           height: 10,
                                         ),
                                         Text(
-                                          'Convenient timetable that organizes your bookings and regulates them.',
+                                          'Convenient timetable that organizes your bookings and regulates them',
                                           maxLines: 10,
                                           overflow: TextOverflow.ellipsis,
                                           style: GoogleFonts.montserrat(

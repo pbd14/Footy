@@ -211,6 +211,9 @@ class _ProfileScreen1State extends State<ProfileScreen1> {
                           margin: EdgeInsets.symmetric(horizontal: 10.0),
                           // padding: EdgeInsets.all(10),
                           child: Card(
+                            shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
                             color: notifs[index]['type'] == 'booking_canceled'
                                 ? Colors.red
                                 : whiteColor,

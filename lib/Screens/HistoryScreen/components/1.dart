@@ -426,6 +426,9 @@ class _History1State extends State<History1>
                             height: 450,
                             width: size.width * 0.9,
                             child: Card(
+                              shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
                               elevation: 10,
                               child: Padding(
                                 padding: EdgeInsets.all(5.0),
@@ -510,6 +513,9 @@ class _History1State extends State<History1>
                                   margin:
                                       EdgeInsets.symmetric(horizontal: 10.0),
                                   child: Card(
+                                    shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
                                     color: Colors.red,
                                     margin: EdgeInsets.all(5),
                                     elevation: 10,
@@ -759,6 +765,9 @@ class _History1State extends State<History1>
                                   margin:
                                       EdgeInsets.symmetric(horizontal: 10.0),
                                   child: Card(
+                                    shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
                                     color: darkPrimaryColor,
                                     margin: EdgeInsets.all(5),
                                     elevation: 10,
@@ -1007,6 +1016,9 @@ class _History1State extends State<History1>
                               margin: EdgeInsets.symmetric(horizontal: 10.0),
                               // padding: EdgeInsets.all(10),
                               child: Card(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
                                 margin: EdgeInsets.all(5),
                                 elevation: 10,
                                 child: Center(
@@ -1475,6 +1487,9 @@ class _History1State extends State<History1>
                                       EdgeInsets.symmetric(horizontal: 10.0),
                                   // padding: EdgeInsets.all(10),
                                   child: Card(
+                                    shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
                                     color: darkColor,
                                     margin: EdgeInsets.all(5),
                                     elevation: 10,

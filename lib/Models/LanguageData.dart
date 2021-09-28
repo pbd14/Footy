@@ -9,6 +9,7 @@ class LanguageData {
     return <LanguageData>[
       LanguageData("🇺🇸", "English", 'en'),
       LanguageData("🇷🇺", "Russian", "ru"),
+      LanguageData("🇺🇿", "Uzbek", "uz"),
     ];
   }
 }

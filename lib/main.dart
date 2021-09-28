@@ -66,6 +66,7 @@ class _MyAppState extends State<MyApp> {
         supportedLocales: [
         Locale('en', ''),
         Locale('ru', ''),
+        Locale('uz', ''),
       ],
       localizationsDelegates: [
         AppLocalizationsDelegate(),

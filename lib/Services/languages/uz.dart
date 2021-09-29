@@ -31,9 +31,18 @@ class LanguageUz extends Languages {
   @override
   String get loginScreenReenterPhone => "Tel. raqamini o'zgartiring";
   @override
-  String get loginScreenPolicy=> "Davom etish orqali siz ilovadan foydalanishning barcha shartlariga va Maxfiylik siyosatiga rozilik bildirasiz";
+  String get loginScreenPolicy =>
+      "Davom etish orqali siz ilovadan foydalanishning barcha shartlariga va Maxfiylik siyosatiga rozilik bildirasiz";
   @override
-  String get loginScreenCodeIsNotValid=> "Kodning muddati tugadi";
-  
-  
+  String get loginScreenCodeIsNotValid => "Kodning muddati tugadi";
+
+
+  @override
+  String get homeScreenBook => "Bron qilish";
+  @override
+  String get homeScreenFail => "Xato";
+  @override
+  String get homeScreenFailedToUpdate => "Yangilanmadi";
+  @override
+  String get homeScreenSaved => "Saqlandi";
 }

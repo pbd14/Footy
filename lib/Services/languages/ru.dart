@@ -34,4 +34,14 @@ class LanguageRu extends Languages {
   String get loginScreenPolicy => "Продолжая вы принимаете все правила пользования приложением и нашу Политику Конфиденциальности";
 @override
   String get loginScreenCodeIsNotValid => "Время действия кода истекло";
+
+
+  @override
+  String get homeScreenBook => "Брон";
+  @override
+  String get homeScreenFail => "Ошибка";
+  @override
+  String get homeScreenFailedToUpdate => "Не удалось обновить";
+  @override
+  String get homeScreenSaved => "Сохранено";
 }

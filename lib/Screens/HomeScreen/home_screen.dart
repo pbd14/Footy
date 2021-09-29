@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_complete_guide/Models/Place.dart';
 import 'package:flutter_complete_guide/Models/PushNotificationMessage.dart';
 import 'package:flutter_complete_guide/Screens/PlaceScreen/place_screen.dart';
+import 'package:flutter_complete_guide/Services/languages/languages.dart';
 import 'package:flutter_complete_guide/widgets/ciw.dart';
 import 'package:flutter_complete_guide/widgets/label_button.dart';
 import 'package:flutter_complete_guide/widgets/point_object.dart';
@@ -534,7 +535,7 @@ class _MapPageState extends State<MapPage> {
                           child: RoundedButton(
                             pw: 60,
                             ph: 40,
-                            text: 'Book',
+                            text: Languages.of(context).homeScreenBook,
                             press: () {
                               setState(() {
                                 loading = true;
@@ -575,8 +576,8 @@ class _MapPageState extends State<MapPage> {
                               }).catchError((error) {
                                 PushNotificationMessage notification =
                                     PushNotificationMessage(
-                                  title: 'Fail',
-                                  body: 'Failed to update favourites',
+                                  title: Languages.of(context).homeScreenFail,
+                                  body: Languages.of(context).homeScreenFailedToUpdate,
                                 );
                                 showSimpleNotification(
                                   Container(child: Text(notification.body)),
@@ -590,7 +591,7 @@ class _MapPageState extends State<MapPage> {
                                 duration: Duration(seconds: 2),
                                 backgroundColor: darkPrimaryColor,
                                 content: Text(
-                                  'Saved to favourites',
+                                  Languages.of(context).homeScreenSaved,
                                   style: GoogleFonts.montserrat(
                                     textStyle: TextStyle(
                                       color: whiteColor,
@@ -611,8 +612,8 @@ class _MapPageState extends State<MapPage> {
                               }).catchError((error) {
                                 PushNotificationMessage notification =
                                     PushNotificationMessage(
-                                  title: 'Fail',
-                                  body: 'Failed to update favourites',
+                                  title: Languages.of(context).homeScreenFail,
+                                  body: Languages.of(context).homeScreenFailedToUpdate,
                                 );
                                 showSimpleNotification(
                                   Container(child: Text(notification.body)),
@@ -626,7 +627,7 @@ class _MapPageState extends State<MapPage> {
                                 duration: Duration(seconds: 2),
                                 backgroundColor: Colors.red,
                                 content: Text(
-                                  'Removed from favourites',
+                                  Languages.of(context).homeScreenSaved,
                                   style: GoogleFonts.montserrat(
                                     textStyle: TextStyle(
                                       color: whiteColor,

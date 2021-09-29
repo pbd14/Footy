@@ -34,4 +34,14 @@ class LanguageEn extends Languages {
   String get loginScreenPolicy => "By continuing, you accept all terms of use of the app and the Privacy Policy";
   @override
   String get loginScreenCodeIsNotValid => "Code is not valid anymore";
+
+
+  @override
+  String get homeScreenBook => "Book";
+  @override
+  String get homeScreenFail => "Fail";
+  @override
+  String get homeScreenFailedToUpdate => "Failed to update";
+  @override
+  String get homeScreenSaved => "Saved";
 }

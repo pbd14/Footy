@@ -22,4 +22,10 @@ abstract class Languages {
   String get loginScreenPolicy;
   String get loginScreenCodeIsNotValid;
 
+
+  String get homeScreenBook;
+  String get homeScreenFail;
+  String get homeScreenFailedToUpdate;
+  String get homeScreenSaved;
+
 }

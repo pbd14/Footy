@@ -48,4 +48,18 @@ class LanguageRu extends Languages {
 
   @override
   String get searchScreenName => "Название";
+
+
+  @override
+  String get historyScreenSchedule => "Расписание";
+  @override
+  String get historyScreenHistory => "История";
+  @override
+  String get historyScreenUnpaid => "Неоплачено";
+  @override
+  String get historyScreenInProcess => "В процессе";
+  @override
+  String get historyScreenUpcoming => "Предстоящие";
+  @override
+  String get historyScreenUnrated => "Без оценки";
 }

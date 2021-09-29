@@ -46,9 +46,21 @@ class LanguageUz extends Languages {
   @override
   String get homeScreenSaved => "Saqlandi";
 
-  
-  @override
-  String get searchScreenName=> "Joy nomi";
 
-  
+  @override
+  String get searchScreenName => "Joy nomi";
+
+
+  @override
+  String get historyScreenSchedule => "Jadval";
+  @override
+  String get historyScreenHistory => "Tarix";
+  @override
+  String get historyScreenUnpaid => "To'lanmagan";
+  @override
+  String get historyScreenInProcess => "Jarayonda";
+  @override
+  String get historyScreenUpcoming => "Tugallanmagan";
+  @override
+  String get historyScreenUnrated=> "Baholanmagan";
 }

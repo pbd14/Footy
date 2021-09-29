@@ -48,4 +48,18 @@ class LanguageEn extends Languages {
 
   @override
   String get searchScreenName => "Place name";
+  
+
+  @override
+  String get historyScreenSchedule => "Schedule";
+  @override
+  String get historyScreenHistory=> "History";
+  @override
+  String get historyScreenUnpaid=> "Unpaid";
+  @override
+  String get historyScreenInProcess=> "In Process";
+  @override
+  String get historyScreenUpcoming=> "Upcoming";
+  @override
+  String get historyScreenUnrated=> "Unrated";
 }

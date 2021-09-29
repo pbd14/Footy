@@ -9,6 +9,7 @@ import 'package:flutter_complete_guide/Models/PushNotificationMessage.dart';
 import 'package:flutter_complete_guide/Screens/HomeScreen/home_screen.dart';
 import 'package:flutter_complete_guide/Screens/OnEventScreen/on_event_screen.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
+import 'package:flutter_complete_guide/Services/languages/languages.dart';
 import 'package:flutter_complete_guide/constants.dart';
 import 'package:flutter_complete_guide/widgets/label_button.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
@@ -164,8 +165,8 @@ class _History1State extends State<History1>
           .get()
           .catchError((error) {
         PushNotificationMessage notification = PushNotificationMessage(
-          title: 'Fail',
-          body: 'Failed to get data',
+          title: Languages.of(context).homeScreenFail,
+          body: Languages.of(context).homeScreenFailedToUpdate,
         );
         showSimpleNotification(
           Container(child: Text(notification.body)),
@@ -193,8 +194,8 @@ class _History1State extends State<History1>
             .get()
             .catchError((error) {
           PushNotificationMessage notification = PushNotificationMessage(
-            title: 'Fail',
-            body: 'Failed to get data',
+            title: Languages.of(context).homeScreenFail,
+            body: Languages.of(context).homeScreenFailedToUpdate,
           );
           showSimpleNotification(
             Container(child: Text(notification.body)),
@@ -400,7 +401,7 @@ class _History1State extends State<History1>
                 padding: const EdgeInsets.all(8.0),
                 child: Center(
                   child: Text(
-                    'Error',
+                    Languages.of(context).homeScreenFail,
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.montserrat(
                       textStyle: TextStyle(
@@ -478,7 +479,7 @@ class _History1State extends State<History1>
                             ),
                             Center(
                               child: Text(
-                                'Unpaid',
+                                Languages.of(context).historyScreenUnpaid,
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.montserrat(
                                   textStyle: TextStyle(
@@ -731,7 +732,7 @@ class _History1State extends State<History1>
                             ),
                             Center(
                               child: Text(
-                                'In process',
+                                Languages.of(context).historyScreenInProcess,
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.montserrat(
                                   textStyle: TextStyle(
@@ -981,7 +982,7 @@ class _History1State extends State<History1>
                         ),
                         Center(
                           child: Text(
-                            'Upcoming',
+                            Languages.of(context).historyScreenUpcoming,
                             overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.montserrat(
                               textStyle: TextStyle(
@@ -1193,9 +1194,9 @@ class _History1State extends State<History1>
                                                               PushNotificationMessage
                                                                   notification =
                                                                   PushNotificationMessage(
-                                                                title: 'Fail',
+                                                                title: Languages.of(context).homeScreenFail,
                                                                 body:
-                                                                    'Failed to update favourites',
+                                                                    Languages.of(context).homeScreenFailedToUpdate,
                                                               );
                                                               showSimpleNotification(
                                                                 Container(
@@ -1230,7 +1231,7 @@ class _History1State extends State<History1>
                                                               backgroundColor:
                                                                   darkPrimaryColor,
                                                               content: Text(
-                                                                'Saved to favourites',
+                                                                Languages.of(context).homeScreenSaved,
                                                                 style: GoogleFonts
                                                                     .montserrat(
                                                                   textStyle:
@@ -1269,9 +1270,9 @@ class _History1State extends State<History1>
                                                               PushNotificationMessage
                                                                   notification =
                                                                   PushNotificationMessage(
-                                                                title: 'Fail',
+                                                                title: Languages.of(context).homeScreenFail,
                                                                 body:
-                                                                    'Failed to update favourites',
+                                                                    Languages.of(context).homeScreenFailedToUpdate
                                                               );
                                                               showSimpleNotification(
                                                                 Container(
@@ -1306,7 +1307,7 @@ class _History1State extends State<History1>
                                                               backgroundColor:
                                                                   Colors.red,
                                                               content: Text(
-                                                                'Removed from favourites',
+                                                                Languages.of(context).homeScreenSaved,
                                                                 style: GoogleFonts
                                                                     .montserrat(
                                                                   textStyle:
@@ -1452,7 +1453,7 @@ class _History1State extends State<History1>
                             ),
                             Center(
                               child: Text(
-                                'Unrated',
+                                Languages.of(context).historyScreenUnrated,
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.montserrat(
                                   textStyle: TextStyle(

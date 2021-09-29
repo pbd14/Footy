@@ -8,6 +8,7 @@ import 'package:flutter_complete_guide/Models/Place.dart';
 import 'package:flutter_complete_guide/Models/PushNotificationMessage.dart';
 import 'package:flutter_complete_guide/Screens/HomeScreen/home_screen.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
+import 'package:flutter_complete_guide/Services/languages/languages.dart';
 import 'package:flutter_complete_guide/constants.dart';
 import 'package:flutter_complete_guide/widgets/label_button.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
@@ -279,9 +280,9 @@ class _History2State extends State<History2>
                                                               PushNotificationMessage
                                                                   notification =
                                                                   PushNotificationMessage(
-                                                                title: 'Fail',
+                                                                title: Languages.of(context).homeScreenFail,
                                                                 body:
-                                                                    'Failed to update favourites',
+                                                                    Languages.of(context).homeScreenFailedToUpdate,
                                                               );
                                                               showSimpleNotification(
                                                                 Container(
@@ -316,7 +317,7 @@ class _History2State extends State<History2>
                                                               backgroundColor:
                                                                   darkPrimaryColor,
                                                               content: Text(
-                                                                'Saved to favourites',
+                                                                Languages.of(context).homeScreenSaved,
                                                                 style: GoogleFonts
                                                                     .montserrat(
                                                                   textStyle:
@@ -355,9 +356,9 @@ class _History2State extends State<History2>
                                                               PushNotificationMessage
                                                                   notification =
                                                                   PushNotificationMessage(
-                                                                title: 'Fail',
+                                                                title: Languages.of(context).homeScreenFail,
                                                                 body:
-                                                                    'Failed to update favourites',
+                                                                    Languages.of(context).homeScreenFailedToUpdate,
                                                               );
                                                               showSimpleNotification(
                                                                 Container(
@@ -392,7 +393,7 @@ class _History2State extends State<History2>
                                                               backgroundColor:
                                                                   Colors.red,
                                                               content: Text(
-                                                                'Removed from favourites',
+                                                                Languages.of(context).homeScreenSaved,
                                                                 style: GoogleFonts
                                                                     .montserrat(
                                                                   textStyle:

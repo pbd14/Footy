@@ -31,4 +31,12 @@ abstract class Languages {
 
   String get searchScreenName;
 
+
+  String get historyScreenSchedule;
+  String get historyScreenHistory;
+  String get historyScreenUnpaid;
+  String get historyScreenInProcess;
+  String get historyScreenUpcoming;
+  String get historyScreenUnrated;
+
 }

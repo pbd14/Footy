@@ -31,10 +31,10 @@ class LanguageEn extends Languages {
   @override
   String get loginScreenReenterPhone => "Re-enter the phone";
   @override
-  String get loginScreenPolicy => "By continuing, you accept all terms of use of the app and the Privacy Policy";
+  String get loginScreenPolicy =>
+      "By continuing, you accept all terms of use of the app and the Privacy Policy";
   @override
   String get loginScreenCodeIsNotValid => "Code is not valid anymore";
-
 
   @override
   String get homeScreenBook => "Book";
@@ -45,21 +45,28 @@ class LanguageEn extends Languages {
   @override
   String get homeScreenSaved => "Saved";
 
-
   @override
   String get searchScreenName => "Place name";
-  
 
   @override
   String get historyScreenSchedule => "Schedule";
   @override
-  String get historyScreenHistory=> "History";
+  String get historyScreenHistory => "History";
   @override
-  String get historyScreenUnpaid=> "Unpaid";
+  String get historyScreenUnpaid => "Unpaid";
   @override
-  String get historyScreenInProcess=> "In Process";
+  String get historyScreenInProcess => "In Process";
   @override
-  String get historyScreenUpcoming=> "Upcoming";
+  String get historyScreenUpcoming => "Upcoming";
   @override
-  String get historyScreenUnrated=> "Unrated";
+  String get historyScreenUnrated => "Unrated";
+
+  @override
+  String get profileScreenFavs => "Favourites";
+  @override
+  String get profileScreenNotifs => "Notifications";
+  @override
+  String get profileScreenSignOut => "Sign Out?";
+  @override
+  String get profileScreenWantToLeave => "Do you want to leave?";
 }

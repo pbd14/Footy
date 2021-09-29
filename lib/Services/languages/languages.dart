@@ -39,4 +39,10 @@ abstract class Languages {
   String get historyScreenUpcoming;
   String get historyScreenUnrated;
 
+
+  String get profileScreenFavs;
+  String get profileScreenNotifs;
+  String get profileScreenSignOut;
+  String get profileScreenWantToLeave;
+
 }

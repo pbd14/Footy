@@ -62,5 +62,15 @@ class LanguageUz extends Languages {
   @override
   String get historyScreenUpcoming => "Tugallanmagan";
   @override
-  String get historyScreenUnrated=> "Baholanmagan";
+  String get historyScreenUnrated => "Baholanmagan";
+
+
+  @override
+  String get profileScreenFavs => "Sevimlilar";
+  @override
+  String get profileScreenNotifs => "Xabarlar";
+  @override
+  String get profileScreenSignOut => "Chiqish?";
+  @override
+  String get profileScreenWantToLeave => "Ketmoqchimisiz?";
 }

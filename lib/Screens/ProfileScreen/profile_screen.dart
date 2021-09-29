@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/Services/languages/languages.dart';
 import 'package:flutter_complete_guide/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -34,7 +35,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   tabs: [
                     Tab(
                       child: Text(
-                        'Favourites',
+                        Languages.of(context).profileScreenFavs,
                         style: GoogleFonts.montserrat(
                           textStyle: TextStyle(
                               color: whiteColor,
@@ -45,7 +46,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     Tab(
                       child: Text(
-                        'Notifications',
+                        Languages.of(context).profileScreenNotifs,
                         style: GoogleFonts.montserrat(
                           textStyle: TextStyle(
                               color: whiteColor,

@@ -1,16 +1,15 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Models/Place.dart';
 import 'package:flutter_complete_guide/Screens/HomeScreen/home_screen.dart';
-import 'package:flutter_complete_guide/Screens/MapScreen/map_screen.dart';
 import 'package:flutter_complete_guide/Screens/PlaceScreen/place_screen.dart';
 import 'package:flutter_complete_guide/Screens/ProfileScreen/components/settings.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
 import 'package:flutter_complete_guide/Services/auth_service.dart';
+import 'package:flutter_complete_guide/Services/languages/languages.dart';
 import 'package:flutter_complete_guide/constants.dart';
 import 'package:flutter_complete_guide/widgets/label_button.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
@@ -114,9 +113,10 @@ class _ProfileScreen2State extends State<ProfileScreen2>
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: const Text('Выйти?'),
-                            content:
-                                const Text('Хотите ли вы выйти из аккаунта?'),
+                            title: Text(
+                                Languages.of(context).profileScreenSignOut),
+                            content: Text(
+                                Languages.of(context).profileScreenWantToLeave),
                             actions: <Widget>[
                               TextButton(
                                 onPressed: () {
@@ -186,8 +186,8 @@ class _ProfileScreen2State extends State<ProfileScreen2>
                               // padding: EdgeInsets.all(10),
                               child: Card(
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
                                 margin: EdgeInsets.all(5),
                                 elevation: 10,
                                 child: Center(

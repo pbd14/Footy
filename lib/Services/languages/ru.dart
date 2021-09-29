@@ -62,4 +62,14 @@ class LanguageRu extends Languages {
   String get historyScreenUpcoming => "Предстоящие";
   @override
   String get historyScreenUnrated => "Без оценки";
+
+  @override
+  String get profileScreenFavs => "Избранное";
+  @override
+  String get profileScreenNotifs => "Уведомления";
+  @override
+  String get profileScreenSignOut => "Выйти?";
+  @override
+  String get profileScreenWantToLeave => "Хотите выйти?";
+
 }

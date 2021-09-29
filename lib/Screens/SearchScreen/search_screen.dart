@@ -5,6 +5,7 @@ import 'package:flutter_complete_guide/Models/Place.dart';
 import 'package:flutter_complete_guide/Screens/HomeScreen/home_screen.dart';
 import 'package:flutter_complete_guide/Screens/PlaceScreen/place_screen.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
+import 'package:flutter_complete_guide/Services/languages/languages.dart';
 import 'package:flutter_complete_guide/constants.dart';
 import 'package:flutter_complete_guide/widgets/rounded_text_input.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
@@ -83,7 +84,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       RoundedTextInput(
                         height: 70,
                         icon: Icons.search,
-                        hintText: 'Place name',
+                        hintText: Languages.of(context).searchScreenName,
                         type: TextInputType.text,
                         onChanged: (value) {
                           value != null

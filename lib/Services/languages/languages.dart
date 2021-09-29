@@ -28,4 +28,7 @@ abstract class Languages {
   String get homeScreenFailedToUpdate;
   String get homeScreenSaved;
 
+
+  String get searchScreenName;
+
 }

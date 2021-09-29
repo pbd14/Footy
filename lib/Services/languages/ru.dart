@@ -44,4 +44,8 @@ class LanguageRu extends Languages {
   String get homeScreenFailedToUpdate => "Не удалось обновить";
   @override
   String get homeScreenSaved => "Сохранено";
+
+
+  @override
+  String get searchScreenName => "Название";
 }

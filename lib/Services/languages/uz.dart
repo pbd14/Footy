@@ -45,4 +45,10 @@ class LanguageUz extends Languages {
   String get homeScreenFailedToUpdate => "Yangilanmadi";
   @override
   String get homeScreenSaved => "Saqlandi";
+
+  
+  @override
+  String get searchScreenName=> "Joy nomi";
+
+  
 }

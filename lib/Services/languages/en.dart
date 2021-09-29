@@ -44,4 +44,8 @@ class LanguageEn extends Languages {
   String get homeScreenFailedToUpdate => "Failed to update";
   @override
   String get homeScreenSaved => "Saved";
+
+
+  @override
+  String get searchScreenName => "Place name";
 }

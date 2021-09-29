@@ -367,7 +367,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ? Container(
                                       width: size.width * 0.7,
                                       child: RoundedPhoneInputField(
-                                        hintText: "Your Phone",
+                                        hintText: Languages.of(context).loginScreenYourPhone,
                                         onChanged: (value) {
                                           this.phoneNo = value;
                                         },
@@ -380,8 +380,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                       length: 6,
                                       validator: (val) => val.length == 6
                                           ? null
-                                          : 'Code should contain 6 digits',
-                                      hintText: "Enter OTP",
+                                          : Languages.of(context).loginScreen6Digits,
+                                      hintText: Languages.of(context).loginScreenEnterCode,
                                       type: TextInputType.number,
                                       onChanged: (value) {
                                         this.smsCode = value;
@@ -400,7 +400,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               RoundedButton(
                                 width: 0.4,
                                 ph: 45,
-                                text: codeSent ? 'GO' : 'SEND CODE',
+                                text: 'GO',
                                 press: () async {
                                   if (_formKey.currentState.validate()) {
                                     setState(() {
@@ -431,7 +431,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ? RoundedButton(
                                       width: 0.6,
                                       ph: 45,
-                                      text: 'Re-enter the phone',
+                                      text: Languages.of(context).loginScreenReenterPhone,
                                       press: () {
                                         Navigator.push(
                                             context,
@@ -461,7 +461,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 padding: EdgeInsets.fromLTRB(
                                     size.width * 0.05, 0, size.width * 0.05, 0),
                                 child: Text(
-                                  'Продолжая вы принимаете все правила пользования приложением и нашу Политику Конфиденциальности',
+                                  Languages.of(context).loginScreenPolicy,
                                   textScaleFactor: 1,
                                   style: GoogleFonts.montserrat(
                                     textStyle: TextStyle(
@@ -527,7 +527,7 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         this.codeSent = false;
         this.loading = false;
-        this.error = 'Code is not valid anymore';
+        this.error = Languages.of(context).loginScreenCodeIsNotValid;
       });
     };
 

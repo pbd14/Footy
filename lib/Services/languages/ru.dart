@@ -4,7 +4,7 @@ class LanguageRu extends Languages {
   @override
   String get welcomeToFooty => "ДОБРО ПОЖАЛОВАТЬ";
   @override
-  String get labelSelectLanguage => "Выберите язык";
+  String get labelSelectLanguage => "Русский";
   @override
   String get loginScreen1head => "Онлайн бронирование";
   @override
@@ -72,4 +72,15 @@ class LanguageRu extends Languages {
   @override
   String get profileScreenWantToLeave => "Хотите выйти?";
 
+
+  @override
+  String get settingsSettings => "Настройки";
+  @override
+  String get settingsLocalPassword => "Локальный пароль";
+  @override
+  String get settingsLocalPasswordTurnedOff => "Локальный пароль отключен";
+  @override
+  String get settingsLocalPasswordTurnedOn => "Локальный пароль включен";
+  @override
+  String get settingsDigitPassword => "4-значный пароль";
 }

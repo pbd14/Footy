@@ -4,7 +4,7 @@ class LanguageEn extends Languages {
   @override
   String get welcomeToFooty => "WELCOME TO FOOTY";
   @override
-  String get labelSelectLanguage => "Select language";
+  String get labelSelectLanguage => "English";
   @override
   String get loginScreen1head => "Online bookings";
   @override
@@ -69,4 +69,17 @@ class LanguageEn extends Languages {
   String get profileScreenSignOut => "Sign Out?";
   @override
   String get profileScreenWantToLeave => "Do you want to leave?";
+
+
+  @override
+  String get settingsSettings => "Settings";
+  @override
+  String get settingsLocalPassword => "Local password";
+  @override
+  String get settingsLocalPasswordTurnedOff => "Local password is turned off";
+  @override
+  String get settingsLocalPasswordTurnedOn => "Local password is turned on";
+  @override
+  String get settingsDigitPassword => "4-digit password";
+  
 }

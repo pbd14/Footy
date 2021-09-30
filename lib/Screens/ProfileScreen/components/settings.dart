@@ -87,7 +87,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               backgroundColor: darkColor,
               centerTitle: true,
               title: Text(
-                'Settings',
+                Languages.of(context).settingsSettings,
                 overflow: TextOverflow.ellipsis,
                 textScaleFactor: 1,
                 style: GoogleFonts.montserrat(
@@ -127,7 +127,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                         padding: const EdgeInsets.all(10.0),
                                         child: Center(
                                           child: Text(
-                                            'Settings',
+                                            Languages.of(context).settingsSettings,
                                             style: GoogleFonts.montserrat(
                                               textStyle: TextStyle(
                                                 color: darkColor,
@@ -203,7 +203,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                         Expanded(
                                           flex: 7,
                                           child: Text(
-                                            'Local password',
+                                            Languages.of(context).settingsLocalPassword,
                                             overflow: TextOverflow.ellipsis,
                                             style: GoogleFonts.montserrat(
                                               textStyle: TextStyle(
@@ -232,9 +232,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                                     PushNotificationMessage
                                                         notification =
                                                         PushNotificationMessage(
-                                                      title: 'Сохранено',
+                                                      title: Languages.of(context).homeScreenSaved,
                                                       body:
-                                                          'Локальный пароль отключен',
+                                                          Languages.of(context).settingsLocalPasswordTurnedOff,
                                                     );
                                                     showSimpleNotification(
                                                       Container(
@@ -287,7 +287,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                                     .allow(
                                                         RegExp(r"[0-9]+|\s")),
                                               ],
-                                              hintText: 'Пароль',
+                                              hintText: 'Password',
                                               type: TextInputType.number,
                                               onChanged: (value) {
                                                 if (value.length == 4) {
@@ -298,9 +298,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                                   PushNotificationMessage
                                                       notification =
                                                       PushNotificationMessage(
-                                                    title: 'Сохранено',
+                                                    title: Languages.of(context).homeScreenSaved,
                                                     body:
-                                                        'Локальный пароль включен',
+                                                        Languages.of(context).settingsLocalPasswordTurnedOn,
                                                   );
                                                   showSimpleNotification(
                                                     Container(

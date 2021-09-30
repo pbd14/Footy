@@ -4,7 +4,7 @@ class LanguageUz extends Languages {
   @override
   String get welcomeToFooty => "HUSH KELIBSIZ";
   @override
-  String get labelSelectLanguage => "Tilni tanlang";
+  String get labelSelectLanguage => "O'zbek";
   @override
   String get loginScreen1head => "Onlayn bron qilish";
   @override
@@ -73,4 +73,16 @@ class LanguageUz extends Languages {
   String get profileScreenSignOut => "Chiqish?";
   @override
   String get profileScreenWantToLeave => "Ketmoqchimisiz?";
+
+
+  @override
+  String get settingsSettings => "Sozlamalar";
+  @override
+  String get settingsLocalPassword => "Mahalliy parol";
+  @override
+  String get settingsLocalPasswordTurnedOff => "Mahalliy parol ochirildi";
+  @override
+  String get settingsLocalPasswordTurnedOn => "Mahalliy parol yoqildi";
+  @override
+  String get settingsDigitPassword => "4 raqamli parol";
 }

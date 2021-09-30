@@ -45,4 +45,9 @@ abstract class Languages {
   String get profileScreenSignOut;
   String get profileScreenWantToLeave;
 
+  String get settingsSettings;
+  String get settingsLocalPassword;
+  String get settingsLocalPasswordTurnedOff;
+  String get settingsLocalPasswordTurnedOn;
+  String get settingsDigitPassword;
 }

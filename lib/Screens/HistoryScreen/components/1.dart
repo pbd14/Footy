@@ -248,15 +248,6 @@ class _History1State extends State<History1>
           'userId',
           isEqualTo: FirebaseAuth.instance.currentUser.uid,
         )
-        .where(
-          'date',
-          isEqualTo: DateTime(
-            DateTime.now().year,
-            DateTime.now().month,
-            DateTime.now().day,
-            0,
-          ).toString(),
-        )
         .snapshots()
         .listen((bookings) {
           setState(() {

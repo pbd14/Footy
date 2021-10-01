@@ -484,7 +484,7 @@ class _History1State extends State<History1>
                               height: 15,
                             ),
                             for (QueryDocumentSnapshot book
-                                in unpaidBookingsSlivers)
+                                in unpaidBookingsSlivers.toSet().toList())
                               TextButton(
                                 onPressed: () {
                                   setState(() {
@@ -736,7 +736,7 @@ class _History1State extends State<History1>
                             SizedBox(
                               height: 15,
                             ),
-                            for (QueryDocumentSnapshot book in slivers)
+                            for (QueryDocumentSnapshot book in slivers.toSet().toList())
                               TextButton(
                                 onPressed: () {
                                   setState(() {
@@ -986,7 +986,7 @@ class _History1State extends State<History1>
                         SizedBox(
                           height: 15,
                         ),
-                        for (QueryDocumentSnapshot book in _bookings)
+                        for (QueryDocumentSnapshot book in _bookings.toSet().toList())
                           CupertinoButton(
                             onPressed: () {
                               setState(() {
@@ -1457,7 +1457,7 @@ class _History1State extends State<History1>
                             SizedBox(
                               height: 15,
                             ),
-                            for (var book in unratedBooks)
+                            for (var book in unratedBooks.toSet().toList())
                               TextButton(
                                 onPressed: () {
                                   setState(() {

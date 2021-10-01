@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:io';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_complete_guide/Models/Place.dart';
 import 'package:flutter_complete_guide/Models/PushNotificationMessage.dart';
@@ -16,6 +18,7 @@ import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart'
 import 'package:flutter_screen_lock/functions.dart';
 import 'package:geolocator/geolocator.dart' as geolocator;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:native_updater/native_updater.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Screens/HistoryScreen/history_screen.dart';
@@ -25,6 +28,7 @@ import 'package:flutter_complete_guide/Screens/loading_screen.dart';
 import 'package:flutter_complete_guide/constants.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Map<String, double> data = null;
@@ -113,8 +117,29 @@ class HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> checkVersion() async {
+    RemoteConfig remoteConfig = RemoteConfig.instance;
+    bool updated = await remoteConfig.fetchAndActivate();
+    String requiredVersion = remoteConfig.getString(Platform.isAndroid
+        ? 'footy_google_play_version'
+        : 'footy_appstore_version');
+    String appStoreLink = remoteConfig.getString('footy_appstore_link');
+    String googlePlayLink = remoteConfig.getString('footy_google_play_link');
+
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    if (packageInfo.version != requiredVersion) {
+      NativeUpdater.displayUpdateAlert(
+        context,
+        forceUpdate: true,
+        appStoreUrl: appStoreLink,
+        playStoreUrl: googlePlayLink,
+      );
+    }
+  }
+
   @override
   void initState() {
+    checkVersion();
     subscription = FirebaseFirestore.instance
         .collection('bookings')
         .where(

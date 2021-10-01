@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Models/LanguageData.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
@@ -11,6 +14,8 @@ import 'package:flutter_complete_guide/widgets/rounded_phone_input_field.dart';
 import 'package:flutter_complete_guide/widgets/rounded_text_input.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:native_updater/native_updater.dart';
+import 'package:package_info/package_info.dart';
 
 class LoginScreen extends StatefulWidget {
   final String errors;
@@ -29,6 +34,32 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool codeSent = false;
   bool loading = false;
+
+  Future<void> checkVersion() async {
+    RemoteConfig remoteConfig = RemoteConfig.instance;
+    bool updated = await remoteConfig.fetchAndActivate();
+    String requiredVersion = remoteConfig.getString(Platform.isAndroid
+        ? 'footy_google_play_version'
+        : 'footy_appstore_version');
+    String appStoreLink = remoteConfig.getString('footy_appstore_link');
+    String googlePlayLink = remoteConfig.getString('footy_google_play_link');
+
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    if (packageInfo.version != requiredVersion) {
+      NativeUpdater.displayUpdateAlert(
+        context,
+        forceUpdate: true,
+        appStoreUrl: appStoreLink,
+        playStoreUrl: googlePlayLink,
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    checkVersion();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

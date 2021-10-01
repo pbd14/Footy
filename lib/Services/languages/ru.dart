@@ -83,4 +83,8 @@ class LanguageRu extends Languages {
   String get settingsLocalPasswordTurnedOn => "Локальный пароль включен";
   @override
   String get settingsDigitPassword => "4-значный пароль";
+
+
+  @override
+  String get serviceScreenNoInternet => "Нет соединения с Интернетом";
 }

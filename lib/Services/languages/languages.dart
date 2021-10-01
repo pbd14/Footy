@@ -50,4 +50,7 @@ abstract class Languages {
   String get settingsLocalPasswordTurnedOff;
   String get settingsLocalPasswordTurnedOn;
   String get settingsDigitPassword;
+
+
+  String get serviceScreenNoInternet;
 }

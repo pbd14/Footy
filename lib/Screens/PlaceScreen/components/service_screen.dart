@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_format/date_format.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Models/Booking.dart';
 import 'package:flutter_complete_guide/Models/PushNotificationMessage.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
+import 'package:flutter_complete_guide/Screens/sww_screen.dart';
+import 'package:flutter_complete_guide/Services/languages/languages.dart';
 import 'package:flutter_complete_guide/widgets/rounded_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -37,6 +41,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
   bool loading1 = false;
   bool verifying = false;
   bool can = true;
+  bool isConnected = false;
 
   // ignore: unused_field
   String _setTime, _setTime2, _setDate, error;
@@ -485,15 +490,101 @@ class _PlaceScreenState extends State<ServiceScreen> {
   }
 
   Future<void> prepare() async {
+    // try {
+    //   final result = await InternetAddress.lookup('https://footyuz.web.app')
+    //       .timeout(Duration(minutes: 1));
+    //   if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+    //     print('connected');
+    //   }
+    // } on SocketException catch (_) {
+    //   showDialog(
+    //     barrierDismissible: false,
+    //     context: context,
+    //     builder: (BuildContext context) {
+    //       return AlertDialog(
+    //         title: Text(Languages.of(context).serviceScreenNoInternet),
+    //         // content: Text(Languages.of(context).profileScreenWantToLeave),
+    //         actions: <Widget>[
+    //           IconButton(
+    //             onPressed: () async {
+    //               try {
+    //                 final result =
+    //                     await InternetAddress.lookup('https://footyuz.web.app');
+    //                 if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+    //                   Navigator.of(context).pop(true);
+    //                 }
+    //               } on SocketException catch (_) {}
+    //               // prefs.setBool('local_auth', false);
+    //               // prefs.setString('local_password', '');
+    //             },
+    //             icon: Icon(CupertinoIcons.arrow_2_circlepath),
+    //             iconSize: 20,
+    //           ),
+    //         ],
+    //       );
+    //     },
+    //   );
+    // }
     place = await FirebaseFirestore.instance
         .collection('locations')
         .doc(widget.placeId)
         .get();
   }
 
+  Future<void> _checkInternetConnection() async {
+    try {
+      final response = await InternetAddress.lookup('www.kindacode.com');
+      if (response.isNotEmpty) {
+        setState(() {
+          isConnected = true;
+        });
+      }
+    } on SocketException catch (err) {
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(Languages.of(context).serviceScreenNoInternet),
+            // content: Text(Languages.of(context).profileScreenWantToLeave),
+            actions: <Widget>[
+              IconButton(
+                onPressed: () async {
+                  try {
+                    final response =
+                        await InternetAddress.lookup('www.kindacode.com');
+                    if (response.isNotEmpty) {
+                      Navigator.of(context).pop(false);
+                      setState(() {
+                        isConnected = true;
+                      });
+                    }
+                  } on SocketException catch (err) {
+                    setState(() {
+                      isConnected = false;
+                    });
+                    print(err);
+                  }
+                },
+                icon: Icon(CupertinoIcons.arrow_2_circlepath),
+                iconSize: 20,
+              ),
+            ],
+          );
+        },
+      );
+      setState(() {
+        isConnected = false;
+      });
+      print(err);
+    }
+  }
+
   @override
   void initState() {
     prepare();
+    _checkInternetConnection();
+
     super.initState();
     _dateController.text = DateFormat.yMMMd().format(DateTime.now());
 
@@ -1106,7 +1197,9 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
                                                               .start,
-                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: <Widget>[
                                                         Text(
                                                           DateFormat.yMMMd()
@@ -1412,13 +1505,14 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                         ),
                                                         payment_way.isNotEmpty
                                                             ? Center(
-                                                              child: Builder(
+                                                                child: Builder(
                                                                   builder:
                                                                       (context) =>
                                                                           RoundedButton(
                                                                     ph: 40,
                                                                     pw: 100,
-                                                                    text: 'Book',
+                                                                    text:
+                                                                        'Book',
                                                                     press:
                                                                         () async {
                                                                       setState(
@@ -1463,8 +1557,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                                         );
                                                                         showSimpleNotification(
                                                                           Container(
-                                                                              child:
-                                                                                  Text(notification.body)),
+                                                                              child: Text(notification.body)),
                                                                           position:
                                                                               NotificationPosition.top,
                                                                           background:
@@ -1481,302 +1574,210 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                                         );
                                                                         showSimpleNotification(
                                                                           Container(
-                                                                              child:
-                                                                                  Text(notification.body)),
+                                                                              child: Text(notification.body)),
                                                                           position:
                                                                               NotificationPosition.top,
                                                                           background:
                                                                               Colors.red,
                                                                         );
                                                                       }
+                                                                      try {
+                                                                        final response =
+                                                                            await InternetAddress.lookup('www.kindacode.com');
+                                                                        if (response
+                                                                            .isNotEmpty) {
+                                                                          setState(
+                                                                              () {
+                                                                            isConnected =
+                                                                                true;
+                                                                          });
+                                                                          if (can) {
+                                                                            String
+                                                                                id =
+                                                                                DateTime.now().millisecondsSinceEpoch.toString();
+                                                                            FirebaseFirestore.instance.collection('bookings').doc(id).set({
+                                                                              'placeId': widget.placeId,
+                                                                              'serviceId': widget.serviceId,
+                                                                              'userId': FirebaseAuth.instance.currentUser.uid,
+                                                                              'price': price.roundToDouble(),
+                                                                              'servicePrice': servicePrice.roundToDouble(),
+                                                                              'commissionPrice': commissionPrice.roundToDouble(),
+                                                                              'from': _time,
+                                                                              'to': _time2,
+                                                                              'date': selectedDate.toString(),
+                                                                              'timestamp_date': selectedDate,
+                                                                              'status': widget.data['type'] == 'nonver' ? 'unfinished' : 'verification_needed',
+                                                                              'deadline': DateTime(
+                                                                                selectedDate.year,
+                                                                                selectedDate.month,
+                                                                                selectedDate.day,
+                                                                                int.parse(_hour) - 1,
+                                                                                int.parse(_minute),
+                                                                              ),
+                                                                              'seen_status': 'unseen',
+                                                                              'isRated': false,
+                                                                              'payment_method': payment_way,
+                                                                            }).catchError((error) {
+                                                                              PushNotificationMessage notification = PushNotificationMessage(
+                                                                                title: 'Fail',
+                                                                                body: 'Failed to make booking',
+                                                                              );
+                                                                              showSimpleNotification(
+                                                                                Container(child: Text(notification.body)),
+                                                                                position: NotificationPosition.top,
+                                                                                background: Colors.red,
+                                                                              );
+                                                                              if (this.mounted) {
+                                                                                setState(() {
+                                                                                  loading = false;
+                                                                                });
+                                                                              } else {
+                                                                                loading = false;
+                                                                              }
+                                                                            });
+                                                                            DocumentSnapshot
+                                                                                company =
+                                                                                await FirebaseFirestore.instance.collection('companies').doc(place.data()['owner']).get().catchError((error) {
+                                                                              PushNotificationMessage notification = PushNotificationMessage(
+                                                                                title: 'Fail',
+                                                                                body: 'Failed to make booking',
+                                                                              );
+                                                                              showSimpleNotification(
+                                                                                Container(child: Text(notification.body)),
+                                                                                position: NotificationPosition.top,
+                                                                                background: Colors.red,
+                                                                              );
+                                                                              if (this.mounted) {
+                                                                                setState(() {
+                                                                                  loading = false;
+                                                                                });
+                                                                              } else {
+                                                                                loading = false;
+                                                                              }
+                                                                            });
+                                                                            FirebaseFirestore.instance.collection('users').doc(company.data()['owner']).update({
+                                                                              'notifications_business': FieldValue.arrayUnion([
+                                                                                {
+                                                                                  'seen': false,
+                                                                                  'type': widget.data['type'] == 'nonver' ? 'new_booking' : 'offered',
+                                                                                  'bookingId': id,
+                                                                                  'title': widget.data['type'] == 'nonver' ? 'New booking' : 'Offer',
+                                                                                  'text': widget.data['type'] == 'nonver' ? 'You have new booking at ' + place.data()['name'] : 'You have new offer at ' + place.data()['name'],
+                                                                                  'companyName': company.data()['name'],
+                                                                                  'date': DateTime.now(),
+                                                                                }
+                                                                              ])
+                                                                            }).catchError((error) {
+                                                                              PushNotificationMessage notification = PushNotificationMessage(
+                                                                                title: 'Fail',
+                                                                                body: 'Failed to make booking',
+                                                                              );
+                                                                              showSimpleNotification(
+                                                                                Container(child: Text(notification.body)),
+                                                                                position: NotificationPosition.top,
+                                                                                background: Colors.red,
+                                                                              );
+                                                                              if (this.mounted) {
+                                                                                setState(() {
+                                                                                  loading = false;
+                                                                                });
+                                                                              } else {
+                                                                                loading = false;
+                                                                              }
+                                                                            });
 
-                                                                      if (can) {
-                                                                        String id = DateTime
-                                                                                .now()
-                                                                            .millisecondsSinceEpoch
-                                                                            .toString();
-                                                                        FirebaseFirestore
-                                                                            .instance
-                                                                            .collection(
-                                                                                'bookings')
-                                                                            .doc(
-                                                                                id)
-                                                                            .set({
-                                                                          'placeId':
-                                                                              widget.placeId,
-                                                                          'serviceId':
-                                                                              widget.serviceId,
-                                                                          'userId': FirebaseAuth
-                                                                              .instance
-                                                                              .currentUser
-                                                                              .uid,
-                                                                          'price':
-                                                                              price.roundToDouble(),
-                                                                          'servicePrice':
-                                                                              servicePrice.roundToDouble(),
-                                                                          'commissionPrice':
-                                                                              commissionPrice.roundToDouble(),
-                                                                          'from':
-                                                                              _time,
-                                                                          'to':
-                                                                              _time2,
-                                                                          'date':
-                                                                              selectedDate.toString(),
-                                                                          'timestamp_date':
-                                                                              selectedDate,
-                                                                          'status': widget.data['type'] ==
-                                                                                  'nonver'
-                                                                              ? 'unfinished'
-                                                                              : 'verification_needed',
-                                                                          'deadline':
-                                                                              DateTime(
-                                                                            selectedDate
-                                                                                .year,
-                                                                            selectedDate
-                                                                                .month,
-                                                                            selectedDate
-                                                                                .day,
-                                                                            int.parse(_hour) -
-                                                                                1,
-                                                                            int.parse(
-                                                                                _minute),
-                                                                          ),
-                                                                          'seen_status':
-                                                                              'unseen',
-                                                                          'isRated':
+                                                                            setState(() {
+                                                                              _dateController.clear();
+                                                                              _timeController.clear();
+                                                                              _timeController2.clear();
+                                                                              selectedDate = DateTime.now();
+                                                                              _time = null;
+                                                                              _time2 = null;
+                                                                              duration = 0;
+                                                                              price = 0;
+                                                                              servicePrice = 0;
+                                                                              commissionPrice = 0;
+                                                                              selectedTime = TimeOfDay(hour: 00, minute: 00);
+                                                                              selectedTime2 = TimeOfDay(hour: 00, minute: 00);
+                                                                              _setDate = null;
+                                                                              _dow = null;
+                                                                              verified = false;
+                                                                              loading1 = false;
+                                                                              verifying = false;
+                                                                              loading = false;
+                                                                              can = true;
+                                                                              selectedDate = DateTime.now();
+                                                                              payment_way = '';
+                                                                            });
+                                                                          } else {
+                                                                            setState(() {
+                                                                              _dateController.clear();
+                                                                              _timeController.clear();
+                                                                              _timeController2.clear();
+                                                                              selectedDate = DateTime.now();
+                                                                              _time = null;
+                                                                              _time2 = null;
+                                                                              duration = 0;
+                                                                              price = 0;
+                                                                              servicePrice = 0;
+                                                                              commissionPrice = 0;
+                                                                              selectedTime = TimeOfDay(hour: 00, minute: 00);
+                                                                              selectedTime2 = TimeOfDay(hour: 00, minute: 00);
+                                                                              _setDate = null;
+                                                                              _dow = null;
+                                                                              verified = false;
+                                                                              loading1 = false;
+                                                                              verifying = false;
+                                                                              loading = false;
+                                                                              can = true;
+                                                                              selectedDate = DateTime.now();
+                                                                              payment_way = '';
+                                                                            });
+                                                                          }
+                                                                        }
+                                                                      } on SocketException catch (err) {
+                                                                        showDialog(
+                                                                          barrierDismissible:
                                                                               false,
-                                                                          'payment_method':
-                                                                              payment_way,
-                                                                        }).catchError(
-                                                                                (error) {
-                                                                          PushNotificationMessage
-                                                                              notification =
-                                                                              PushNotificationMessage(
-                                                                            title:
-                                                                                'Fail',
-                                                                            body:
-                                                                                'Failed to make booking',
-                                                                          );
-                                                                          showSimpleNotification(
-                                                                            Container(
-                                                                                child: Text(notification.body)),
-                                                                            position:
-                                                                                NotificationPosition.top,
-                                                                            background:
-                                                                                Colors.red,
-                                                                          );
-                                                                          if (this
-                                                                              .mounted) {
-                                                                            setState(
-                                                                                () {
-                                                                              loading =
-                                                                                  false;
-                                                                            });
-                                                                          } else {
-                                                                            loading =
-                                                                                false;
-                                                                          }
-                                                                        });
-                                                                        DocumentSnapshot company = await FirebaseFirestore
-                                                                            .instance
-                                                                            .collection(
-                                                                                'companies')
-                                                                            .doc(place.data()[
-                                                                                'owner'])
-                                                                            .get()
-                                                                            .catchError(
-                                                                                (error) {
-                                                                          PushNotificationMessage
-                                                                              notification =
-                                                                              PushNotificationMessage(
-                                                                            title:
-                                                                                'Fail',
-                                                                            body:
-                                                                                'Failed to make booking',
-                                                                          );
-                                                                          showSimpleNotification(
-                                                                            Container(
-                                                                                child: Text(notification.body)),
-                                                                            position:
-                                                                                NotificationPosition.top,
-                                                                            background:
-                                                                                Colors.red,
-                                                                          );
-                                                                          if (this
-                                                                              .mounted) {
-                                                                            setState(
-                                                                                () {
-                                                                              loading =
-                                                                                  false;
-                                                                            });
-                                                                          } else {
-                                                                            loading =
-                                                                                false;
-                                                                          }
-                                                                        });
-                                                                        FirebaseFirestore
-                                                                            .instance
-                                                                            .collection(
-                                                                                'users')
-                                                                            .doc(company.data()[
-                                                                                'owner'])
-                                                                            .update({
-                                                                          'notifications_business':
-                                                                              FieldValue.arrayUnion([
-                                                                            {
-                                                                              'seen':
-                                                                                  false,
-                                                                              'type': widget.data['type'] == 'nonver'
-                                                                                  ? 'new_booking'
-                                                                                  : 'offered',
-                                                                              'bookingId':
-                                                                                  id,
-                                                                              'title': widget.data['type'] == 'nonver'
-                                                                                  ? 'New booking'
-                                                                                  : 'Offer',
-                                                                              'text': widget.data['type'] == 'nonver'
-                                                                                  ? 'You have new booking at ' + place.data()['name']
-                                                                                  : 'You have new offer at ' + place.data()['name'],
-                                                                              'companyName':
-                                                                                  company.data()['name'],
-                                                                              'date':
-                                                                                  DateTime.now(),
-                                                                            }
-                                                                          ])
-                                                                        }).catchError(
-                                                                                (error) {
-                                                                          PushNotificationMessage
-                                                                              notification =
-                                                                              PushNotificationMessage(
-                                                                            title:
-                                                                                'Fail',
-                                                                            body:
-                                                                                'Failed to make booking',
-                                                                          );
-                                                                          showSimpleNotification(
-                                                                            Container(
-                                                                                child: Text(notification.body)),
-                                                                            position:
-                                                                                NotificationPosition.top,
-                                                                            background:
-                                                                                Colors.red,
-                                                                          );
-                                                                          if (this
-                                                                              .mounted) {
-                                                                            setState(
-                                                                                () {
-                                                                              loading =
-                                                                                  false;
-                                                                            });
-                                                                          } else {
-                                                                            loading =
-                                                                                false;
-                                                                          }
-                                                                        });
-
+                                                                          context:
+                                                                              context,
+                                                                          builder:
+                                                                              (BuildContext context) {
+                                                                            return AlertDialog(
+                                                                              title: Text(Languages.of(context).serviceScreenNoInternet),
+                                                                              // content: Text(Languages.of(context).profileScreenWantToLeave),
+                                                                              actions: <Widget>[
+                                                                                IconButton(
+                                                                                  onPressed: () async {
+                                                                                    try {
+                                                                                      final response = await InternetAddress.lookup('www.kindacode.com');
+                                                                                      if (response.isNotEmpty) {
+                                                                                        Navigator.of(context).pop(false);
+                                                                                        setState(() {
+                                                                                          isConnected = true;
+                                                                                        });
+                                                                                      }
+                                                                                    } on SocketException catch (err) {
+                                                                                      setState(() {
+                                                                                        isConnected = false;
+                                                                                      });
+                                                                                      print(err);
+                                                                                    }
+                                                                                  },
+                                                                                  icon: Icon(CupertinoIcons.arrow_2_circlepath),
+                                                                                  iconSize: 20,
+                                                                                ),
+                                                                              ],
+                                                                            );
+                                                                          },
+                                                                        );
                                                                         setState(
                                                                             () {
-                                                                          _dateController
-                                                                              .clear();
-                                                                          _timeController
-                                                                              .clear();
-                                                                          _timeController2
-                                                                              .clear();
-                                                                          selectedDate =
-                                                                              DateTime.now();
-                                                                          _time =
-                                                                              null;
-                                                                          _time2 =
-                                                                              null;
-                                                                          duration =
-                                                                              0;
-                                                                          price =
-                                                                              0;
-                                                                          servicePrice =
-                                                                              0;
-                                                                          commissionPrice =
-                                                                              0;
-                                                                          selectedTime = TimeOfDay(
-                                                                              hour:
-                                                                                  00,
-                                                                              minute:
-                                                                                  00);
-                                                                          selectedTime2 = TimeOfDay(
-                                                                              hour:
-                                                                                  00,
-                                                                              minute:
-                                                                                  00);
-                                                                          _setDate =
-                                                                              null;
-                                                                          _dow =
-                                                                              null;
-                                                                          verified =
+                                                                          isConnected =
                                                                               false;
-                                                                          loading1 =
-                                                                              false;
-                                                                          verifying =
-                                                                              false;
-                                                                          loading =
-                                                                              false;
-                                                                          can =
-                                                                              true;
-                                                                          selectedDate =
-                                                                              DateTime.now();
-                                                                          payment_way =
-                                                                              '';
                                                                         });
-                                                                      } else {
-                                                                        setState(
-                                                                            () {
-                                                                          _dateController
-                                                                              .clear();
-                                                                          _timeController
-                                                                              .clear();
-                                                                          _timeController2
-                                                                              .clear();
-                                                                          selectedDate =
-                                                                              DateTime.now();
-                                                                          _time =
-                                                                              null;
-                                                                          _time2 =
-                                                                              null;
-                                                                          duration =
-                                                                              0;
-                                                                          price =
-                                                                              0;
-                                                                          servicePrice =
-                                                                              0;
-                                                                          commissionPrice =
-                                                                              0;
-                                                                          selectedTime = TimeOfDay(
-                                                                              hour:
-                                                                                  00,
-                                                                              minute:
-                                                                                  00);
-                                                                          selectedTime2 = TimeOfDay(
-                                                                              hour:
-                                                                                  00,
-                                                                              minute:
-                                                                                  00);
-                                                                          _setDate =
-                                                                              null;
-                                                                          _dow =
-                                                                              null;
-                                                                          verified =
-                                                                              false;
-                                                                          loading1 =
-                                                                              false;
-                                                                          verifying =
-                                                                              false;
-                                                                          loading =
-                                                                              false;
-                                                                          can =
-                                                                              true;
-                                                                          selectedDate =
-                                                                              DateTime.now();
-                                                                          payment_way =
-                                                                              '';
-                                                                        });
+                                                                        print(
+                                                                            err);
                                                                       }
                                                                     },
                                                                     color:
@@ -1785,7 +1786,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                                         whiteColor,
                                                                   ),
                                                                 ),
-                                                            )
+                                                              )
                                                             : Container()
                                                         // Builder(
                                                         //   builder: (context) =>

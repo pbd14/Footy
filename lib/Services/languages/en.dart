@@ -81,5 +81,9 @@ class LanguageEn extends Languages {
   String get settingsLocalPasswordTurnedOn => "Local password is turned on";
   @override
   String get settingsDigitPassword => "4-digit password";
+
+
+  @override
+  String get serviceScreenNoInternet => "No Internet";
   
 }

@@ -85,4 +85,7 @@ class LanguageUz extends Languages {
   String get settingsLocalPasswordTurnedOn => "Mahalliy parol yoqildi";
   @override
   String get settingsDigitPassword => "4 raqamli parol";
+
+  @override
+  String get serviceScreenNoInternet => "Internet aloqasi yo'q";
 }

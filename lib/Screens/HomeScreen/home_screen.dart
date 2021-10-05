@@ -559,7 +559,7 @@ class _MapPageState extends State<MapPage> {
                         Expanded(
                           child: RoundedButton(
                             pw: 60,
-                            ph: 40,
+                            ph: 50,
                             text: Languages.of(context).homeScreenBook,
                             press: () {
                               setState(() {

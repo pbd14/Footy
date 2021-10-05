@@ -1,15 +1,10 @@
-import 'dart:io';
-
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Services/auth_service.dart';
 import 'package:flutter_complete_guide/Services/languages/applocalizationsdelegate.dart';
 import 'package:flutter_complete_guide/Services/languages/locale_constant.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:native_updater/native_updater.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'package:package_info/package_info.dart';
 import 'constants.dart';
 
 // SHA-1 KEY  19:15:92:FA:6D:EE:79:89:88:63:7A:59:5C:45:75:83:30:26:74:33

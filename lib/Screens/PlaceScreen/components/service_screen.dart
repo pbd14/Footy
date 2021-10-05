@@ -1546,41 +1546,6 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                                               nn
                                                                             ]),
                                                                       );
-                                                                      if (can) {
-                                                                        PushNotificationMessage
-                                                                            notification =
-                                                                            PushNotificationMessage(
-                                                                          title:
-                                                                              'Booked',
-                                                                          body:
-                                                                              'Bokking was successful',
-                                                                        );
-                                                                        showSimpleNotification(
-                                                                          Container(
-                                                                              child: Text(notification.body)),
-                                                                          position:
-                                                                              NotificationPosition.top,
-                                                                          background:
-                                                                              darkPrimaryColor,
-                                                                        );
-                                                                      } else {
-                                                                        PushNotificationMessage
-                                                                            notification =
-                                                                            PushNotificationMessage(
-                                                                          title:
-                                                                              'Fail',
-                                                                          body:
-                                                                              'Failed to book',
-                                                                        );
-                                                                        showSimpleNotification(
-                                                                          Container(
-                                                                              child: Text(notification.body)),
-                                                                          position:
-                                                                              NotificationPosition.top,
-                                                                          background:
-                                                                              Colors.red,
-                                                                        );
-                                                                      }
                                                                       try {
                                                                         final response =
                                                                             await InternetAddress.lookup('www.kindacode.com');
@@ -1733,6 +1698,31 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                                               selectedDate = DateTime.now();
                                                                               payment_way = '';
                                                                             });
+                                                                          }
+                                                                          if (can) {
+                                                                            PushNotificationMessage
+                                                                                notification =
+                                                                                PushNotificationMessage(
+                                                                              title: 'Booked',
+                                                                              body: 'Bokking was successful',
+                                                                            );
+                                                                            showSimpleNotification(
+                                                                              Container(child: Text(notification.body)),
+                                                                              position: NotificationPosition.top,
+                                                                              background: darkPrimaryColor,
+                                                                            );
+                                                                          } else {
+                                                                            PushNotificationMessage
+                                                                                notification =
+                                                                                PushNotificationMessage(
+                                                                              title: 'Fail',
+                                                                              body: 'Failed to book',
+                                                                            );
+                                                                            showSimpleNotification(
+                                                                              Container(child: Text(notification.body)),
+                                                                              position: NotificationPosition.top,
+                                                                              background: Colors.red,
+                                                                            );
                                                                           }
                                                                         }
                                                                       } on SocketException catch (err) {

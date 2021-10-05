@@ -419,8 +419,8 @@ class _History1State extends State<History1>
                             width: size.width * 0.9,
                             child: Card(
                               shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
                               elevation: 10,
                               child: Padding(
                                 padding: EdgeInsets.all(5.0),
@@ -497,6 +497,17 @@ class _History1State extends State<History1>
                                           bookingId: book.id,
                                         ),
                                       ));
+                                  _bookings = [];
+                                  _places = {};
+                                  placesSlivers = {};
+                                  unrplacesSlivers = {};
+                                  _bookings1 = [];
+                                  _unrbookings1 = [];
+                                  slivers = [];
+                                  unratedBooks = [];
+                                  sliversList = [];
+                                  unpaidPlacesSlivers = {};
+                                  unpaidBookings = [];
                                   setState(() {
                                     loading = false;
                                   });
@@ -506,8 +517,8 @@ class _History1State extends State<History1>
                                       EdgeInsets.symmetric(horizontal: 10.0),
                                   child: Card(
                                     shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
+                                      borderRadius: BorderRadius.circular(20.0),
+                                    ),
                                     color: Colors.red,
                                     margin: EdgeInsets.all(5),
                                     elevation: 10,
@@ -736,7 +747,8 @@ class _History1State extends State<History1>
                             SizedBox(
                               height: 15,
                             ),
-                            for (QueryDocumentSnapshot book in slivers.toSet().toList())
+                            for (QueryDocumentSnapshot book
+                                in slivers.toSet().toList())
                               TextButton(
                                 onPressed: () {
                                   setState(() {
@@ -749,6 +761,17 @@ class _History1State extends State<History1>
                                           bookingId: book.id,
                                         ),
                                       ));
+                                  _bookings = [];
+                                  _places = {};
+                                  placesSlivers = {};
+                                  unrplacesSlivers = {};
+                                  _bookings1 = [];
+                                  _unrbookings1 = [];
+                                  slivers = [];
+                                  unratedBooks = [];
+                                  sliversList = [];
+                                  unpaidPlacesSlivers = {};
+                                  unpaidBookings = [];
                                   setState(() {
                                     loading = false;
                                   });
@@ -758,8 +781,8 @@ class _History1State extends State<History1>
                                       EdgeInsets.symmetric(horizontal: 10.0),
                                   child: Card(
                                     shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
+                                      borderRadius: BorderRadius.circular(20.0),
+                                    ),
                                     color: darkPrimaryColor,
                                     margin: EdgeInsets.all(5),
                                     elevation: 10,
@@ -986,7 +1009,8 @@ class _History1State extends State<History1>
                         SizedBox(
                           height: 15,
                         ),
-                        for (QueryDocumentSnapshot book in _bookings.toSet().toList())
+                        for (QueryDocumentSnapshot book
+                            in _bookings.toSet().toList())
                           CupertinoButton(
                             onPressed: () {
                               setState(() {
@@ -999,6 +1023,17 @@ class _History1State extends State<History1>
                                       bookingId: book.id,
                                     ),
                                   ));
+                              _bookings = [];
+                              _places = {};
+                              placesSlivers = {};
+                              unrplacesSlivers = {};
+                              _bookings1 = [];
+                              _unrbookings1 = [];
+                              slivers = [];
+                              unratedBooks = [];
+                              sliversList = [];
+                              unpaidPlacesSlivers = {};
+                              unpaidBookings = [];
                               setState(() {
                                 loading = false;
                               });
@@ -1009,8 +1044,8 @@ class _History1State extends State<History1>
                               // padding: EdgeInsets.all(10),
                               child: Card(
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
                                 margin: EdgeInsets.all(5),
                                 elevation: 10,
                                 child: Center(
@@ -1185,9 +1220,12 @@ class _History1State extends State<History1>
                                                               PushNotificationMessage
                                                                   notification =
                                                                   PushNotificationMessage(
-                                                                title: Languages.of(context).homeScreenFail,
-                                                                body:
-                                                                    Languages.of(context).homeScreenFailedToUpdate,
+                                                                title: Languages.of(
+                                                                        context)
+                                                                    .homeScreenFail,
+                                                                body: Languages.of(
+                                                                        context)
+                                                                    .homeScreenFailedToUpdate,
                                                               );
                                                               showSimpleNotification(
                                                                 Container(
@@ -1222,7 +1260,9 @@ class _History1State extends State<History1>
                                                               backgroundColor:
                                                                   darkPrimaryColor,
                                                               content: Text(
-                                                                Languages.of(context).homeScreenSaved,
+                                                                Languages.of(
+                                                                        context)
+                                                                    .homeScreenSaved,
                                                                 style: GoogleFonts
                                                                     .montserrat(
                                                                   textStyle:
@@ -1261,10 +1301,12 @@ class _History1State extends State<History1>
                                                               PushNotificationMessage
                                                                   notification =
                                                                   PushNotificationMessage(
-                                                                title: Languages.of(context).homeScreenFail,
-                                                                body:
-                                                                    Languages.of(context).homeScreenFailedToUpdate
-                                                              );
+                                                                      title: Languages.of(
+                                                                              context)
+                                                                          .homeScreenFail,
+                                                                      body: Languages.of(
+                                                                              context)
+                                                                          .homeScreenFailedToUpdate);
                                                               showSimpleNotification(
                                                                 Container(
                                                                     child: Text(
@@ -1298,7 +1340,9 @@ class _History1State extends State<History1>
                                                               backgroundColor:
                                                                   Colors.red,
                                                               content: Text(
-                                                                Languages.of(context).homeScreenSaved,
+                                                                Languages.of(
+                                                                        context)
+                                                                    .homeScreenSaved,
                                                                 style: GoogleFonts
                                                                     .montserrat(
                                                                   textStyle:
@@ -1470,6 +1514,17 @@ class _History1State extends State<History1>
                                           bookingId: book.id,
                                         ),
                                       ));
+                                  _bookings = [];
+                                  _places = {};
+                                  placesSlivers = {};
+                                  unrplacesSlivers = {};
+                                  _bookings1 = [];
+                                  _unrbookings1 = [];
+                                  slivers = [];
+                                  unratedBooks = [];
+                                  sliversList = [];
+                                  unpaidPlacesSlivers = {};
+                                  unpaidBookings = [];
                                   setState(() {
                                     loading = false;
                                   });
@@ -1480,8 +1535,8 @@ class _History1State extends State<History1>
                                   // padding: EdgeInsets.all(10),
                                   child: Card(
                                     shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
+                                      borderRadius: BorderRadius.circular(20.0),
+                                    ),
                                     color: darkColor,
                                     margin: EdgeInsets.all(5),
                                     elevation: 10,

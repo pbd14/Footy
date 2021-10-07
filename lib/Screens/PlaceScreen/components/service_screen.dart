@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_format/date_format.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Models/Booking.dart';
 import 'package:flutter_complete_guide/Models/PushNotificationMessage.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
-import 'package:flutter_complete_guide/Screens/sww_screen.dart';
 import 'package:flutter_complete_guide/Services/languages/languages.dart';
 import 'package:flutter_complete_guide/widgets/rounded_button.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -586,14 +584,14 @@ class _PlaceScreenState extends State<ServiceScreen> {
     _checkInternetConnection();
 
     super.initState();
-    _dateController.text = DateFormat.yMMMd().format(DateTime.now());
+    // _dateController.text = DateFormat.yMMMd().format(DateTime.now());
 
-    _timeController.text = formatDate(
-        DateTime(2019, 08, 1, DateTime.now().hour, DateTime.now().minute), [
-      HH,
-      ':',
-      nn,
-    ]).toString();
+    // _timeController.text = formatDate(
+    //     DateTime(2019, 08, 1, DateTime.now().hour, DateTime.now().minute), [
+    //   HH,
+    //   ':',
+    //   nn,
+    // ]).toString();
   }
 
   @override

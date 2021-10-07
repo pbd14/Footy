@@ -466,6 +466,40 @@ class _MapPageState extends State<MapPage> {
                 );
               }
               break;
+            case 'health':
+              {
+                categoryLine = 'assets/icons/health.png';
+                cardColor = Colors.red[800];
+                categoryIcon = Icon(
+                  Icons.medical_services,
+                  size: 24,
+                  color: whiteColor,
+                );
+              }
+              break;
+            case 'beauty':
+              {
+                categoryLine = 'assets/icons/beauty.png';
+                cardColor = Colors.purple[800];
+                categoryIcon = Icon(
+                  CupertinoIcons.scissors,
+                  size: 24,
+                  color: whiteColor,
+                );
+              }
+              break;
+
+              case 'food':
+              {
+                categoryLine = 'assets/icons/food.png';
+                cardColor = Colors.orange[400];
+                categoryIcon = Icon(
+                  Icons.food_bank_rounded,
+                  size: 24,
+                  color: whiteColor,
+                );
+              }
+              break;
 
             default:
               {

@@ -37,7 +37,11 @@ class _ProfileScreen2State extends State<ProfileScreen2>
         .doc(FirebaseAuth.instance.currentUser.uid)
         .get();
     setState(() {
-      _favs = dataL.data()['favourites'];
+      if (dataL != null) {
+        if (dataL.data() != null) {
+          _favs = dataL.data()['favourites'];
+        }
+      }
     });
     QuerySnapshot data = await FirebaseFirestore.instance
         .collection('locations')

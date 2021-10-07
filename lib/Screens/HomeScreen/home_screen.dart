@@ -117,6 +117,30 @@ class HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> checkUserProfile() async {
+    DocumentSnapshot user = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .get();
+    if (!user.exists) {
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser.uid)
+          .set({
+        'status': 'default',
+        'cancellations_num': 0,
+        'phone': FirebaseAuth.instance.currentUser.phoneNumber,
+      });
+    } else {
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser.uid)
+          .update({
+        'status': 'default',
+      });
+    }
+  }
+
   Future<void> checkVersion() async {
     RemoteConfig remoteConfig = RemoteConfig.instance;
     bool updated = await remoteConfig.fetchAndActivate();
@@ -139,6 +163,7 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    checkUserProfile();
     checkVersion();
     subscription = FirebaseFirestore.instance
         .collection('bookings')
@@ -189,7 +214,7 @@ class HomeScreenState extends State<HomeScreen> {
         .doc(FirebaseAuth.instance.currentUser.uid)
         .snapshots()
         .listen((docsnap) {
-      if (docsnap != null) {
+      if (docsnap.data() != null) {
         if (docsnap.data()['notifications'] != null) {
           if (docsnap.data()['notifications'].length != 0) {
             List acts = [];
@@ -316,7 +341,7 @@ class HomeScreenState extends State<HomeScreen> {
                         ),
                       )
                     ],
-                  ) 
+                  )
                 : Icon(CupertinoIcons.person_fill),
             label: '',
           ),
@@ -489,7 +514,7 @@ class _MapPageState extends State<MapPage> {
               }
               break;
 
-              case 'food':
+            case 'food':
               {
                 categoryLine = 'assets/icons/food.png';
                 cardColor = Colors.orange[400];
@@ -636,7 +661,8 @@ class _MapPageState extends State<MapPage> {
                                 PushNotificationMessage notification =
                                     PushNotificationMessage(
                                   title: Languages.of(context).homeScreenFail,
-                                  body: Languages.of(context).homeScreenFailedToUpdate,
+                                  body: Languages.of(context)
+                                      .homeScreenFailedToUpdate,
                                 );
                                 showSimpleNotification(
                                   Container(child: Text(notification.body)),
@@ -672,7 +698,8 @@ class _MapPageState extends State<MapPage> {
                                 PushNotificationMessage notification =
                                     PushNotificationMessage(
                                   title: Languages.of(context).homeScreenFail,
-                                  body: Languages.of(context).homeScreenFailedToUpdate,
+                                  body: Languages.of(context)
+                                      .homeScreenFailedToUpdate,
                                 );
                                 showSimpleNotification(
                                   Container(child: Text(notification.body)),

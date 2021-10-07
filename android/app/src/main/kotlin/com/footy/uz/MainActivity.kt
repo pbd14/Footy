@@ -1,4 +1,4 @@
-package com.footy
+package com.footy.uz
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -11,7 +11,7 @@ import 'constants.dart';
 // Android API KEY AIzaSyAsZX_bhLde8Aif2ayUgrzisg3yYQxizg8
 // IOS API KEY AIzaSyAP76RF198pKogJjyPyEtcB3L_bLfSWgGY
 // Bundle ID com.example.flutterCompleteGuide
-// Package Name com.example.flutter_complete_guide
+// Package Name com.footy.uz
 // OCTO Secret key c66db06a-6bd7-4029-bb8c-1f582d33b62a
 
 void main() async {

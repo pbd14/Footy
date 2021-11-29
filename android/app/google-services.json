@@ -9,12 +9,122 @@
       "client_info": {
         "mobilesdk_app_id": "1:311852147013:android:0399169538b67a3e38de2c",
         "android_client_info": {
-          "package_name": "com.footy.uz"
+          "package_name": "com.example.flutter_complete_guide"
         }
       },
       "oauth_client": [
         {
           "client_id": "311852147013-6j7vt8rp7lbukgkkvhc2gr91vp667vd0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.flutter_complete_guide",
+            "certificate_hash": "191592fa6dee798988637a595c45758330267433"
+          }
+        },
+        {
+          "client_id": "311852147013-e8r7dbsdjphp7o59jls1d71jpm9tfgpm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.flutter_complete_guide",
+            "certificate_hash": "a915abacf8b9ca483f5d3edcd85bb0da9c32a0eb"
+          }
+        },
+        {
+          "client_id": "311852147013-41apvamisnphf331gfgvafffvgaae4cl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAGoYAiy1wSqFl8jpG9hcX6sA13oLY0m4"
+        },
+        {
+          "current_key": "AIzaSyAsZX_bhLde8Aif2ayUgrzisg3yYQxizg8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "311852147013-41apvamisnphf331gfgvafffvgaae4cl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "311852147013-kr9b86rlpditd2eg7r8534tmipjijso6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.footy"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:311852147013:android:0eddae98e34ceb9c38de2c",
+        "android_client_info": {
+          "package_name": "com.example.footy_business"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "311852147013-8nquof6ltvpkgsa19lsc3c152pl3s7on.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.footy_business",
+            "certificate_hash": "191592fa6dee798988637a595c45758330267433"
+          }
+        },
+        {
+          "client_id": "311852147013-41apvamisnphf331gfgvafffvgaae4cl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAGoYAiy1wSqFl8jpG9hcX6sA13oLY0m4"
+        },
+        {
+          "current_key": "AIzaSyAsZX_bhLde8Aif2ayUgrzisg3yYQxizg8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "311852147013-41apvamisnphf331gfgvafffvgaae4cl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "311852147013-kr9b86rlpditd2eg7r8534tmipjijso6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.footy"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:311852147013:android:a56442e627c7d71e38de2c",
+        "android_client_info": {
+          "package_name": "com.footy.uz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "311852147013-0ff65e7gl9n8rmtkovbhce1gl2ua51qr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.footy.uz",
+            "certificate_hash": "a915abacf8b9ca483f5d3edcd85bb0da9c32a0eb"
+          }
+        },
+        {
+          "client_id": "311852147013-c02c1u3p0ssspvj04ohrapj8u43ngmah.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.footy.uz",
@@ -28,6 +138,9 @@
       ],
       "api_key": [
         {
+          "current_key": "AIzaSyAAGoYAiy1wSqFl8jpG9hcX6sA13oLY0m4"
+        },
+        {
           "current_key": "AIzaSyAsZX_bhLde8Aif2ayUgrzisg3yYQxizg8"
         }
       ],
@@ -37,6 +150,68 @@
             {
               "client_id": "311852147013-41apvamisnphf331gfgvafffvgaae4cl.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "311852147013-kr9b86rlpditd2eg7r8534tmipjijso6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.footy"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:311852147013:android:f775ffb0032def0838de2c",
+        "android_client_info": {
+          "package_name": "com.footy_business.uz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "311852147013-fe2pg6q3oa824o8htadvtj62aqmsf4rf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.footy_business.uz",
+            "certificate_hash": "191592fa6dee798988637a595c45758330267433"
+          }
+        },
+        {
+          "client_id": "311852147013-i3uev6hvonifi52g1eijihclmo0ojg1e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.footy_business.uz",
+            "certificate_hash": "dabc40c6661b200d89f57c832194a1e101ea73df"
+          }
+        },
+        {
+          "client_id": "311852147013-41apvamisnphf331gfgvafffvgaae4cl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAGoYAiy1wSqFl8jpG9hcX6sA13oLY0m4"
+        },
+        {
+          "current_key": "AIzaSyAsZX_bhLde8Aif2ayUgrzisg3yYQxizg8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "311852147013-41apvamisnphf331gfgvafffvgaae4cl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "311852147013-kr9b86rlpditd2eg7r8534tmipjijso6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.footy"
+              }
             }
           ]
         }

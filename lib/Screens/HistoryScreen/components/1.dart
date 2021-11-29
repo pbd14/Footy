@@ -497,17 +497,17 @@ class _History1State extends State<History1>
                                           bookingId: book.id,
                                         ),
                                       ));
-                                  _bookings = [];
-                                  _places = {};
-                                  placesSlivers = {};
-                                  unrplacesSlivers = {};
-                                  _bookings1 = [];
-                                  _unrbookings1 = [];
-                                  slivers = [];
-                                  unratedBooks = [];
-                                  sliversList = [];
-                                  unpaidPlacesSlivers = {};
-                                  unpaidBookings = [];
+                                  // _bookings = [];
+                                  // _places = {};
+                                  // placesSlivers = {};
+                                  // unrplacesSlivers = {};
+                                  // _bookings1 = [];
+                                  // _unrbookings1 = [];
+                                  // slivers = [];
+                                  // unratedBooks = [];
+                                  // sliversList = [];
+                                  // unpaidPlacesSlivers = {};
+                                  // unpaidBookings = [];
                                   setState(() {
                                     loading = false;
                                   });
@@ -761,17 +761,17 @@ class _History1State extends State<History1>
                                           bookingId: book.id,
                                         ),
                                       ));
-                                  _bookings = [];
-                                  _places = {};
-                                  placesSlivers = {};
-                                  unrplacesSlivers = {};
-                                  _bookings1 = [];
-                                  _unrbookings1 = [];
-                                  slivers = [];
-                                  unratedBooks = [];
-                                  sliversList = [];
-                                  unpaidPlacesSlivers = {};
-                                  unpaidBookings = [];
+                                  // _bookings = [];
+                                  // _places = {};
+                                  // placesSlivers = {};
+                                  // unrplacesSlivers = {};
+                                  // _bookings1 = [];
+                                  // _unrbookings1 = [];
+                                  // slivers = [];
+                                  // unratedBooks = [];
+                                  // sliversList = [];
+                                  // unpaidPlacesSlivers = {};
+                                  // unpaidBookings = [];
                                   setState(() {
                                     loading = false;
                                   });
@@ -1023,17 +1023,17 @@ class _History1State extends State<History1>
                                       bookingId: book.id,
                                     ),
                                   ));
-                              _bookings = [];
-                              _places = {};
-                              placesSlivers = {};
-                              unrplacesSlivers = {};
-                              _bookings1 = [];
-                              _unrbookings1 = [];
-                              slivers = [];
-                              unratedBooks = [];
-                              sliversList = [];
-                              unpaidPlacesSlivers = {};
-                              unpaidBookings = [];
+                              // _bookings = [];
+                              // _places = {};
+                              // placesSlivers = {};
+                              // unrplacesSlivers = {};
+                              // _bookings1 = [];
+                              // _unrbookings1 = [];
+                              // slivers = [];
+                              // unratedBooks = [];
+                              // sliversList = [];
+                              // unpaidPlacesSlivers = {};
+                              // unpaidBookings = [];
                               setState(() {
                                 loading = false;
                               });
@@ -1503,325 +1503,332 @@ class _History1State extends State<History1>
                             ),
                             if (unrplacesSlivers != null)
                               for (var book in unratedBooks.toSet().toList())
-                                if (unrplacesSlivers[book].data() != null)
-                                  TextButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        loading = true;
-                                      });
-                                      Navigator.push(
-                                          context,
-                                          SlideRightRoute(
-                                            page: OnEventScreen(
-                                              bookingId: book.id,
-                                            ),
-                                          ));
-                                      _bookings = [];
-                                      _places = {};
-                                      placesSlivers = {};
-                                      unrplacesSlivers = {};
-                                      _bookings1 = [];
-                                      _unrbookings1 = [];
-                                      slivers = [];
-                                      unratedBooks = [];
-                                      sliversList = [];
-                                      unpaidPlacesSlivers = {};
-                                      unpaidBookings = [];
-                                      setState(() {
-                                        loading = false;
-                                      });
-                                    },
-                                    child: Container(
-                                      margin: EdgeInsets.symmetric(
-                                          horizontal: 10.0),
-                                      // padding: EdgeInsets.all(10),
-                                      child: Card(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
-                                        ),
-                                        color: darkColor,
-                                        margin: EdgeInsets.all(5),
-                                        elevation: 10,
-                                        child: Center(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(10.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                Container(
-                                                  width: size.width * 0.5,
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        DateFormat.yMMMd()
-                                                            .format(Booking
-                                                                    .fromSnapshot(
-                                                                        book)
-                                                                .timestamp_date
-                                                                .toDate())
-                                                            .toString(),
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: GoogleFonts
-                                                            .montserrat(
-                                                          textStyle: TextStyle(
-                                                            color: whiteColor,
-                                                            fontSize: 20,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Text(
-                                                        Booking.fromSnapshot(
-                                                                    book)
-                                                                .from +
-                                                            ' - ' +
-                                                            Booking.fromSnapshot(
-                                                                    book)
-                                                                .to,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: GoogleFonts
-                                                            .montserrat(
-                                                          textStyle: TextStyle(
-                                                            color: whiteColor,
-                                                            fontSize: 20,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Text(
-                                                        unrplacesSlivers[
-                                                                    book] !=
-                                                                null
-                                                            ? unrplacesSlivers[
-                                                                            book]
-                                                                        .data() !=
-                                                                    null
-                                                                ? Place.fromSnapshot(
-                                                                        unrplacesSlivers[
-                                                                            book])
-                                                                    .name
-                                                                : 'Place'
-                                                            : 'Place',
-                                                        maxLines: 2,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: GoogleFonts
-                                                            .montserrat(
-                                                          textStyle: TextStyle(
+                                if (unrplacesSlivers[book] != null)
+                                  if (unrplacesSlivers[book].data() != null)
+                                    TextButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          loading = true;
+                                        });
+                                        Navigator.push(
+                                            context,
+                                            SlideRightRoute(
+                                              page: OnEventScreen(
+                                                bookingId: book.id,
+                                              ),
+                                            ));
+                                        // _bookings = [];
+                                        // _places = {};
+                                        // placesSlivers = {};
+                                        // unrplacesSlivers = {};
+                                        // _bookings1 = [];
+                                        // _unrbookings1 = [];
+                                        // slivers = [];
+                                        // unratedBooks = [];
+                                        // sliversList = [];
+                                        // unpaidPlacesSlivers = {};
+                                        // unpaidBookings = [];
+                                        setState(() {
+                                          loading = false;
+                                        });
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 10.0),
+                                        // padding: EdgeInsets.all(10),
+                                        child: Card(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                          ),
+                                          color: darkColor,
+                                          margin: EdgeInsets.all(5),
+                                          elevation: 10,
+                                          child: Center(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(10.0),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Container(
+                                                    width: size.width * 0.5,
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          DateFormat.yMMMd()
+                                                              .format(Booking
+                                                                      .fromSnapshot(
+                                                                          book)
+                                                                  .timestamp_date
+                                                                  .toDate())
+                                                              .toString(),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: GoogleFonts
+                                                              .montserrat(
+                                                            textStyle:
+                                                                TextStyle(
                                                               color: whiteColor,
-                                                              fontSize: 15,
+                                                              fontSize: 20,
                                                               fontWeight:
                                                                   FontWeight
-                                                                      .w400),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Text(
-                                                        Booking.fromSnapshot(
-                                                                book)
-                                                            .status,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: GoogleFonts
-                                                            .montserrat(
-                                                          textStyle: TextStyle(
-                                                            color: Booking.fromSnapshot(
-                                                                            book)
-                                                                        .status ==
-                                                                    'unfinished'
-                                                                ? whiteColor
-                                                                : Colors.red,
-                                                            fontSize: 15,
+                                                                      .bold,
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerRight,
-                                                  child: Container(
-                                                    width: size.width * 0.3,
-                                                    child: Column(
-                                                      children: [
-                                                        IconButton(
-                                                          iconSize: 30,
-                                                          icon: Icon(
-                                                            CupertinoIcons
-                                                                .map_pin_ellipse,
-                                                            color: whiteColor,
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Text(
+                                                          Booking.fromSnapshot(
+                                                                      book)
+                                                                  .from +
+                                                              ' - ' +
+                                                              Booking.fromSnapshot(
+                                                                      book)
+                                                                  .to,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: GoogleFonts
+                                                              .montserrat(
+                                                            textStyle:
+                                                                TextStyle(
+                                                              color: whiteColor,
+                                                              fontSize: 20,
+                                                            ),
                                                           ),
-                                                          onPressed: () {
-                                                            setState(() {
-                                                              loading = true;
-                                                            });
-                                                            Navigator.push(
-                                                              context,
-                                                              SlideRightRoute(
-                                                                page: MapPage(
-                                                                  isLoading:
-                                                                      true,
-                                                                  isAppBar:
-                                                                      true,
-                                                                  data: {
-                                                                    'lat': Place.fromSnapshot(
-                                                                            unrplacesSlivers[book])
-                                                                        .lat,
-                                                                    'lon': Place.fromSnapshot(
-                                                                            unrplacesSlivers[book])
-                                                                        .lon
-                                                                  },
-                                                                ),
-                                                              ),
-                                                            );
-                                                            setState(() {
-                                                              loading = false;
-                                                            });
-                                                          },
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Text(
+                                                          unrplacesSlivers[
+                                                                      book] !=
+                                                                  null
+                                                              ? unrplacesSlivers[
+                                                                              book]
+                                                                          .data() !=
+                                                                      null
+                                                                  ? Place.fromSnapshot(
+                                                                          unrplacesSlivers[
+                                                                              book])
+                                                                      .name
+                                                                  : 'Place'
+                                                              : 'Place',
+                                                          maxLines: 2,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: GoogleFonts
+                                                              .montserrat(
+                                                            textStyle: TextStyle(
+                                                                color:
+                                                                    whiteColor,
+                                                                fontSize: 15,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Text(
+                                                          Booking.fromSnapshot(
+                                                                  book)
+                                                              .status,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: GoogleFonts
+                                                              .montserrat(
+                                                            textStyle:
+                                                                TextStyle(
+                                                              color: Booking.fromSnapshot(
+                                                                              book)
+                                                                          .status ==
+                                                                      'unfinished'
+                                                                  ? whiteColor
+                                                                  : Colors.red,
+                                                              fontSize: 15,
+                                                            ),
+                                                          ),
                                                         ),
                                                       ],
                                                     ),
                                                   ),
-                                                )
-                                              ],
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.centerRight,
+                                                    child: Container(
+                                                      width: size.width * 0.3,
+                                                      child: Column(
+                                                        children: [
+                                                          IconButton(
+                                                            iconSize: 30,
+                                                            icon: Icon(
+                                                              CupertinoIcons
+                                                                  .map_pin_ellipse,
+                                                              color: whiteColor,
+                                                            ),
+                                                            onPressed: () {
+                                                              setState(() {
+                                                                loading = true;
+                                                              });
+                                                              Navigator.push(
+                                                                context,
+                                                                SlideRightRoute(
+                                                                  page: MapPage(
+                                                                    isLoading:
+                                                                        true,
+                                                                    isAppBar:
+                                                                        true,
+                                                                    data: {
+                                                                      'lat': Place.fromSnapshot(
+                                                                              unrplacesSlivers[book])
+                                                                          .lat,
+                                                                      'lon': Place.fromSnapshot(
+                                                                              unrplacesSlivers[book])
+                                                                          .lon
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                              );
+                                                              setState(() {
+                                                                loading = false;
+                                                              });
+                                                            },
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    // CardW(
-                                    //   ph: 140,
-                                    //   bgColor: Colors.blueGrey[900],
-                                    //   child: Column(
-                                    //     children: [
-                                    //       SizedBox(
-                                    //         height: 20,
-                                    //       ),
-                                    //       Expanded(
-                                    //         child: Padding(
-                                    //           padding: const EdgeInsets.fromLTRB(
-                                    //               10, 0, 10, 0),
-                                    //           child: Row(
-                                    //             mainAxisAlignment:
-                                    //                 MainAxisAlignment.center,
-                                    //             children: [
-                                    //               Container(
-                                    //                 alignment: Alignment.centerLeft,
-                                    //                 child: Column(
-                                    //                   children: [
-                                    //                     Text(
-                                    //                       DateFormat.yMMMd()
-                                    //                           .format(Booking
-                                    //                                   .fromSnapshot(
-                                    //                                       book)
-                                    //                               .timestamp_date
-                                    //                               .toDate())
-                                    //                           .toString(),
-                                    //                       overflow:
-                                    //                           TextOverflow.ellipsis,
-                                    //                       style:
-                                    //                           GoogleFonts.montserrat(
-                                    //                         textStyle: TextStyle(
-                                    //                           color: whiteColor,
-                                    //                           fontSize: 20,
-                                    //                           fontWeight:
-                                    //                               FontWeight.bold,
-                                    //                         ),
-                                    //                       ),
-                                    //                     ),
-                                    //                     SizedBox(
-                                    //                       height: 10,
-                                    //                     ),
-                                    //                     Text(
-                                    //                       Booking.fromSnapshot(book)
-                                    //                               .from +
-                                    //                           ' - ' +
-                                    //                           Booking.fromSnapshot(
-                                    //                                   book)
-                                    //                               .to,
-                                    //                       overflow:
-                                    //                           TextOverflow.ellipsis,
-                                    //                       style:
-                                    //                           GoogleFonts.montserrat(
-                                    //                         textStyle: TextStyle(
-                                    //                           color: whiteColor,
-                                    //                           fontSize: 15,
-                                    //                         ),
-                                    //                       ),
-                                    //                     ),
-                                    //                   ],
-                                    //                 ),
-                                    //               ),
-                                    //               SizedBox(
-                                    //                 width: size.width * 0.1,
-                                    //               ),
-                                    //               Flexible(
-                                    //                 child: Container(
-                                    //                   alignment: Alignment.centerLeft,
-                                    //                   child: Column(
-                                    //                     children: [
-                                    //                       Text(
-                                    //                         unrplacesSlivers[book] !=
-                                    //                                 null
-                                    //                             ? Place.fromSnapshot(
-                                    //                                     unrplacesSlivers[
-                                    //                                         book])
-                                    //                                 .name
+                                      // CardW(
+                                      //   ph: 140,
+                                      //   bgColor: Colors.blueGrey[900],
+                                      //   child: Column(
+                                      //     children: [
+                                      //       SizedBox(
+                                      //         height: 20,
+                                      //       ),
+                                      //       Expanded(
+                                      //         child: Padding(
+                                      //           padding: const EdgeInsets.fromLTRB(
+                                      //               10, 0, 10, 0),
+                                      //           child: Row(
+                                      //             mainAxisAlignment:
+                                      //                 MainAxisAlignment.center,
+                                      //             children: [
+                                      //               Container(
+                                      //                 alignment: Alignment.centerLeft,
+                                      //                 child: Column(
+                                      //                   children: [
+                                      //                     Text(
+                                      //                       DateFormat.yMMMd()
+                                      //                           .format(Booking
+                                      //                                   .fromSnapshot(
+                                      //                                       book)
+                                      //                               .timestamp_date
+                                      //                               .toDate())
+                                      //                           .toString(),
+                                      //                       overflow:
+                                      //                           TextOverflow.ellipsis,
+                                      //                       style:
+                                      //                           GoogleFonts.montserrat(
+                                      //                         textStyle: TextStyle(
+                                      //                           color: whiteColor,
+                                      //                           fontSize: 20,
+                                      //                           fontWeight:
+                                      //                               FontWeight.bold,
+                                      //                         ),
+                                      //                       ),
+                                      //                     ),
+                                      //                     SizedBox(
+                                      //                       height: 10,
+                                      //                     ),
+                                      //                     Text(
+                                      //                       Booking.fromSnapshot(book)
+                                      //                               .from +
+                                      //                           ' - ' +
+                                      //                           Booking.fromSnapshot(
+                                      //                                   book)
+                                      //                               .to,
+                                      //                       overflow:
+                                      //                           TextOverflow.ellipsis,
+                                      //                       style:
+                                      //                           GoogleFonts.montserrat(
+                                      //                         textStyle: TextStyle(
+                                      //                           color: whiteColor,
+                                      //                           fontSize: 15,
+                                      //                         ),
+                                      //                       ),
+                                      //                     ),
+                                      //                   ],
+                                      //                 ),
+                                      //               ),
+                                      //               SizedBox(
+                                      //                 width: size.width * 0.1,
+                                      //               ),
+                                      //               Flexible(
+                                      //                 child: Container(
+                                      //                   alignment: Alignment.centerLeft,
+                                      //                   child: Column(
+                                      //                     children: [
+                                      //                       Text(
+                                      //                         unrplacesSlivers[book] !=
+                                      //                                 null
+                                      //                             ? Place.fromSnapshot(
+                                      //                                     unrplacesSlivers[
+                                      //                                         book])
+                                      //                                 .name
 
-                                    //                             //             _places != null
-                                    //                             //                 ? _places[Booking.fromSnapshot(
-                                    //                             //                                     book)
-                                    //                             //                                 .id]
-                                    //                             //                             .name !=
-                                    //                             //                         null
-                                    //                             //                     ? _places[Booking
-                                    //                             //                                 .fromSnapshot(
-                                    //                             //                                     book)
-                                    //                             //                             .id]
-                                    //                             //                         .name
-                                    //                             //                     : 'Place'
-                                    //                             : 'Place',
-                                    //                         overflow:
-                                    //                             TextOverflow.ellipsis,
-                                    //                         style: GoogleFonts
-                                    //                             .montserrat(
-                                    //                           textStyle: TextStyle(
-                                    //                             color: whiteColor,
-                                    //                             fontSize: 15,
-                                    //                           ),
-                                    //                         ),
-                                    //                       ),
-                                    //                     ],
-                                    //                   ),
-                                    //                 ),
-                                    //               ),
-                                    //             ],
-                                    //           ),
-                                    //         ),
-                                    //       ),
-                                    //       SizedBox(
-                                    //         height: 20,
-                                    //       ),
-                                    //     ],
-                                    //   ),
-                                    // ),
-                                  ),
+                                      //                             //             _places != null
+                                      //                             //                 ? _places[Booking.fromSnapshot(
+                                      //                             //                                     book)
+                                      //                             //                                 .id]
+                                      //                             //                             .name !=
+                                      //                             //                         null
+                                      //                             //                     ? _places[Booking
+                                      //                             //                                 .fromSnapshot(
+                                      //                             //                                     book)
+                                      //                             //                             .id]
+                                      //                             //                         .name
+                                      //                             //                     : 'Place'
+                                      //                             : 'Place',
+                                      //                         overflow:
+                                      //                             TextOverflow.ellipsis,
+                                      //                         style: GoogleFonts
+                                      //                             .montserrat(
+                                      //                           textStyle: TextStyle(
+                                      //                             color: whiteColor,
+                                      //                             fontSize: 15,
+                                      //                           ),
+                                      //                         ),
+                                      //                       ),
+                                      //                     ],
+                                      //                   ),
+                                      //                 ),
+                                      //               ),
+                                      //             ],
+                                      //           ),
+                                      //         ),
+                                      //       ),
+                                      //       SizedBox(
+                                      //         height: 20,
+                                      //       ),
+                                      //     ],
+                                      //   ),
+                                      // ),
+                                    ),
                           ]),
                         )
                       : SliverList(

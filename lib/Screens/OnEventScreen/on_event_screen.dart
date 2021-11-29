@@ -113,7 +113,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
     return loading
         ? LoadingScreen()
         : RefreshIndicator(
-          onRefresh: _refresh,
+            onRefresh: _refresh,
             child: Scaffold(
               key: _scaffoldKey,
               appBar: AppBar(
@@ -290,8 +290,145 @@ class _OnEventScreenState extends State<OnEventScreen> {
                         width: size.width * 0.8,
                         child: Card(
                           shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          elevation: 11,
+                          margin: EdgeInsets.fromLTRB(30, 5, 30, 5),
+                          child: Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  CupertinoIcons.info_circle,
+                                  color: darkPrimaryColor,
+                                  size: 30,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      booking.data()['status'] ==
+                                                  'unfinished' ||
+                                              booking.data()['status'] ==
+                                                  'verification_needed'
+                                          ? Text(
+                                              'Event has not started yet',
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 3,
+                                              textAlign: TextAlign.center,
+                                              style: GoogleFonts.montserrat(
+                                                textStyle: TextStyle(
+                                                  color: darkColor,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                            )
+                                          : Container(),
+                                      booking.data()['status'] == 'in process'
+                                          ? Text(
+                                              'Event is going on',
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 3,
+                                              textAlign: TextAlign.center,
+                                              style: GoogleFonts.montserrat(
+                                                textStyle: TextStyle(
+                                                  color: greenColor,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                            )
+                                          : Container(),
+                                      booking.data()['status'] == 'unpaid'
+                                          ? Text(
+                                              'Please make your payment and check if owner has accepted it',
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 10,
+                                              textAlign: TextAlign.center,
+                                              style: GoogleFonts.montserrat(
+                                                textStyle: TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                            )
+                                          : Container(),
+                                      booking.data()['status'] == 'unpaid' &&
+                                              booking.data()[
+                                                      'payment_method'] ==
+                                                  'octo'
+                                          ? Text(
+                                              'Please make your payment with credit card',
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 8,
+                                              textAlign: TextAlign.center,
+                                              style: GoogleFonts.montserrat(
+                                                textStyle: TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                            )
+                                          : Container(),
+                                      SizedBox(
+                                        height:
+                                            booking.data()['status'] == 'unpaid'
+                                                ? 10
+                                                : 0,
+                                      ),
+                                      booking.data()['status'] == 'unpaid'
+                                          ? Center(
+                                              child: Text(
+                                                booking
+                                                        .data()['price']
+                                                        .toString() +
+                                                    ' UZS',
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 15,
+                                                textAlign: TextAlign.center,
+                                                style: GoogleFonts.montserrat(
+                                                  textStyle: TextStyle(
+                                                    color: darkColor,
+                                                    fontSize: 25,
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          : Container(),
+                                      booking.data()['status'] == 'finished'
+                                          ? Text(
+                                              'Event has ended',
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 3,
+                                              textAlign: TextAlign.center,
+                                              style: GoogleFonts.montserrat(
+                                                textStyle: TextStyle(
+                                                  color: darkPrimaryColor,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                            )
+                                          : Container(),
+                                    ],
                                   ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      
+
+                      Container(
+                        width: size.width * 0.8,
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
                           elevation: 10,
                           margin: EdgeInsets.fromLTRB(30, 5, 30, 5),
                           child: Padding(
@@ -361,8 +498,8 @@ class _OnEventScreenState extends State<OnEventScreen> {
                         width: size.width * 0.8,
                         child: Card(
                           shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
                           elevation: 10,
                           margin: EdgeInsets.fromLTRB(30, 5, 30, 5),
                           child: Padding(
@@ -417,40 +554,6 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                 ),
                                 SizedBox(
                                   height: 10,
-                                ),
-                                Text(
-                                  'Commission: ' +
-                                      booking
-                                          .data()['commissionPrice']
-                                          .toString() +
-                                      " UZS",
-                                  overflow: TextOverflow.ellipsis,
-                                  style: GoogleFonts.montserrat(
-                                    textStyle: TextStyle(
-                                      color: Colors.red,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  'Profit: ' +
-                                      booking
-                                          .data()['servicePrice']
-                                          .toString() +
-                                      " UZS",
-                                  overflow: TextOverflow.ellipsis,
-                                  style: GoogleFonts.montserrat(
-                                    textStyle: TextStyle(
-                                      color: darkColor,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 5,
                                 ),
                                 Text(
                                   'Status: ' + booking.data()['status'],
@@ -618,8 +721,8 @@ class _OnEventScreenState extends State<OnEventScreen> {
                               width: size.width * 0.8,
                               child: Card(
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
                                 elevation: 11,
                                 margin: EdgeInsets.fromLTRB(30, 5, 30, 5),
                                 child: Padding(
@@ -935,116 +1038,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                       SizedBox(
                         height: 20,
                       ),
-                      Container(
-                        width: size.width * 0.8,
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
-                          elevation: 11,
-                          margin: EdgeInsets.fromLTRB(30, 5, 30, 5),
-                          child: Padding(
-                            padding: EdgeInsets.all(10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Icon(
-                                  CupertinoIcons.info_circle,
-                                  color: darkPrimaryColor,
-                                  size: 30,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      booking.data()['status'] ==
-                                                  'unfinished' ||
-                                              booking.data()['status'] ==
-                                                  'verification_needed'
-                                          ? Text(
-                                              'Event has not started yet',
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 3,
-                                              textAlign: TextAlign.center,
-                                              style: GoogleFonts.montserrat(
-                                                textStyle: TextStyle(
-                                                  color: darkColor,
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                            )
-                                          : Container(),
-                                      booking.data()['status'] == 'in process'
-                                          ? Text(
-                                              'Event is going on',
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 3,
-                                              textAlign: TextAlign.center,
-                                              style: GoogleFonts.montserrat(
-                                                textStyle: TextStyle(
-                                                  color: greenColor,
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                            )
-                                          : Container(),
-                                      booking.data()['status'] == 'unpaid'
-                                          ? Text(
-                                              'Please make your payment and check if owner has accepted it',
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 10,
-                                              textAlign: TextAlign.center,
-                                              style: GoogleFonts.montserrat(
-                                                textStyle: TextStyle(
-                                                  color: Colors.red,
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                            )
-                                          : Container(),
-                                      booking.data()['status'] == 'unpaid' &&
-                                              booking.data()[
-                                                      'payment_method'] ==
-                                                  'octo'
-                                          ? Text(
-                                              'Please make your payment with credit card',
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 8,
-                                              textAlign: TextAlign.center,
-                                              style: GoogleFonts.montserrat(
-                                                textStyle: TextStyle(
-                                                  color: Colors.red,
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                            )
-                                          : Container(),
-                                      booking.data()['status'] == 'finished'
-                                          ? Text(
-                                              'Event has ended',
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 3,
-                                              textAlign: TextAlign.center,
-                                              style: GoogleFonts.montserrat(
-                                                textStyle: TextStyle(
-                                                  color: darkPrimaryColor,
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                            )
-                                          : Container(),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
+                      
                       SizedBox(
                         height: 20,
                       ),
@@ -1053,8 +1047,8 @@ class _OnEventScreenState extends State<OnEventScreen> {
                         width: size.width * 0.9,
                         child: Card(
                           shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
                           elevation: 10,
                           child: Padding(
                             padding: EdgeInsets.all(10.0),

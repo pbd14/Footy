@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "311852147013",
+    "project_id": "footy-335d6",
+    "storage_bucket": "footy-335d6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:311852147013:android:0399169538b67a3e38de2c",
+        "android_client_info": {
+          "package_name": "com.footy.uz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "311852147013-6j7vt8rp7lbukgkkvhc2gr91vp667vd0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.footy.uz",
+            "certificate_hash": "191592fa6dee798988637a595c45758330267433"
+          }
+        },
+        {
+          "client_id": "311852147013-41apvamisnphf331gfgvafffvgaae4cl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsZX_bhLde8Aif2ayUgrzisg3yYQxizg8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "311852147013-41apvamisnphf331gfgvafffvgaae4cl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

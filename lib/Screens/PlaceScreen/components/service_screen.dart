@@ -531,7 +531,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
 
   Future<void> _checkInternetConnection() async {
     try {
-      final response = await InternetAddress.lookup('www.kindacode.com');
+      final response = await InternetAddress.lookup('footyuz.web.app');
       if (response.isNotEmpty) {
         setState(() {
           isConnected = true;
@@ -542,33 +542,35 @@ class _PlaceScreenState extends State<ServiceScreen> {
         barrierDismissible: false,
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(Languages.of(context).serviceScreenNoInternet),
-            // content: Text(Languages.of(context).profileScreenWantToLeave),
-            actions: <Widget>[
-              IconButton(
-                onPressed: () async {
-                  try {
-                    final response =
-                        await InternetAddress.lookup('www.kindacode.com');
-                    if (response.isNotEmpty) {
-                      Navigator.of(context).pop(false);
-                      setState(() {
-                        isConnected = true;
-                      });
-                    }
-                  } on SocketException catch (err) {
-                    setState(() {
-                      isConnected = false;
-                    });
-                    print(err);
-                  }
-                },
-                icon: Icon(CupertinoIcons.arrow_2_circlepath),
-                iconSize: 20,
-              ),
-            ],
-          );
+          return WillPopScope(
+              onWillPop: () async => false,
+              child: AlertDialog(
+                title: Text(Languages.of(context).serviceScreenNoInternet),
+                // content: Text(Languages.of(context).profileScreenWantToLeave),
+                actions: <Widget>[
+                  IconButton(
+                    onPressed: () async {
+                      try {
+                        final response =
+                            await InternetAddress.lookup('footyuz.web.app');
+                        if (response.isNotEmpty) {
+                          Navigator.of(context).pop(false);
+                          setState(() {
+                            isConnected = true;
+                          });
+                        }
+                      } on SocketException catch (err) {
+                        setState(() {
+                          isConnected = false;
+                        });
+                        print(err);
+                      }
+                    },
+                    icon: Icon(CupertinoIcons.arrow_2_circlepath),
+                    iconSize: 20,
+                  ),
+                ],
+              ));
         },
       );
       setState(() {
@@ -1546,7 +1548,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                                       );
                                                                       try {
                                                                         final response =
-                                                                            await InternetAddress.lookup('www.kindacode.com');
+                                                                            await InternetAddress.lookup('footyuz.web.app');
                                                                         if (response
                                                                             .isNotEmpty) {
                                                                           setState(
@@ -1731,31 +1733,34 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                                               context,
                                                                           builder:
                                                                               (BuildContext context) {
-                                                                            return AlertDialog(
-                                                                              title: Text(Languages.of(context).serviceScreenNoInternet),
-                                                                              // content: Text(Languages.of(context).profileScreenWantToLeave),
-                                                                              actions: <Widget>[
-                                                                                IconButton(
-                                                                                  onPressed: () async {
-                                                                                    try {
-                                                                                      final response = await InternetAddress.lookup('www.kindacode.com');
-                                                                                      if (response.isNotEmpty) {
-                                                                                        Navigator.of(context).pop(false);
+                                                                            return WillPopScope(
+                                                                              onWillPop: () async => false,
+                                                                              child: AlertDialog(
+                                                                                title: Text(Languages.of(context).serviceScreenNoInternet),
+                                                                                // content: Text(Languages.of(context).profileScreenWantToLeave),
+                                                                                actions: <Widget>[
+                                                                                  IconButton(
+                                                                                    onPressed: () async {
+                                                                                      try {
+                                                                                        final response = await InternetAddress.lookup('footyuz.web.app');
+                                                                                        if (response.isNotEmpty) {
+                                                                                          Navigator.of(context).pop(false);
+                                                                                          setState(() {
+                                                                                            isConnected = true;
+                                                                                          });
+                                                                                        }
+                                                                                      } on SocketException catch (err) {
                                                                                         setState(() {
-                                                                                          isConnected = true;
+                                                                                          isConnected = false;
                                                                                         });
+                                                                                        print(err);
                                                                                       }
-                                                                                    } on SocketException catch (err) {
-                                                                                      setState(() {
-                                                                                        isConnected = false;
-                                                                                      });
-                                                                                      print(err);
-                                                                                    }
-                                                                                  },
-                                                                                  icon: Icon(CupertinoIcons.arrow_2_circlepath),
-                                                                                  iconSize: 20,
-                                                                                ),
-                                                                              ],
+                                                                                    },
+                                                                                    icon: Icon(CupertinoIcons.arrow_2_circlepath),
+                                                                                    iconSize: 20,
+                                                                                  ),
+                                                                                ],
+                                                                              ),
                                                                             );
                                                                           },
                                                                         );

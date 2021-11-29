@@ -46,6 +46,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
   String _hour, _minute, _time, _dow;
   String _hour2, _minute2, _time2;
   String dateTime;
+  // ignore: non_constant_identifier_names
   String payment_way = '';
 
   List imgList = [];
@@ -207,6 +208,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
             }
 
             RemoteConfig remoteConfig = RemoteConfig.instance;
+            // ignore: unused_local_variable
             bool updated = await remoteConfig.fetchAndActivate();
             print('HETGJ');
             print(remoteConfig.getDouble('booking_commission'));
@@ -229,10 +231,10 @@ class _PlaceScreenState extends State<ServiceScreen> {
     double dtime1 = selectedTime.minute + selectedTime.hour * 60.0;
     double dtime2 = selectedTime2.minute + selectedTime2.hour * 60.0;
     double dNow = DateTime.now().minute + DateTime.now().hour * 60.0;
-    var bPlaceData = await FirebaseFirestore.instance
-        .collection('locations')
-        .doc(widget.placeId)
-        .get();
+    // var bPlaceData = await FirebaseFirestore.instance
+    //     .collection('locations')
+    //     .doc(widget.placeId)
+    //     .get();
     if (selectedDate.isBefore(DateTime.now())) {
       if (selectedDate.day != DateTime.now().day) {
         setState(() {

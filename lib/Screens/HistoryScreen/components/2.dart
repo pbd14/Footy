@@ -38,7 +38,7 @@ class _History2State extends State<History2>
 
   Future<void> ordinaryBookPrep(
       List<QueryDocumentSnapshot> _unrbookings1) async {
-    DocumentSnapshot customUB;
+    // DocumentSnapshot customUB;
     if (_unrbookings1.length != 0) {
       for (QueryDocumentSnapshot book in _bookings) {
         DocumentSnapshot data1 = await FirebaseFirestore.instance

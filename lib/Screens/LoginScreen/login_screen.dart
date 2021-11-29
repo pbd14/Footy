@@ -36,6 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> checkVersion() async {
     RemoteConfig remoteConfig = RemoteConfig.instance;
+    // ignore: unused_local_variable
     bool updated = await remoteConfig.fetchAndActivate();
     String requiredVersion = remoteConfig.getString(Platform.isAndroid
         ? 'footy_google_play_version'

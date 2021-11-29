@@ -14,7 +14,6 @@ import 'package:intl/intl.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
 import 'package:flutter_complete_guide/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 import 'package:overlay_support/overlay_support.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -29,6 +28,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
   bool loading = true;
   double initRat = 3;
   String reason = '';
+  // ignore: non_constant_identifier_names
   var cancellations_num = 0;
   DocumentSnapshot booking;
   DocumentSnapshot place;

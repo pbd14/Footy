@@ -398,7 +398,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ? Container(
                                       width: size.width * 0.7,
                                       child: RoundedPhoneInputField(
-                                        hintText: Languages.of(context).loginScreenYourPhone,
+                                        hintText: Languages.of(context)
+                                            .loginScreenYourPhone,
                                         onChanged: (value) {
                                           this.phoneNo = value;
                                         },
@@ -411,8 +412,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                       length: 6,
                                       validator: (val) => val.length == 6
                                           ? null
-                                          : Languages.of(context).loginScreen6Digits,
-                                      hintText: Languages.of(context).loginScreenEnterCode,
+                                          : Languages.of(context)
+                                              .loginScreen6Digits,
+                                      hintText: Languages.of(context)
+                                          .loginScreenEnterCode,
                                       type: TextInputType.number,
                                       onChanged: (value) {
                                         this.smsCode = value;
@@ -462,7 +465,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ? RoundedButton(
                                       width: 0.6,
                                       ph: 45,
-                                      text: Languages.of(context).loginScreenReenterPhone,
+                                      text: Languages.of(context)
+                                          .loginScreenReenterPhone,
                                       press: () {
                                         Navigator.push(
                                             context,
@@ -555,11 +559,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final PhoneCodeAutoRetrievalTimeout autoTimeout = (String verId) {
       this.verificationId = verId;
-      setState(() {
-        this.codeSent = false;
-        this.loading = false;
-        this.error = Languages.of(context).loginScreenCodeIsNotValid;
-      });
+      if (this.mounted) {
+        setState(() {
+          this.codeSent = false;
+          this.loading = false;
+          this.error = Languages.of(context).loginScreenCodeIsNotValid;
+        });
+      }
     };
 
     await FirebaseAuth.instance.verifyPhoneNumber(

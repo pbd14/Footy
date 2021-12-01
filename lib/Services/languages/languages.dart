@@ -38,6 +38,7 @@ abstract class Languages {
   String get historyScreenInProcess;
   String get historyScreenUpcoming;
   String get historyScreenUnrated;
+  String get historyScreenVerificationNeeded;
 
 
   String get profileScreenFavs;
@@ -52,5 +53,30 @@ abstract class Languages {
   String get settingsDigitPassword;
 
 
+  String get placeScreenServices;
+  String get placeScreenDeactivated;
+  String get placeScreenPerMinute;
+
   String get serviceScreenNoInternet;
+  String get serviceScreenClosed;
+  String get serviceScreenDate;
+  String get serviceScreenFrom;
+  String get serviceScreenTo;
+  String get serviceScreenAlreadyBooked;
+  String get serviceScreenIncorrectDate;
+  String get serviceScreenIncorrectTime;
+  String get serviceScreenTooEarly;
+  String get serviceScreenTooLate;
+  String get serviceScreen2HoursAdvance;
+  String get serviceScreenPaymentMethod;
+  String get serviceScreenCash;
+  String get serviceScreenCreditCard;
+
+  String get oeScreenNotStarted;
+  String get oeScreenInProcess;
+  String get oeScreenEnded;
+  String get oeScreenMakePayment;
+  String get oeScreenMakePaymentWith;
+  // String get oeScreenOverallPrice;
+  // String get oeScreenCancel;
 }

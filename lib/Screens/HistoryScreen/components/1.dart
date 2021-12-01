@@ -29,14 +29,14 @@ class _History1State extends State<History1>
   bool get wantKeepAlive => true;
   bool loading = true;
   bool error = true;
-  List<QueryDocumentSnapshot> _bookings = [];
+  List<QueryDocumentSnapshot> ordinaryBookings = [];
   Map<String, DocumentSnapshot> _places = {};
+
   Map<QueryDocumentSnapshot, DocumentSnapshot> placesSlivers = {};
   Map<QueryDocumentSnapshot, DocumentSnapshot> unrplacesSlivers = {};
   Map<QueryDocumentSnapshot, DocumentSnapshot> unpaidPlacesSlivers = {};
-  List _bookings1 = [];
-  List _unrbookings1 = [];
-  List<QueryDocumentSnapshot> slivers = [];
+
+  List<QueryDocumentSnapshot> inprocessBookSlivers = [];
   List unratedBooks = [];
   List unpaidBookings = [];
   List unpaidBookingsSlivers = [];
@@ -105,10 +105,10 @@ class _History1State extends State<History1>
     }
   }
 
-  Future<void> inprocessBookPrep(List<QueryDocumentSnapshot> _bookings1) async {
+  Future<void> inprocessBookPrep(List<QueryDocumentSnapshot> _bookings) async {
     DocumentSnapshot customIB;
-    if (_bookings1.length != 0) {
-      for (QueryDocumentSnapshot book in _bookings1) {
+    if (_bookings.length != 0) {
+      for (QueryDocumentSnapshot book in _bookings) {
         customIB = await FirebaseFirestore.instance
             .collection('locations')
             .doc(Booking.fromSnapshot(book).placeId)
@@ -134,12 +134,12 @@ class _History1State extends State<History1>
           }
         });
         setState(() {
-          slivers.add(book);
+          inprocessBookSlivers.add(book);
           placesSlivers.addAll({book: customIB});
         });
       }
     }
-    for (QueryDocumentSnapshot book in _bookings1) {
+    for (QueryDocumentSnapshot book in _bookings) {
       if (Booking.fromSnapshot(book).seen_status == 'unseen') {
         FirebaseFirestore.instance
             .collection('bookings')
@@ -229,7 +229,7 @@ class _History1State extends State<History1>
         .snapshots()
         .listen((bookings) {
           setState(() {
-            _bookings = bookings.docs;
+            ordinaryBookings = bookings.docs;
             ordinaryBookPrep(bookings.docs);
           });
         });
@@ -251,7 +251,6 @@ class _History1State extends State<History1>
         .snapshots()
         .listen((bookings) {
           setState(() {
-            _bookings1 = bookings.docs;
             inprocessBookPrep(bookings.docs);
           });
         });
@@ -277,7 +276,6 @@ class _History1State extends State<History1>
         .snapshots()
         .listen((bookings) {
           setState(() {
-            _unrbookings1 = bookings.docs;
             unratedBookPrep(bookings.docs);
           });
         });
@@ -314,8 +312,8 @@ class _History1State extends State<History1>
   // ignore: unused_element
   List<Meeting> _getDataSource() {
     var meetings = <Meeting>[];
-    if (_bookings != null) {
-      for (var book in _bookings) {
+    if (ordinaryBookings != null) {
+      for (QueryDocumentSnapshot book in ordinaryBookings) {
         final DateTime today =
             Booking.fromSnapshot(book).timestamp_date.toDate();
         final DateTime startTime = DateTime(
@@ -353,13 +351,11 @@ class _History1State extends State<History1>
     setState(() {
       loading = true;
     });
-    _bookings = [];
+    ordinaryBookings = [];
     _places = {};
     placesSlivers = {};
     unrplacesSlivers = {};
-    _bookings1 = [];
-    _unrbookings1 = [];
-    slivers = [];
+    inprocessBookSlivers = [];
     unratedBooks = [];
     sliversList = [];
     unpaidPlacesSlivers = {};
@@ -646,19 +642,15 @@ class _History1State extends State<History1>
                                                     height: 10,
                                                   ),
                                                   Text(
-                                                    Booking.fromSnapshot(book)
-                                                        .status,
+                                                    // Booking.fromSnapshot(book).status,
+                                                    Languages.of(context)
+                                              .historyScreenUnpaid,
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     style:
                                                         GoogleFonts.montserrat(
                                                       textStyle: TextStyle(
-                                                        color: Booking.fromSnapshot(
-                                                                        book)
-                                                                    .status ==
-                                                                'unfinished'
-                                                            ? whiteColor
-                                                            : Colors.red,
+                                                        color: whiteColor,
                                                         fontSize: 15,
                                                       ),
                                                     ),
@@ -726,7 +718,7 @@ class _History1State extends State<History1>
                           ]),
                         ),
                   // Ongoing
-                  slivers.length != 0
+                  inprocessBookSlivers.length != 0
                       ? SliverList(
                           delegate: SliverChildListDelegate([
                             SizedBox(
@@ -748,7 +740,7 @@ class _History1State extends State<History1>
                               height: 15,
                             ),
                             for (QueryDocumentSnapshot book
-                                in slivers.toSet().toList())
+                                in inprocessBookSlivers.toSet().toList())
                               TextButton(
                                 onPressed: () {
                                   setState(() {
@@ -908,8 +900,10 @@ class _History1State extends State<History1>
                                                     height: 10,
                                                   ),
                                                   Text(
-                                                    Booking.fromSnapshot(book)
-                                                        .status,
+                                                    // Booking.fromSnapshot(book)
+                                                        // .status,
+                                                        Languages.of(context)
+                                              .historyScreenInProcess,
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     style:
@@ -1010,7 +1004,7 @@ class _History1State extends State<History1>
                           height: 15,
                         ),
                         for (QueryDocumentSnapshot book
-                            in _bookings.toSet().toList())
+                            in ordinaryBookings.toSet().toList())
                           CupertinoButton(
                             onPressed: () {
                               setState(() {
@@ -1152,8 +1146,18 @@ class _History1State extends State<History1>
                                                 height: 10,
                                               ),
                                               Text(
-                                                Booking.fromSnapshot(book)
-                                                    .status,
+                                                // Booking.fromSnapshot(book)
+                                                //     .status,
+
+                                                Booking.fromSnapshot(
+                                                                    book)
+                                                                .status ==
+                                                            'unfinished'
+                                                        ? Languages.of(context)
+                                              .historyScreenUpcoming
+                                                        : Languages.of(context)
+                                              .historyScreenVerificationNeeded
+                                              ,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: GoogleFonts.montserrat(
                                                   textStyle: TextStyle(
@@ -1638,9 +1642,11 @@ class _History1State extends State<History1>
                                                           height: 10,
                                                         ),
                                                         Text(
-                                                          Booking.fromSnapshot(
-                                                                  book)
-                                                              .status,
+                                                          // Booking.fromSnapshot(
+                                                          //         book)
+                                                          //     .status,
+                                                          Languages.of(context)
+                                              .historyScreenUnrated,
                                                           overflow: TextOverflow
                                                               .ellipsis,
                                                           style: GoogleFonts

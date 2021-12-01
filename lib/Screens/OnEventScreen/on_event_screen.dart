@@ -3,9 +3,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/Models/LanguageData.dart';
 import 'package:flutter_complete_guide/Models/Place.dart';
 import 'package:flutter_complete_guide/Models/PushNotificationMessage.dart';
 import 'package:flutter_complete_guide/Screens/MapScreen/map_screen.dart';
+import 'package:flutter_complete_guide/Services/languages/languages.dart';
 import 'package:flutter_complete_guide/widgets/rounded_button.dart';
 import 'package:flutter_complete_guide/widgets/rounded_text_input.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
@@ -317,7 +319,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                               booking.data()['status'] ==
                                                   'verification_needed'
                                           ? Text(
-                                              'Event has not started yet',
+                                              Languages.of(context).oeScreenNotStarted,
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 3,
                                               textAlign: TextAlign.center,
@@ -331,7 +333,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                           : Container(),
                                       booking.data()['status'] == 'in process'
                                           ? Text(
-                                              'Event is going on',
+                                              Languages.of(context).oeScreenInProcess,
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 3,
                                               textAlign: TextAlign.center,
@@ -345,7 +347,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                           : Container(),
                                       booking.data()['status'] == 'unpaid'
                                           ? Text(
-                                              'Please make your payment and check if owner has accepted it',
+                                              Languages.of(context).oeScreenMakePayment,
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 10,
                                               textAlign: TextAlign.center,
@@ -362,7 +364,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                                       'payment_method'] ==
                                                   'octo'
                                           ? Text(
-                                              'Please make your payment with credit card',
+                                              Languages.of(context).oeScreenMakePaymentWith + " " + Languages.of(context).serviceScreenCreditCard,
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 8,
                                               textAlign: TextAlign.center,
@@ -401,7 +403,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                           : Container(),
                                       booking.data()['status'] == 'finished'
                                           ? Text(
-                                              'Event has ended',
+                                              Languages.of(context).oeScreenEnded,
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 3,
                                               textAlign: TextAlign.center,
@@ -619,7 +621,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                                 height: 5,
                                               ),
                                               Text(
-                                                'Cash',
+                                                Languages.of(context).serviceScreenCash,
                                                 maxLines: 3,
                                                 style: GoogleFonts.montserrat(
                                                   textStyle: TextStyle(
@@ -685,7 +687,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                                 height: 5,
                                               ),
                                               Text(
-                                                'Credit card',
+                                                Languages.of(context).serviceScreenCreditCard,
                                                 maxLines: 3,
                                                 style: GoogleFonts.montserrat(
                                                   textStyle: TextStyle(

@@ -60,6 +60,8 @@ class LanguageEn extends Languages {
   String get historyScreenUpcoming => "Upcoming";
   @override
   String get historyScreenUnrated => "Unrated";
+  @override
+  String get historyScreenVerificationNeeded => "verification needed";
 
   @override
   String get profileScreenFavs => "Favourites";
@@ -84,6 +86,54 @@ class LanguageEn extends Languages {
 
 
   @override
+  String get placeScreenServices => "Services";
+  @override
+  String get placeScreenDeactivated => "Deactivated";
+  @override
+  String get placeScreenPerMinute => "per minute";
+
+  @override
   String get serviceScreenNoInternet => "No Internet";
+  @override
+  String get serviceScreenClosed => "Closed";
+  @override
+  String get serviceScreenDate => "Date";
+  @override
+  String get serviceScreenFrom => "From";
+  @override
+  String get serviceScreenTo => "To";
+  @override
+  String get serviceScreenAlreadyBooked => "Already booked";
+  @override
+  String get serviceScreenIncorrectDate => "Incorrect date selected";
+  @override
+  String get serviceScreenIncorrectTime => "Incorrect time selected";
+  @override
+  String get serviceScreenTooEarly => "Too early";
+  @override
+  String get serviceScreenTooLate => "Too late";
+  @override
+  String get serviceScreen2HoursAdvance => "Booking should be made 2 hours in advance for this place";
+  @override
+  String get serviceScreenPaymentMethod => "Choose payment method";
+  @override
+  String get serviceScreenCash => "Cash";
+  @override
+  String get serviceScreenCreditCard => "Credit card";
   
+  
+  @override
+  String get oeScreenNotStarted => "Event has not started yet";
+  @override
+  String get oeScreenInProcess => "Event is in process";
+  @override
+  String get oeScreenEnded => "Event has ended";
+  @override
+  String get oeScreenMakePayment => "Please make your payment and check if owner has accepted it";
+  @override
+  String get oeScreenMakePaymentWith => "Please make your payment with";
+  // @override
+  // String get oeScreenOverallPrice => "Overall price: ";
+  // @override
+  // String get oeScreenCancel => "Cancel";
 }

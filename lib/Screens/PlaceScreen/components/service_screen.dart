@@ -80,7 +80,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
     if (selectedDate.isBefore(DateTime.now())) {
       if (selectedDate.day != DateTime.now().day) {
         setState(() {
-          error = 'Incorrect date selected';
+          error = Languages.of(context).serviceScreenIncorrectDate;
           loading1 = false;
           verified = false;
         });
@@ -88,7 +88,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
       } else {
         if (dtime1 < dNow) {
           setState(() {
-            error = 'Incorrect time selected';
+            error = Languages.of(context).serviceScreenIncorrectTime;
             loading1 = false;
             verified = false;
           });
@@ -105,7 +105,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                 (DateTime.now().minute + DateTime.now().hour * 60) <
             120) {
           setState(() {
-            error = 'Booking should be made 2 hours in advance for this place';
+            error = Languages.of(context).serviceScreen2HoursAdvance;
             loading1 = false;
             verified = false;
           });
@@ -116,7 +116,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
 
     if (dtime1 >= dtime2) {
       setState(() {
-        error = 'Incorrect time selected';
+        error = Languages.of(context).serviceScreenIncorrectTime;
         loading1 = false;
         verified = false;
       });
@@ -146,7 +146,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
           double dplaceFrom = placeFrom.minute + placeFrom.hour * 60.0;
           if (dtime1 < dplaceFrom || dtime2 < dplaceFrom) {
             setState(() {
-              error = 'Too early';
+              error = Languages.of(context).serviceScreenTooEarly;
               loading1 = false;
               verified = false;
             });
@@ -154,7 +154,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
           }
           if (dtime1 > dplaceTo || dtime2 > dplaceTo) {
             setState(() {
-              error = 'Too late';
+              error = Languages.of(context).serviceScreenTooLate;
               loading1 = false;
               verified = false;
             });
@@ -400,7 +400,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
             fixedMinute = fixedMinute - 60;
           }
           if (fixedHour > 23) {
-            error = 'Too late';
+            error = Languages.of(context).serviceScreenTooLate;
             loading1 = false;
             verified = false;
             String fixedMinuteString;
@@ -679,7 +679,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                 Text(
                                   widget.data['days']['Mon']['status'] ==
                                           'closed'
-                                      ? 'Closed'
+                                      ? Languages.of(context).serviceScreenClosed
                                       : widget.data['days']['Mon']['from'] +
                                           ' - ' +
                                           widget.data['days']['Mon']['to'],
@@ -725,7 +725,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                 Text(
                                   widget.data['days']['Tue']['status'] ==
                                           'closed'
-                                      ? 'Closed'
+                                      ? Languages.of(context).serviceScreenClosed
                                       : widget.data['days']['Tue']['from'] +
                                           ' - ' +
                                           widget.data['days']['Tue']['to'],
@@ -771,7 +771,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                 Text(
                                   widget.data['days']['Wed']['status'] ==
                                           'closed'
-                                      ? 'Closed'
+                                      ? Languages.of(context).serviceScreenClosed
                                       : widget.data['days']['Wed']['from'] +
                                           ' - ' +
                                           widget.data['days']['Wed']['to'],
@@ -817,7 +817,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                 Text(
                                   widget.data['days']['Thu']['status'] ==
                                           'closed'
-                                      ? 'Closed'
+                                      ? Languages.of(context).serviceScreenClosed
                                       : widget.data['days']['Thu']['from'] +
                                           ' - ' +
                                           widget.data['days']['Thu']['to'],
@@ -863,7 +863,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                 Text(
                                   widget.data['days']['Fri']['status'] ==
                                           'closed'
-                                      ? 'Closed'
+                                      ? Languages.of(context).serviceScreenClosed
                                       : widget.data['days']['Fri']['from'] +
                                           ' - ' +
                                           widget.data['days']['Fri']['to'],
@@ -909,7 +909,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                 Text(
                                   widget.data['days']['Sat']['status'] ==
                                           'closed'
-                                      ? 'Closed'
+                                      ? Languages.of(context).serviceScreenClosed
                                       : widget.data['days']['Sat']['from'] +
                                           ' - ' +
                                           widget.data['days']['Sat']['to'],
@@ -955,7 +955,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                 Text(
                                   widget.data['days']['Sun']['status'] ==
                                           'closed'
-                                      ? 'Closed'
+                                      ? Languages.of(context).serviceScreenClosed
                                       : widget.data['days']['Sun']['from'] +
                                           ' - ' +
                                           widget.data['days']['Sun']['to'],
@@ -979,7 +979,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  'Date',
+                                  Languages.of(context).serviceScreenDate,
                                   style: GoogleFonts.montserrat(
                                     textStyle: TextStyle(
                                       color: darkColor,
@@ -1040,7 +1040,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                               alreadyBookings.length != 0
                                                   ? Center(
                                                       child: Text(
-                                                        'Already booked',
+                                                        Languages.of(context).serviceScreenAlreadyBooked,
                                                         style: GoogleFonts
                                                             .montserrat(
                                                           textStyle: TextStyle(
@@ -1082,7 +1082,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                             Row(
                               children: <Widget>[
                                 Text(
-                                  'From',
+                                  Languages.of(context).serviceScreenFrom,
                                   style: GoogleFonts.montserrat(
                                     textStyle: TextStyle(
                                       color: darkColor,
@@ -1124,7 +1124,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                   ),
                                 ),
                                 Text(
-                                  'To',
+                                  Languages.of(context).serviceScreenTo,
                                   style: GoogleFonts.montserrat(
                                     textStyle: TextStyle(
                                       color: darkColor,
@@ -1221,7 +1221,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                           height: 5,
                                                         ),
                                                         Text(
-                                                          'From: ' + _time,
+                                                          Languages.of(context).serviceScreenFrom + ' ' + _time,
                                                           style: GoogleFonts
                                                               .montserrat(
                                                             textStyle:
@@ -1235,7 +1235,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                           height: 5,
                                                         ),
                                                         Text(
-                                                          'To: ' + _time2,
+                                                           Languages.of(context).serviceScreenTo + ' ' + _time2,
                                                           style: GoogleFonts
                                                               .montserrat(
                                                             textStyle:
@@ -1297,7 +1297,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
 
                                                         SizedBox(height: 30),
                                                         Text(
-                                                          'Choose payment method',
+                                                          Languages.of(context).serviceScreenPaymentMethod,
                                                           maxLines: 2,
                                                           style: GoogleFonts
                                                               .montserrat(
@@ -1390,7 +1390,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                                           Text(
                                                                             payment_way == 'cash'
                                                                                 ? 'Done'
-                                                                                : 'Cash',
+                                                                                : Languages.of(context).serviceScreenCash,
                                                                             maxLines:
                                                                                 3,
                                                                             style:
@@ -1484,7 +1484,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                                           Text(
                                                                             payment_way == 'octo'
                                                                                 ? 'Done'
-                                                                                : 'Credit card',
+                                                                                : Languages.of(context).serviceScreenCreditCard,
                                                                             maxLines:
                                                                                 3,
                                                                             style:
@@ -1706,7 +1706,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                                                 notification =
                                                                                 PushNotificationMessage(
                                                                               title: 'Booked',
-                                                                              body: 'Bokking was successful',
+                                                                              body: Languages.of(context).homeScreenSaved,
                                                                             );
                                                                             showSimpleNotification(
                                                                               Container(child: Text(notification.body)),
@@ -1876,19 +1876,22 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                     ),
                                                   ),
                                                 )
-                                              : Align(
-                                                  alignment: Alignment.center,
-                                                  child: Text(
-                                                    error,
-                                                    style:
-                                                        GoogleFonts.montserrat(
-                                                      textStyle: TextStyle(
-                                                        color: Colors.red,
-                                                        fontSize: 30,
+                                              : Padding(
+                                                padding: const EdgeInsets.all(10.0),
+                                                child: Align(
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      error,
+                                                      style:
+                                                          GoogleFonts.montserrat(
+                                                        textStyle: TextStyle(
+                                                          color: Colors.red,
+                                                          fontSize: 30,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
+                                              ),
                                     ),
                                   )
                                 : Container(),

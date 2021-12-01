@@ -62,6 +62,8 @@ class LanguageRu extends Languages {
   String get historyScreenUpcoming => "Предстоящие";
   @override
   String get historyScreenUnrated => "Без оценки";
+  @override
+  String get historyScreenVerificationNeeded => "ожидание согласия владельца";
 
   @override
   String get profileScreenFavs => "Избранное";
@@ -86,5 +88,49 @@ class LanguageRu extends Languages {
 
 
   @override
+  String get placeScreenServices => "Услуги";
+  @override
+  String get placeScreenDeactivated => "Деактивировано";
+  @override
+  String get placeScreenPerMinute => "в минуту";
+
+  @override
   String get serviceScreenNoInternet => "Нет соединения с Интернетом";
+  @override
+  String get serviceScreenClosed => "Закрыто";
+  @override
+  String get serviceScreenDate => "Дата";
+  @override
+  String get serviceScreenFrom => "От";
+  @override
+  String get serviceScreenTo => "До";
+  @override
+  String get serviceScreenAlreadyBooked => "Уже забронированно";
+  @override
+  String get serviceScreenIncorrectDate => "Выбрана неверная дата";
+  @override
+  String get serviceScreenIncorrectTime => "Выбрано неверное время";
+  @override
+  String get serviceScreenTooEarly => "Слишком рано";
+  @override
+  String get serviceScreenTooLate => "Слишком поздно";
+  @override
+  String get serviceScreen2HoursAdvance => "Для этого места необходимо сделать предварительный заказ за 2 часа.";
+  @override
+  String get serviceScreenPaymentMethod => "Выберите способ оплаты";
+  @override
+  String get serviceScreenCash => "Наличка";
+  @override
+  String get serviceScreenCreditCard => "Карта";
+
+  @override
+  String get oeScreenNotStarted => "Мероприятие еще не началось";
+  @override
+  String get oeScreenInProcess => "Мероприятие в процессе";
+  @override
+  String get oeScreenEnded => "Событие закончилось";
+  @override
+  String get oeScreenMakePayment => "Пожалуйста, произведите оплату и проверьте, принял ли ее владелец";
+  @override
+  String get oeScreenMakePaymentWith => "Пожалуйста, произведите оплату -";
 }

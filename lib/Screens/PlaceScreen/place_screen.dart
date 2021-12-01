@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Models/PushNotificationMessage.dart';
 import 'package:flutter_complete_guide/Screens/PlaceScreen/components/service_screen.dart';
 import 'package:flutter_complete_guide/Screens/loading_screen.dart';
+import 'package:flutter_complete_guide/Services/languages/languages.dart';
 import 'package:flutter_complete_guide/widgets/label_button.dart';
 import 'package:flutter_complete_guide/widgets/slide_right_route_animation.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -344,8 +345,8 @@ class _PlaceScreenState extends State<PlaceScreen> {
                       Center(
                         child: Text(
                           company.data()['isActive']
-                              ? 'Services'
-                              : 'Deactivated',
+                              ? Languages.of(context).placeScreenServices
+                              : Languages.of(context).placeScreenDeactivated,
                           style: GoogleFonts.montserrat(
                             textStyle: TextStyle(
                               color: darkColor,
@@ -415,11 +416,16 @@ class _PlaceScreenState extends State<PlaceScreen> {
                                 subtitle: Text(
                                   service['isActive'] == null
                                       ? service['spm'].toString() +
-                                          ' UZS per minute'
+                                          ' UZS ' +
+                                          Languages.of(context)
+                                              .placeScreenPerMinute
                                       : service['isActive']
                                           ? service['spm'].toString() +
-                                              ' UZS per minute'
-                                          : 'Deactivated',
+                                              ' UZS ' +
+                                              Languages.of(context)
+                                                  .placeScreenPerMinute
+                                          : Languages.of(context)
+                                              .placeScreenDeactivated,
                                   style: GoogleFonts.montserrat(
                                     textStyle: TextStyle(
                                       color: whiteColor,

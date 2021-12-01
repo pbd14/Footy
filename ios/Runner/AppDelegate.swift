@@ -20,4 +20,9 @@ import Firebase
     UIApplication.shared.setMinimumBackgroundFetchInterval(TimeInterval(60*5))
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
+    override func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+
+       Messaging.messaging().apnsToken = deviceToken
+       super.application(application, didRegisterForRemoteNotificationsWithDeviceToken: deviceToken)
+     }
 }

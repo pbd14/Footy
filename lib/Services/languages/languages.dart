@@ -77,6 +77,11 @@ abstract class Languages {
   String get oeScreenEnded;
   String get oeScreenMakePayment;
   String get oeScreenMakePaymentWith;
-  // String get oeScreenOverallPrice;
-  // String get oeScreenCancel;
+  String get oeScreenOverallPrice;
+  String get oeScreenCancel;
+  String get oeScreenStatus;
+  String get oeScreenCanCancel;
+  String get oeScreenQuestionCancel;
+  String get oeScreenReason;
+  String get oeScreenMinCharacters;
 }

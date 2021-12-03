@@ -319,7 +319,8 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                               booking.data()['status'] ==
                                                   'verification_needed'
                                           ? Text(
-                                              Languages.of(context).oeScreenNotStarted,
+                                              Languages.of(context)
+                                                  .oeScreenNotStarted,
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 3,
                                               textAlign: TextAlign.center,
@@ -333,7 +334,8 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                           : Container(),
                                       booking.data()['status'] == 'in process'
                                           ? Text(
-                                              Languages.of(context).oeScreenInProcess,
+                                              Languages.of(context)
+                                                  .oeScreenInProcess,
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 3,
                                               textAlign: TextAlign.center,
@@ -347,7 +349,8 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                           : Container(),
                                       booking.data()['status'] == 'unpaid'
                                           ? Text(
-                                              Languages.of(context).oeScreenMakePayment,
+                                              Languages.of(context)
+                                                  .oeScreenMakePayment,
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 10,
                                               textAlign: TextAlign.center,
@@ -364,7 +367,11 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                                       'payment_method'] ==
                                                   'octo'
                                           ? Text(
-                                              Languages.of(context).oeScreenMakePaymentWith + " " + Languages.of(context).serviceScreenCreditCard,
+                                              Languages.of(context)
+                                                      .oeScreenMakePaymentWith +
+                                                  " " +
+                                                  Languages.of(context)
+                                                      .serviceScreenCreditCard,
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 8,
                                               textAlign: TextAlign.center,
@@ -403,7 +410,8 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                           : Container(),
                                       booking.data()['status'] == 'finished'
                                           ? Text(
-                                              Languages.of(context).oeScreenEnded,
+                                              Languages.of(context)
+                                                  .oeScreenEnded,
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 3,
                                               textAlign: TextAlign.center,
@@ -423,7 +431,6 @@ class _OnEventScreenState extends State<OnEventScreen> {
                           ),
                         ),
                       ),
-                      
 
                       Container(
                         width: size.width * 0.8,
@@ -543,7 +550,8 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                   height: 5,
                                 ),
                                 Text(
-                                  'Overall price: ' +
+                                  Languages.of(context).oeScreenOverallPrice +
+                                      ': ' +
                                       booking.data()['price'].toString() +
                                       " UZS",
                                   overflow: TextOverflow.ellipsis,
@@ -558,7 +566,29 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                   height: 10,
                                 ),
                                 Text(
-                                  'Status: ' + booking.data()['status'],
+                                  Languages.of(context).oeScreenStatus +
+                                              ': ' +
+                                              booking.data()['status'] ==
+                                          'unfinished'
+                                      ? Languages.of(context)
+                                          .historyScreenUpcoming
+                                      : booking.data()['status'] == 'unpaid'
+                                          ? Languages.of(context)
+                                              .historyScreenUnpaid
+                                          : booking.data()['status'] ==
+                                                  'finished'
+                                              ? Languages.of(context)
+                                                  .oeScreenEnded
+                                              : booking.data()['status'] ==
+                                                      'in process'
+                                                  ? Languages.of(context)
+                                                      .oeScreenInProcess
+                                                  : booking.data()['status'] ==
+                                                          'verification_needed'
+                                                      ? Languages.of(context)
+                                                          .historyScreenVerificationNeeded
+                                                      : booking
+                                                          .data()['status'],
                                   overflow: TextOverflow.ellipsis,
                                   style: GoogleFonts.montserrat(
                                     textStyle: TextStyle(
@@ -621,7 +651,8 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                                 height: 5,
                                               ),
                                               Text(
-                                                Languages.of(context).serviceScreenCash,
+                                                Languages.of(context)
+                                                    .serviceScreenCash,
                                                 maxLines: 3,
                                                 style: GoogleFonts.montserrat(
                                                   textStyle: TextStyle(
@@ -687,7 +718,8 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                                 height: 5,
                                               ),
                                               Text(
-                                                Languages.of(context).serviceScreenCreditCard,
+                                                Languages.of(context)
+                                                    .serviceScreenCreditCard,
                                                 maxLines: 3,
                                                 style: GoogleFonts.montserrat(
                                                   textStyle: TextStyle(
@@ -746,9 +778,10 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              'You can cancel event 2 hours before it starts. You can cancel only 5 bookings. You have ' +
-                                                  cancellations_num.toString() +
-                                                  ' already',
+                                              Languages.of(context)
+                                                      .oeScreenCanCancel +
+                                                  ' :' +
+                                                  cancellations_num.toString(),
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 10,
                                               textAlign: TextAlign.center,
@@ -764,7 +797,8 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                               child: RoundedButton(
                                                 pw: 100,
                                                 ph: 45,
-                                                text: 'Cancel',
+                                                text: Languages.of(context)
+                                                    .oeScreenCancel,
                                                 press: () {
                                                   showDialog(
                                                     barrierDismissible: false,
@@ -772,10 +806,14 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                                     builder:
                                                         (BuildContext context) {
                                                       return AlertDialog(
-                                                        title: const Text(
-                                                            'Cancel?'),
-                                                        content: const Text(
-                                                            'Are you sure you want to cancel the booking?'),
+                                                        title: Text(Languages
+                                                                    .of(context)
+                                                                .oeScreenCancel +
+                                                            '?'),
+                                                        content: Text(Languages
+                                                                    .of(context)
+                                                                .oeScreenQuestionCancel +
+                                                            '?'),
                                                         scrollable: true,
                                                         actions: <Widget>[
                                                           Form(
@@ -786,13 +824,16 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                                                       .center,
                                                               children: [
                                                                 RoundedTextInput(
-                                                                  validator: (val) =>
-                                                                      val.length >=
-                                                                              5
-                                                                          ? null
-                                                                          : 'Minimum 5 characters',
-                                                                  hintText:
-                                                                      "Reason",
+                                                                  validator: (val) => val
+                                                                              .length >=
+                                                                          5
+                                                                      ? null
+                                                                      : Languages.of(context)
+                                                                              .oeScreenMinCharacters +
+                                                                          ': 5',
+                                                                  hintText: Languages.of(
+                                                                          context)
+                                                                      .oeScreenReason,
                                                                   length: 500,
                                                                   type: TextInputType
                                                                       .multiline,
@@ -1040,7 +1081,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                       SizedBox(
                         height: 20,
                       ),
-                      
+
                       SizedBox(
                         height: 20,
                       ),

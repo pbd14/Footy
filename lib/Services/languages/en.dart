@@ -132,8 +132,18 @@ class LanguageEn extends Languages {
   String get oeScreenMakePayment => "Please make your payment and check if owner has accepted it";
   @override
   String get oeScreenMakePaymentWith => "Please make your payment with";
-  // @override
-  // String get oeScreenOverallPrice => "Overall price: ";
-  // @override
-  // String get oeScreenCancel => "Cancel";
+  @override
+  String get oeScreenOverallPrice => "Overall price";
+  @override
+  String get oeScreenCancel => "Cancel";
+  @override
+  String get oeScreenStatus => "Status";
+  @override
+  String get oeScreenCanCancel => "You can cancel event 2 hours before it starts. You can cancel only 5 bookings. You canceled ";
+  @override
+  String get oeScreenQuestionCancel=> "Are you sure you want to cancel the booking";
+  @override
+  String get oeScreenReason => "Reason";
+  @override
+  String get oeScreenMinCharacters=> "Minimum characters";
 }

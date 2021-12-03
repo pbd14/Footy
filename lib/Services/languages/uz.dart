@@ -130,4 +130,18 @@ class LanguageUz extends Languages {
   String get oeScreenMakePayment => "Iltimos, toʻlovni amalga oshiring va egasi uni qabul qilganligini tekshiring";
   @override
   String get oeScreenMakePaymentWith => "Iltimos, toʻlovni amalga oshiring -";
+  @override
+  String get oeScreenOverallPrice => "Umumiy narx";
+  @override
+  String get oeScreenCancel => "Bekor qilish";
+  @override
+  String get oeScreenStatus => "Status";
+  @override
+  String get oeScreenCanCancel => "Tadbirni boshlanishidan 2 soat oldin bekor qilishingiz mumkin. Siz faqat 5 ta bronni bekor qilishingiz mumkin. Siz bekor qildingiz";
+  @override
+  String get oeScreenQuestionCancel=> "Haqiqatan ham bekor qilmoqchimisiz";
+  @override
+  String get oeScreenReason => "Sabab";
+  @override
+  String get oeScreenMinCharacters=> "Minimal belgilar soni";
 }

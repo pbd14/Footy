@@ -133,4 +133,19 @@ class LanguageRu extends Languages {
   String get oeScreenMakePayment => "Пожалуйста, произведите оплату и проверьте, принял ли ее владелец";
   @override
   String get oeScreenMakePaymentWith => "Пожалуйста, произведите оплату -";
+
+  @override
+  String get oeScreenOverallPrice => "Общая цена";
+  @override
+  String get oeScreenCancel => "Отменить";
+  @override
+  String get oeScreenStatus => "Статус";
+  @override
+  String get oeScreenCanCancel => "Вы можете отменить мероприятие за 2 часа до его начала. Вы можете отменить только 5 бронирований. Вы отменили";
+  @override
+  String get oeScreenQuestionCancel=> "Вы уверены, что хотите отменить бронирование";
+  @override
+  String get oeScreenReason => "Причина";
+  @override
+  String get oeScreenMinCharacters=> "Минимум символов";
 }

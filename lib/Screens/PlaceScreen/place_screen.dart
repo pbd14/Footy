@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/Models/PushNotificationMessage.dart';
 import 'package:flutter_complete_guide/Screens/PlaceScreen/components/service_screen.dart';
@@ -41,6 +42,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
   List imgList = [];
   DocumentSnapshot place;
   DocumentSnapshot company;
+  DocumentSnapshot user;
 
   Future<void> prepare() async {
     place = await FirebaseFirestore.instance
@@ -50,6 +52,10 @@ class _PlaceScreenState extends State<PlaceScreen> {
     company = await FirebaseFirestore.instance
         .collection('companies')
         .doc(place.data()['owner'])
+        .get();
+    user = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser.uid)
         .get();
     for (String img in place.data()['images']) {
       imgList.add(img);
@@ -358,11 +364,59 @@ class _PlaceScreenState extends State<PlaceScreen> {
                       SizedBox(
                         height: 20,
                       ),
+                      if (user.data()['status'] == "blocked")
+                        Container(
+                          width: size.width * 0.8,
+                          child: Card(
+                            color: Colors.red,
+                            elevation: 10,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    CupertinoIcons.info_circle,
+                                    color: whiteColor,
+                                    size: 15,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Your account is blocked. Please pay for all previous bookings.',
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 100,
+                                          textAlign: TextAlign.start,
+                                          style: GoogleFonts.montserrat(
+                                            textStyle: TextStyle(
+                                              color: whiteColor,
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      SizedBox(
+                        height: 20,
+                      ),
                       if (company.data()['isActive'])
                         for (Map service in place.data()['services'])
                           TextButton(
                             onPressed: () {
-                              if (service['isActive'] == null) {
+                              if (service['isActive'] == null &&
+                                  user.data()['status'] != "blocked") {
                                 setState(() {
                                   loading = true;
                                 });
@@ -379,7 +433,8 @@ class _PlaceScreenState extends State<PlaceScreen> {
                                 setState(() {
                                   loading = false;
                                 });
-                              } else if (service['isActive']) {
+                              } else if (service['isActive'] &&
+                                  user.data()['status'] != "blocked") {
                                 setState(() {
                                   loading = true;
                                 });

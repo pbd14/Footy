@@ -131,13 +131,6 @@ class HomeScreenState extends State<HomeScreen> {
         'cancellations_num': 0,
         'phone': FirebaseAuth.instance.currentUser.phoneNumber,
       });
-    } else {
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser.uid)
-          .update({
-        'status': 'default',
-      });
     }
   }
 

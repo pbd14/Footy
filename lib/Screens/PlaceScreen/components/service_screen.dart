@@ -31,7 +31,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
   double _height;
   double _width;
   double duration = 0;
-  double price = 0;
+  double placeProfit = 0;
   double servicePrice = 0;
   double commissionPrice = 0;
 
@@ -210,14 +210,12 @@ class _PlaceScreenState extends State<ServiceScreen> {
             RemoteConfig remoteConfig = RemoteConfig.instance;
             // ignore: unused_local_variable
             bool updated = await remoteConfig.fetchAndActivate();
-            print('HETGJ');
-            print(remoteConfig.getDouble('booking_commission'));
             setState(() {
               duration = dtime2 - dtime1;
               servicePrice = duration * double.parse(widget.data['spm']);
               commissionPrice =
                   servicePrice * remoteConfig.getDouble('booking_commission');
-              price = servicePrice + commissionPrice;
+              placeProfit = servicePrice - commissionPrice;
               loading1 = false;
               verified = true;
             });
@@ -679,7 +677,8 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                 Text(
                                   widget.data['days']['Mon']['status'] ==
                                           'closed'
-                                      ? Languages.of(context).serviceScreenClosed
+                                      ? Languages.of(context)
+                                          .serviceScreenClosed
                                       : widget.data['days']['Mon']['from'] +
                                           ' - ' +
                                           widget.data['days']['Mon']['to'],
@@ -725,7 +724,8 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                 Text(
                                   widget.data['days']['Tue']['status'] ==
                                           'closed'
-                                      ? Languages.of(context).serviceScreenClosed
+                                      ? Languages.of(context)
+                                          .serviceScreenClosed
                                       : widget.data['days']['Tue']['from'] +
                                           ' - ' +
                                           widget.data['days']['Tue']['to'],
@@ -771,7 +771,8 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                 Text(
                                   widget.data['days']['Wed']['status'] ==
                                           'closed'
-                                      ? Languages.of(context).serviceScreenClosed
+                                      ? Languages.of(context)
+                                          .serviceScreenClosed
                                       : widget.data['days']['Wed']['from'] +
                                           ' - ' +
                                           widget.data['days']['Wed']['to'],
@@ -817,7 +818,8 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                 Text(
                                   widget.data['days']['Thu']['status'] ==
                                           'closed'
-                                      ? Languages.of(context).serviceScreenClosed
+                                      ? Languages.of(context)
+                                          .serviceScreenClosed
                                       : widget.data['days']['Thu']['from'] +
                                           ' - ' +
                                           widget.data['days']['Thu']['to'],
@@ -863,7 +865,8 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                 Text(
                                   widget.data['days']['Fri']['status'] ==
                                           'closed'
-                                      ? Languages.of(context).serviceScreenClosed
+                                      ? Languages.of(context)
+                                          .serviceScreenClosed
                                       : widget.data['days']['Fri']['from'] +
                                           ' - ' +
                                           widget.data['days']['Fri']['to'],
@@ -909,7 +912,8 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                 Text(
                                   widget.data['days']['Sat']['status'] ==
                                           'closed'
-                                      ? Languages.of(context).serviceScreenClosed
+                                      ? Languages.of(context)
+                                          .serviceScreenClosed
                                       : widget.data['days']['Sat']['from'] +
                                           ' - ' +
                                           widget.data['days']['Sat']['to'],
@@ -955,7 +959,8 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                 Text(
                                   widget.data['days']['Sun']['status'] ==
                                           'closed'
-                                      ? Languages.of(context).serviceScreenClosed
+                                      ? Languages.of(context)
+                                          .serviceScreenClosed
                                       : widget.data['days']['Sun']['from'] +
                                           ' - ' +
                                           widget.data['days']['Sun']['to'],
@@ -1040,7 +1045,8 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                               alreadyBookings.length != 0
                                                   ? Center(
                                                       child: Text(
-                                                        Languages.of(context).serviceScreenAlreadyBooked,
+                                                        Languages.of(context)
+                                                            .serviceScreenAlreadyBooked,
                                                         style: GoogleFonts
                                                             .montserrat(
                                                           textStyle: TextStyle(
@@ -1221,7 +1227,10 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                           height: 5,
                                                         ),
                                                         Text(
-                                                          Languages.of(context).serviceScreenFrom + ' ' + _time,
+                                                          Languages.of(context)
+                                                                  .serviceScreenFrom +
+                                                              ' ' +
+                                                              _time,
                                                           style: GoogleFonts
                                                               .montserrat(
                                                             textStyle:
@@ -1235,7 +1244,10 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                           height: 5,
                                                         ),
                                                         Text(
-                                                           Languages.of(context).serviceScreenTo + ' ' + _time2,
+                                                          Languages.of(context)
+                                                                  .serviceScreenTo +
+                                                              ' ' +
+                                                              _time2,
                                                           style: GoogleFonts
                                                               .montserrat(
                                                             textStyle:
@@ -1249,41 +1261,8 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                           height: 15,
                                                         ),
                                                         Text(
-                                                          'Service: ' +
-                                                              servicePrice
+                                                          servicePrice
                                                                   .toString() +
-                                                              " UZS ",
-                                                          style: GoogleFonts
-                                                              .montserrat(
-                                                            textStyle:
-                                                                TextStyle(
-                                                              color: darkColor,
-                                                              fontSize: 15,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        // SizedBox(
-                                                        //   height: 5,
-                                                        // ),
-                                                        Text(
-                                                          'Commission: ' +
-                                                              commissionPrice
-                                                                  .toString() +
-                                                              " UZS ",
-                                                          style: GoogleFonts
-                                                              .montserrat(
-                                                            textStyle:
-                                                                TextStyle(
-                                                              color: darkColor,
-                                                              fontSize: 15,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 5,
-                                                        ),
-                                                        Text(
-                                                          price.toString() +
                                                               " UZS ",
                                                           style: GoogleFonts
                                                               .montserrat(
@@ -1297,7 +1276,8 @@ class _PlaceScreenState extends State<ServiceScreen> {
 
                                                         SizedBox(height: 30),
                                                         Text(
-                                                          Languages.of(context).serviceScreenPaymentMethod,
+                                                          Languages.of(context)
+                                                              .serviceScreenPaymentMethod,
                                                           maxLines: 2,
                                                           style: GoogleFonts
                                                               .montserrat(
@@ -1566,7 +1546,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                                               'placeId': widget.placeId,
                                                                               'serviceId': widget.serviceId,
                                                                               'userId': FirebaseAuth.instance.currentUser.uid,
-                                                                              'price': price.roundToDouble(),
+                                                                              'placeProfit': placeProfit.roundToDouble(),
                                                                               'servicePrice': servicePrice.roundToDouble(),
                                                                               'commissionPrice': commissionPrice.roundToDouble(),
                                                                               'from': _time,
@@ -1602,6 +1582,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                                                 loading = false;
                                                                               }
                                                                             });
+
                                                                             DocumentSnapshot
                                                                                 company =
                                                                                 await FirebaseFirestore.instance.collection('companies').doc(place.data()['owner']).get().catchError((error) {
@@ -1661,7 +1642,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                                               _time = null;
                                                                               _time2 = null;
                                                                               duration = 0;
-                                                                              price = 0;
+                                                                              placeProfit = 0;
                                                                               servicePrice = 0;
                                                                               commissionPrice = 0;
                                                                               selectedTime = TimeOfDay(hour: 00, minute: 00);
@@ -1685,7 +1666,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                                               _time = null;
                                                                               _time2 = null;
                                                                               duration = 0;
-                                                                              price = 0;
+                                                                              placeProfit = 0;
                                                                               servicePrice = 0;
                                                                               commissionPrice = 0;
                                                                               selectedTime = TimeOfDay(hour: 00, minute: 00);
@@ -1700,31 +1681,6 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                                               selectedDate = DateTime.now();
                                                                               payment_way = '';
                                                                             });
-                                                                          }
-                                                                          if (can) {
-                                                                            PushNotificationMessage
-                                                                                notification =
-                                                                                PushNotificationMessage(
-                                                                              title: 'Booked',
-                                                                              body: Languages.of(context).homeScreenSaved,
-                                                                            );
-                                                                            showSimpleNotification(
-                                                                              Container(child: Text(notification.body)),
-                                                                              position: NotificationPosition.top,
-                                                                              background: darkPrimaryColor,
-                                                                            );
-                                                                          } else {
-                                                                            PushNotificationMessage
-                                                                                notification =
-                                                                                PushNotificationMessage(
-                                                                              title: 'Fail',
-                                                                              body: 'Failed to book',
-                                                                            );
-                                                                            showSimpleNotification(
-                                                                              Container(child: Text(notification.body)),
-                                                                              position: NotificationPosition.top,
-                                                                              background: Colors.red,
-                                                                            );
                                                                           }
                                                                         }
                                                                       } on SocketException catch (err) {
@@ -1794,7 +1750,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                         //         loading = true;
                                                         //       });
                                                         //       FirebaseFirestore
-                                                        //           .instance
+                                                        //           .instanceProfit
                                                         //           .collection(
                                                         //               'bookings')
                                                         //           .doc()
@@ -1877,13 +1833,14 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                   ),
                                                 )
                                               : Padding(
-                                                padding: const EdgeInsets.all(10.0),
-                                                child: Align(
+                                                  padding: const EdgeInsets.all(
+                                                      10.0),
+                                                  child: Align(
                                                     alignment: Alignment.center,
                                                     child: Text(
                                                       error,
-                                                      style:
-                                                          GoogleFonts.montserrat(
+                                                      style: GoogleFonts
+                                                          .montserrat(
                                                         textStyle: TextStyle(
                                                           color: Colors.red,
                                                           fontSize: 30,
@@ -1891,7 +1848,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                       ),
                                                     ),
                                                   ),
-                                              ),
+                                                ),
                                     ),
                                   )
                                 : Container(),

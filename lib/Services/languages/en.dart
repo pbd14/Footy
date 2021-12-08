@@ -61,7 +61,7 @@ class LanguageEn extends Languages {
   @override
   String get historyScreenUnrated => "Unrated";
   @override
-  String get historyScreenVerificationNeeded => "verification needed";
+  String get historyScreenVerificationNeeded => "Verification needed";
 
   @override
   String get profileScreenFavs => "Favourites";

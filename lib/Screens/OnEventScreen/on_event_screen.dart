@@ -393,7 +393,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                           ? Center(
                                               child: Text(
                                                 booking
-                                                        .data()['price']
+                                                        .data()['servicePrice']
                                                         .toString() +
                                                     ' UZS',
                                                 overflow: TextOverflow.ellipsis,
@@ -552,7 +552,7 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                 Text(
                                   Languages.of(context).oeScreenOverallPrice +
                                       ': ' +
-                                      booking.data()['price'].toString() +
+                                      booking.data()['servicePrice'].toString() +
                                       " UZS",
                                   overflow: TextOverflow.ellipsis,
                                   style: GoogleFonts.montserrat(

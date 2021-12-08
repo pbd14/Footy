@@ -61,7 +61,7 @@ class LanguageUz extends Languages {
   @override
   String get historyScreenUnrated => "Baholanmagan";
   @override
-  String get historyScreenVerificationNeeded => "kelishuv kutilmoqda";
+  String get historyScreenVerificationNeeded => "Kelishuv kutilmoqda";
 
   @override
   String get profileScreenFavs => "Sevimlilar";

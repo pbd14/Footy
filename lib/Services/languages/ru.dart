@@ -63,7 +63,7 @@ class LanguageRu extends Languages {
   @override
   String get historyScreenUnrated => "Без оценки";
   @override
-  String get historyScreenVerificationNeeded => "ожидание согласия владельца";
+  String get historyScreenVerificationNeeded => "Ожидание согласия владельца";
 
   @override
   String get profileScreenFavs => "Избранное";

@@ -273,6 +273,7 @@ class _History1State extends State<History1>
           'userId',
           isEqualTo: FirebaseAuth.instance.currentUser.uid,
         )
+        .limit(10)
         .snapshots()
         .listen((bookings) {
           setState(() {

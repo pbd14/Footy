@@ -909,7 +909,9 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                                                         'bookings')
                                                                     .doc(booking
                                                                         .id)
-                                                                    .delete()
+                                                                    .update({
+                                                                      'status':'canceled',
+                                                                    })
                                                                     .catchError(
                                                                         (error) {
                                                                   setState(() {
@@ -956,8 +958,8 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                                                           false,
                                                                       'type':
                                                                           'booking_canceled',
-                                                                      // 'bookingId':
-                                                                      //     booking.id,
+                                                                      'bookingId':
+                                                                          booking.id,
                                                                       'title':
                                                                           'Canceled',
                                                                       'text': 'Client has canceled the booking (' +

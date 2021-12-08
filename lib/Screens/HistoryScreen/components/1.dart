@@ -29,27 +29,26 @@ class _History1State extends State<History1>
   bool get wantKeepAlive => true;
   bool loading = true;
   bool error = true;
-  List<QueryDocumentSnapshot> ordinaryBookings = [];
-  Map<String, DocumentSnapshot> _places = {};
+  List<QueryDocumentSnapshot> upcomingBookings = [];
+  List<QueryDocumentSnapshot> unratedBooks = [];
+  List<QueryDocumentSnapshot> unpaidBookings = [];
 
-  Map<QueryDocumentSnapshot, DocumentSnapshot> placesSlivers = {};
-  Map<QueryDocumentSnapshot, DocumentSnapshot> unrplacesSlivers = {};
+  Map<String, DocumentSnapshot> upcomingPlaces = {};
+  Map<QueryDocumentSnapshot, DocumentSnapshot> inprocessPlacesSlivers = {};
+  Map<QueryDocumentSnapshot, DocumentSnapshot> unratedPlacesSlivers = {};
   Map<QueryDocumentSnapshot, DocumentSnapshot> unpaidPlacesSlivers = {};
 
   List<QueryDocumentSnapshot> inprocessBookSlivers = [];
-  List unratedBooks = [];
-  List unpaidBookings = [];
-  List unpaidBookingsSlivers = [];
-  List<Widget> sliversList = [];
+  List<QueryDocumentSnapshot> unpaidBookingsSlivers = [];
 
-  StreamSubscription<QuerySnapshot> ordinaryBookSubscr;
+  StreamSubscription<QuerySnapshot> upcomingBookSubscr;
   StreamSubscription<QuerySnapshot> inprocessBookSubscr;
   StreamSubscription<QuerySnapshot> unratedBookSubscr;
   StreamSubscription<QuerySnapshot> unpaidBookSubscr;
 
   @override
   void dispose() {
-    ordinaryBookSubscr.cancel();
+    upcomingBookSubscr.cancel();
     inprocessBookSubscr.cancel();
     unratedBookSubscr.cancel();
     unpaidBookSubscr.cancel();
@@ -84,7 +83,7 @@ class _History1State extends State<History1>
         }
       });
       setState(() {
-        _places.addAll({
+        upcomingPlaces.addAll({
           Booking.fromSnapshot(book).id: customOB,
         });
       });
@@ -135,7 +134,7 @@ class _History1State extends State<History1>
         });
         setState(() {
           inprocessBookSlivers.add(book);
-          placesSlivers.addAll({book: customIB});
+          inprocessPlacesSlivers.addAll({book: customIB});
         });
       }
     }
@@ -205,18 +204,18 @@ class _History1State extends State<History1>
         });
         setState(() {
           unratedBooks.add(book);
-          unrplacesSlivers.addAll({book: customUB});
+          unratedPlacesSlivers.addAll({book: customUB});
         });
       }
     }
   }
 
   Future<void> loadData() async {
-    ordinaryBookSubscr = FirebaseFirestore.instance
+    upcomingBookSubscr = FirebaseFirestore.instance
         .collection('bookings')
         .orderBy(
           'timestamp_date',
-          descending: true,
+          descending: false,
         )
         .where(
           'status',
@@ -229,7 +228,7 @@ class _History1State extends State<History1>
         .snapshots()
         .listen((bookings) {
           setState(() {
-            ordinaryBookings = bookings.docs;
+            upcomingBookings = bookings.docs;
             ordinaryBookPrep(bookings.docs);
           });
         });
@@ -238,7 +237,7 @@ class _History1State extends State<History1>
         .collection('bookings')
         .orderBy(
           'timestamp_date',
-          descending: true,
+          descending: false,
         )
         .where(
           'status',
@@ -259,7 +258,7 @@ class _History1State extends State<History1>
         .collection('bookings')
         .orderBy(
           'timestamp_date',
-          descending: true,
+          descending: false,
         )
         .where(
           'status',
@@ -284,7 +283,7 @@ class _History1State extends State<History1>
         .collection('bookings')
         .orderBy(
           'timestamp_date',
-          descending: true,
+          descending: false,
         )
         .where(
           'status',
@@ -312,9 +311,9 @@ class _History1State extends State<History1>
 
   // ignore: unused_element
   List<Meeting> _getDataSource() {
-    var meetings = <Meeting>[];
-    if (ordinaryBookings != null) {
-      for (QueryDocumentSnapshot book in ordinaryBookings) {
+    List<Meeting> meetings = <Meeting>[];
+    if (upcomingBookings != null) {
+      for (QueryDocumentSnapshot book in upcomingBookings) {
         final DateTime today =
             Booking.fromSnapshot(book).timestamp_date.toDate();
         final DateTime startTime = DateTime(
@@ -332,9 +331,9 @@ class _History1State extends State<History1>
           DateFormat.Hm().parse(Booking.fromSnapshot(book).to).minute,
         );
         meetings.add(Meeting(
-            _places != null
-                ? _places[Booking.fromSnapshot(book).id] != null
-                    ? _places[Booking.fromSnapshot(book).id].data()['name']
+            upcomingPlaces != null
+                ? upcomingPlaces[Booking.fromSnapshot(book).id] != null
+                    ? upcomingPlaces[Booking.fromSnapshot(book).id].data()['name']
                     : 'Place'
                 : 'Place',
             startTime,
@@ -352,17 +351,16 @@ class _History1State extends State<History1>
     setState(() {
       loading = true;
     });
-    ordinaryBookings = [];
-    _places = {};
-    placesSlivers = {};
-    unrplacesSlivers = {};
+    upcomingBookings = [];
+    upcomingPlaces = {};
+    inprocessPlacesSlivers = {};
+    unratedPlacesSlivers = {};
     inprocessBookSlivers = [];
     unratedBooks = [];
-    sliversList = [];
     unpaidPlacesSlivers = {};
     unpaidBookings = [];
     unpaidBookingsSlivers = [];
-    ordinaryBookSubscr.cancel();
+    upcomingBookSubscr.cancel();
     inprocessBookSubscr.cancel();
     unratedBookSubscr.cancel();
     unpaidBookSubscr.cancel();
@@ -502,7 +500,6 @@ class _History1State extends State<History1>
                                   // _unrbookings1 = [];
                                   // slivers = [];
                                   // unratedBooks = [];
-                                  // sliversList = [];
                                   // unpaidPlacesSlivers = {};
                                   // unpaidBookings = [];
                                   setState(() {
@@ -684,11 +681,11 @@ class _History1State extends State<History1>
                                                               isAppBar: true,
                                                               data: {
                                                                 'lat': Place.fromSnapshot(
-                                                                        placesSlivers[
+                                                                        inprocessPlacesSlivers[
                                                                             book])
                                                                     .lat,
                                                                 'lon': Place.fromSnapshot(
-                                                                        placesSlivers[
+                                                                        inprocessPlacesSlivers[
                                                                             book])
                                                                     .lon
                                                               },
@@ -762,7 +759,6 @@ class _History1State extends State<History1>
                                   // _unrbookings1 = [];
                                   // slivers = [];
                                   // unratedBooks = [];
-                                  // sliversList = [];
                                   // unpaidPlacesSlivers = {};
                                   // unpaidBookings = [];
                                   setState(() {
@@ -836,7 +832,7 @@ class _History1State extends State<History1>
                                                     height: 10,
                                                   ),
                                                   Text(
-                                                    placesSlivers[book]
+                                                    inprocessPlacesSlivers[book]
                                                                 .data()[
                                                                     'services']
                                                                 .where(
@@ -851,7 +847,7 @@ class _History1State extends State<History1>
                                                               }
                                                             }).first['name'] !=
                                                             null
-                                                        ? placesSlivers[book]
+                                                        ? inprocessPlacesSlivers[book]
                                                             .data()['services']
                                                             .where((service) {
                                                             if (service['id'] ==
@@ -879,9 +875,9 @@ class _History1State extends State<History1>
                                                     height: 10,
                                                   ),
                                                   Text(
-                                                    placesSlivers[book] != null
+                                                    inprocessPlacesSlivers[book] != null
                                                         ? Place.fromSnapshot(
-                                                                placesSlivers[
+                                                                inprocessPlacesSlivers[
                                                                     book])
                                                             .name
                                                         : 'Place',
@@ -948,11 +944,11 @@ class _History1State extends State<History1>
                                                               isAppBar: true,
                                                               data: {
                                                                 'lat': Place.fromSnapshot(
-                                                                        placesSlivers[
+                                                                        inprocessPlacesSlivers[
                                                                             book])
                                                                     .lat,
                                                                 'lon': Place.fromSnapshot(
-                                                                        placesSlivers[
+                                                                        inprocessPlacesSlivers[
                                                                             book])
                                                                     .lon
                                                               },
@@ -1005,7 +1001,7 @@ class _History1State extends State<History1>
                           height: 15,
                         ),
                         for (QueryDocumentSnapshot book
-                            in ordinaryBookings.toSet().toList())
+                            in upcomingBookings.toSet().toList())
                           CupertinoButton(
                             onPressed: () {
                               setState(() {
@@ -1026,7 +1022,6 @@ class _History1State extends State<History1>
                               // _unrbookings1 = [];
                               // slivers = [];
                               // unratedBooks = [];
-                              // sliversList = [];
                               // unpaidPlacesSlivers = {};
                               // unpaidBookings = [];
                               setState(() {
@@ -1093,8 +1088,8 @@ class _History1State extends State<History1>
                                                 height: 10,
                                               ),
                                               Text(
-                                                _places[book.id] != null
-                                                    ? _places[book.id]
+                                                upcomingPlaces[book.id] != null
+                                                    ? upcomingPlaces[book.id]
                                                         .data()['services']
                                                         .where((service) {
                                                         if (service['id'] ==
@@ -1120,13 +1115,13 @@ class _History1State extends State<History1>
                                                 height: 10,
                                               ),
                                               Text(
-                                                _places[book.id] != null
-                                                    ? _places[Booking.fromSnapshot(
+                                                upcomingPlaces[book.id] != null
+                                                    ? upcomingPlaces[Booking.fromSnapshot(
                                                                         book)
                                                                     .id]
                                                                 .data() !=
                                                             null
-                                                        ? _places[Booking
+                                                        ? upcomingPlaces[Booking
                                                                     .fromSnapshot(
                                                                         book)
                                                                 .id]
@@ -1183,7 +1178,7 @@ class _History1State extends State<History1>
                                               // crossAxisAlignment:
                                               //     CrossAxisAlignment.end,
                                               children: [
-                                                _places[book.id] != null
+                                                upcomingPlaces[book.id] != null
                                                     ? LabelButton(
                                                         isC: false,
                                                         reverse:
@@ -1196,7 +1191,7 @@ class _History1State extends State<History1>
                                                                     .currentUser
                                                                     .uid),
                                                         containsValue:
-                                                            _places[book.id].id,
+                                                            upcomingPlaces[book.id].id,
                                                         color1: Colors.red,
                                                         color2:
                                                             lightPrimaryColor,
@@ -1215,7 +1210,7 @@ class _History1State extends State<History1>
                                                               'favourites':
                                                                   FieldValue
                                                                       .arrayUnion([
-                                                                _places[Booking.fromSnapshot(
+                                                                upcomingPlaces[Booking.fromSnapshot(
                                                                             book)
                                                                         .id]
                                                                     .id
@@ -1296,7 +1291,7 @@ class _History1State extends State<History1>
                                                               'favourites':
                                                                   FieldValue
                                                                       .arrayRemove([
-                                                                _places[Booking.fromSnapshot(
+                                                                upcomingPlaces[Booking.fromSnapshot(
                                                                             book)
                                                                         .id]
                                                                     .id
@@ -1383,12 +1378,12 @@ class _History1State extends State<History1>
                                                           isAppBar: true,
                                                           isLoading: true,
                                                           data: {
-                                                            'lat': _places[Booking
+                                                            'lat': upcomingPlaces[Booking
                                                                         .fromSnapshot(
                                                                             book)
                                                                     .id]
                                                                 .data()['lat'],
-                                                            'lon': _places[Booking
+                                                            'lon': upcomingPlaces[Booking
                                                                         .fromSnapshot(
                                                                             book)
                                                                     .id]
@@ -1506,10 +1501,10 @@ class _History1State extends State<History1>
                             SizedBox(
                               height: 15,
                             ),
-                            if (unrplacesSlivers != null)
-                              for (var book in unratedBooks.toSet().toList())
-                                if (unrplacesSlivers[book] != null)
-                                  if (unrplacesSlivers[book].data() != null)
+                            if (unratedPlacesSlivers != null)
+                              for (QueryDocumentSnapshot book in unratedBooks.toSet().toList())
+                                if (unratedPlacesSlivers[book] != null)
+                                  if (unratedPlacesSlivers[book].data() != null)
                                     TextButton(
                                       onPressed: () {
                                         setState(() {
@@ -1523,14 +1518,13 @@ class _History1State extends State<History1>
                                               ),
                                             ));
                                         // _bookings = [];
-                                        // _places = {};
+                                        // upcomingPlaces = {};
                                         // placesSlivers = {};
                                         // unrplacesSlivers = {};
                                         // _bookings1 = [];
                                         // _unrbookings1 = [];
                                         // slivers = [];
                                         // unratedBooks = [];
-                                        // sliversList = [];
                                         // unpaidPlacesSlivers = {};
                                         // unpaidBookings = [];
                                         setState(() {
@@ -1612,15 +1606,15 @@ class _History1State extends State<History1>
                                                           height: 10,
                                                         ),
                                                         Text(
-                                                          unrplacesSlivers[
+                                                          unratedPlacesSlivers[
                                                                       book] !=
                                                                   null
-                                                              ? unrplacesSlivers[
+                                                              ? unratedPlacesSlivers[
                                                                               book]
                                                                           .data() !=
                                                                       null
                                                                   ? Place.fromSnapshot(
-                                                                          unrplacesSlivers[
+                                                                          unratedPlacesSlivers[
                                                                               book])
                                                                       .name
                                                                   : 'Place'
@@ -1695,10 +1689,10 @@ class _History1State extends State<History1>
                                                                         true,
                                                                     data: {
                                                                       'lat': Place.fromSnapshot(
-                                                                              unrplacesSlivers[book])
+                                                                              unratedPlacesSlivers[book])
                                                                           .lat,
                                                                       'lon': Place.fromSnapshot(
-                                                                              unrplacesSlivers[book])
+                                                                              unratedPlacesSlivers[book])
                                                                           .lon
                                                                     },
                                                                   ),

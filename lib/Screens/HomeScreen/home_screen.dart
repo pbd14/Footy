@@ -146,6 +146,7 @@ class HomeScreenState extends State<HomeScreen> {
 
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     if (packageInfo.version != requiredVersion) {
+      print('DONE');
       NativeUpdater.displayUpdateAlert(
         context,
         forceUpdate: true,
@@ -729,7 +730,7 @@ class _MapPageState extends State<MapPage> {
                 Place.fromSnapshot(place).lat, Place.fromSnapshot(place).lon),
           );
           pinLocationIcon = await BitmapDescriptor.fromAssetImage(
-              ImageConfiguration(devicePixelRatio: 2.5), categoryLine);
+              ImageConfiguration(devicePixelRatio: 3), categoryLine,);
           _markers.add(Marker(
             markerId: MarkerId(Place.fromSnapshot(place).name),
             position: LatLng(

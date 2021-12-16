@@ -7,7 +7,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'constants.dart';
 
-// SHA-1 KEY  19:15:92:FA:6D:EE:79:89:88:63:7A:59:5C:45:75:83:30:26:74:33
+// SHA-1  19:15:92:FA:6D:EE:79:89:88:63:7A:59:5C:45:75:83:30:26:74:33
 // SHA-256 33:88:c5:61:62:cc:38:a9:cc:fe:3a:37:0a:17:70:2c:4f:86:bf:47:4b:6a:75:df:3c:88:ad:0d:8d:07:e5:5a
 // Google Play SHA-1 A9:15:AB:AC:F8:B9:CA:48:3F:5D:3E:DC:D8:5B:B0:DA:9C:32:A0:EB
 // Google Play SHA-256 A3:F6:72:A8:A7:2E:4E:11:A9:CC:13:C3:4E:19:25:00:2C:F6:37:1B:74:70:BF:E1:3A:31:C2:4C:34:0B:69:BC

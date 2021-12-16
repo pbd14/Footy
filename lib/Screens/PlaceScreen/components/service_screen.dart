@@ -161,7 +161,7 @@ class _PlaceScreenState extends State<ServiceScreen> {
             return;
           }
           if (dtime1 >= dplaceFrom && dtime2 <= dplaceTo) {
-            var data = await FirebaseFirestore.instance
+            QuerySnapshot data = await FirebaseFirestore.instance
                 .collection('bookings')
                 .where(
                   'date',
@@ -1607,10 +1607,12 @@ class _PlaceScreenState extends State<ServiceScreen> {
                                                                               'notifications_business': FieldValue.arrayUnion([
                                                                                 {
                                                                                   'seen': false,
-                                                                                  'type': widget.data['type'] == 'nonver' ? 'new_booking' : 'offered',
+                                                                                  // 'type': widget.data['type'] == 'nonver' ? 'new_booking' : 'offered',
+                                                                                  'type': 'notifications_booking_offer',
                                                                                   'bookingId': id,
-                                                                                  'title': widget.data['type'] == 'nonver' ? 'New booking' : 'Offer',
-                                                                                  'text': widget.data['type'] == 'nonver' ? 'You have new booking at ' + place.data()['name'] : 'You have new offer at ' + place.data()['name'],
+                                                                                  // 'title': widget.data['type'] == 'nonver' ? 'New booking' : 'Offer',
+                                                                                  // 'text': widget.data['type'] == 'nonver' ? 'You have new booking at ' + place.data()['name'] : 'You have new offer at ' + place.data()['name'],
+                                                                                  'place': place.data()['name'],
                                                                                   'companyName': company.data()['name'],
                                                                                   'date': DateTime.now(),
                                                                                 }

@@ -552,7 +552,9 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                 Text(
                                   Languages.of(context).oeScreenOverallPrice +
                                       ': ' +
-                                      booking.data()['servicePrice'].toString() +
+                                      booking
+                                          .data()['servicePrice']
+                                          .toString() +
                                       " UZS",
                                   overflow: TextOverflow.ellipsis,
                                   style: GoogleFonts.montserrat(
@@ -910,9 +912,9 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                                                     .doc(booking
                                                                         .id)
                                                                     .update({
-                                                                      'status':'canceled',
-                                                                    })
-                                                                    .catchError(
+                                                                  'status':
+                                                                      'canceled',
+                                                                }).catchError(
                                                                         (error) {
                                                                   setState(() {
                                                                     loading =
@@ -957,23 +959,15 @@ class _OnEventScreenState extends State<OnEventScreen> {
                                                                       'seen':
                                                                           false,
                                                                       'type':
-                                                                          'booking_canceled',
+                                                                          'notifications_booking_canceled',
                                                                       'bookingId':
-                                                                          booking.id,
-                                                                      'title':
-                                                                          'Canceled',
-                                                                      'text': 'Client has canceled the booking (' +
-                                                                          place.data()[
-                                                                              'name'] +
-                                                                          ' ' +
-                                                                          DateFormat.yMMMd()
-                                                                              .format(booking.data()['timestamp_date'].toDate())
-                                                                              .toString() +
-                                                                          ')' +
-                                                                          '. Reason: ' +
-                                                                          reason +
-                                                                          '. Contact: ' +
-                                                                          FirebaseAuth.instance.currentUser.phoneNumber,
+                                                                          booking
+                                                                              .id,
+                                                                      // 'title':
+                                                                      //     'Canceled',
+                                                                      'place': place
+                                                                              .data()[
+                                                                          'name'],
                                                                       'companyName':
                                                                           company
                                                                               .data()['name'],
